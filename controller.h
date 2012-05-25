@@ -21,6 +21,7 @@ private slots:
 	void showSettings();
 
 private:
+	void makeConnections();
 };
 
 #endif // CONTROLLER_H
