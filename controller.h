@@ -4,7 +4,7 @@
 #include <QtGui/QMainWindow>
 #include "ui_controller.h"
 
-class Controller : public QMainWindow
+class Controller : public QMainWindow, private Ui::ControllerClass
 {
 	Q_OBJECT
 
@@ -12,8 +12,15 @@ public:
 	Controller(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Controller();
 
+private slots:
+	void play();
+	void pause();
+	void step();
+	void clear();
+	void initialize();
+	void showSettings();
+
 private:
-	Ui::ControllerClass ui;
 };
 
 #endif // CONTROLLER_H
