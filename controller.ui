@@ -58,6 +58,10 @@
    <addaction name="menu_Help"/>
   </widget>
   <action name="actionPlay">
+   <property name="icon">
+    <iconset resource="controller.qrc">
+     <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
+   </property>
    <property name="text">
     <string>Play</string>
    </property>
@@ -66,6 +70,10 @@
    </property>
   </action>
   <action name="actionPause">
+   <property name="icon">
+    <iconset resource="controller.qrc">
+     <normaloff>:/images/pause.png</normaloff>:/images/pause.png</iconset>
+   </property>
    <property name="text">
     <string>Pause</string>
    </property>
@@ -74,6 +82,10 @@
    </property>
   </action>
   <action name="actionStep">
+   <property name="icon">
+    <iconset resource="controller.qrc">
+     <normaloff>:/images/next.png</normaloff>:/images/next.png</iconset>
+   </property>
    <property name="text">
     <string>Step</string>
    </property>
