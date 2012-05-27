@@ -8,13 +8,13 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	this->setupUi(this);
 
 	makeConnections();
-	createCa(CaType::LOCAL);
+	createCa(LOCAL);
 }
 
 Controller::~Controller()
 {
-	delete mCellularAutomaton;
-	delete mView;
+	//delete mCellularAutomaton;
+	//delete mView;
 }
 
 void Controller::timerEvent(QTimerEvent* e)

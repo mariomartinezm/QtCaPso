@@ -93,7 +93,10 @@
     <ClCompile Include="GeneratedFiles\Release\moc_controller.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="latticepoint.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="particle.cpp" />
+    <ClCompile Include="swarm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="controller.h">
@@ -121,6 +124,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="latticepoint.h" />
+    <ClInclude Include="particle.h" />
+    <ClInclude Include="swarm.h" />
     <CustomBuild Include="caview.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing caview.h...</Message>

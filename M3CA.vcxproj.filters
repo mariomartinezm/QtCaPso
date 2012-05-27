@@ -74,6 +74,15 @@
     <ClCompile Include="cellularautomaton.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="latticepoint.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="particle.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="swarm.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="controller.ui">
@@ -97,6 +106,15 @@
       <Filter>Header Files\Model</Filter>
     </ClInclude>
     <ClInclude Include="catype.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="latticepoint.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="swarm.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
   </ItemGroup>
