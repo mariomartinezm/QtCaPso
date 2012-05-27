@@ -83,6 +83,9 @@
     <ClCompile Include="swarm.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="localcapso.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="controller.ui">
@@ -115,6 +118,9 @@
       <Filter>Header Files\Model</Filter>
     </ClInclude>
     <ClInclude Include="swarm.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="localcapso.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
   </ItemGroup>

@@ -94,6 +94,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="latticepoint.cpp" />
+    <ClCompile Include="localcapso.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="swarm.cpp" />
@@ -125,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="latticepoint.h" />
+    <ClInclude Include="localcapso.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="swarm.h" />
     <CustomBuild Include="caview.h">
