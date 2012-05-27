@@ -5,6 +5,7 @@
 #include "ui_controller.h"
 #include "catype.h"
 #include "cellularautomaton.h"
+#include "caview.h"
 
 class Controller : public QMainWindow, private Ui::ControllerClass
 {
@@ -13,6 +14,10 @@ class Controller : public QMainWindow, private Ui::ControllerClass
 public:
 	Controller(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Controller();
+
+protected:
+	// put events here
+	void timerEvent(QTimerEvent*);
 
 private slots:
 	void play();
@@ -24,9 +29,12 @@ private slots:
 
 private:
 	void makeConnections();
-	void createCa(CaType type);
+	void createCa(CaType);
 
 	CellularAutomaton* mCellularAutomaton;
+	CaView* mView;
+	int mTimerId;
+	int mTimerCount;
 };
 
 #endif // CONTROLLER_H

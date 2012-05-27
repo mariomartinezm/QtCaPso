@@ -1,7 +1,9 @@
 #include "controller.h"
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
-	: QMainWindow(parent, flags)
+	: QMainWindow(parent, flags),
+	mTimerId(-1),
+	mTimerCount(0)
 {
 	this->setupUi(this);
 
@@ -11,27 +13,72 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 
 Controller::~Controller()
 {
+	delete mCellularAutomaton;
+	delete mView;
+}
 
+void Controller::timerEvent(QTimerEvent* e)
+{
+	mCellularAutomaton->nextGen();
+
+	mTimerCount++;
+
+	/*if(!(mTimerCount % 10))
+	{
+		writeResults();
+	}*/
+
+	//mStatusBarString.setNum(mTimerCount);
+
+	//mStatusBar->showMessage(mStatusBarString);
+
+	mView->update();
 }
 
 void Controller::play()
 {
-
+	if(mTimerId == -1)
+	{
+		mTimerId = startTimer(0);
+	}
 }
 
 void Controller::pause()
 {
+	if(mTimerId != -1)
+	{
+		killTimer(mTimerId);
 
+		mTimerId = -1;
+	}
 }
 
 void Controller::step()
 {
+	if(mTimerId != -1)
+	{
+		killTimer(mTimerId);
 
+		mTimerId = -1;
+	}
+
+	mCellularAutomaton->nextGen();
+
+	mTimerCount++;
+
+	if(!(mTimerCount % 5))
+	{
+		//writeResults();
+	}
+
+	update();
 }
 
 void Controller::clear()
 {
+	mCellularAutomaton->clear();
 
+	mView->update();
 }
 
 void Controller::initialize()
