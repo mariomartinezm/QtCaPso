@@ -39,6 +39,12 @@
     <Filter Include="Source Files\Application">
       <UniqueIdentifier>{a37b7da1-20f4-4446-a80b-735bb31508cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Model">
+      <UniqueIdentifier>{094afe91-0974-4461-a7d9-bc3fca545728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{48658b9a-37ff-4e92-8315-8bc894c3c7ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -56,6 +62,18 @@
     <ClCompile Include="controller.cpp">
       <Filter>Source Files\Application</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_caview.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_caview.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="caview.cpp">
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="cellularautomaton.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="controller.ui">
@@ -67,10 +85,16 @@
     <CustomBuild Include="controller.h">
       <Filter>Header Files\Application</Filter>
     </CustomBuild>
+    <CustomBuild Include="caview.h">
+      <Filter>Header Files\Application</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_controller.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cellularautomaton.h">
+      <Filter>Header Files\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
