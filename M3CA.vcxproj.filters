@@ -96,5 +96,8 @@
     <ClInclude Include="cellularautomaton.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
+    <ClInclude Include="catype.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

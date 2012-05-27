@@ -3,6 +3,8 @@
 
 #include <QtGui/QMainWindow>
 #include "ui_controller.h"
+#include "catype.h"
+#include "cellularautomaton.h"
 
 class Controller : public QMainWindow, private Ui::ControllerClass
 {
@@ -22,6 +24,9 @@ private slots:
 
 private:
 	void makeConnections();
+	void createCa(CaType type);
+
+	CellularAutomaton* mCellularAutomaton;
 };
 
 #endif // CONTROLLER_H

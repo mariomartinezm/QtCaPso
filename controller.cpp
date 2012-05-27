@@ -6,6 +6,7 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	this->setupUi(this);
 
 	makeConnections();
+	createCa(CaType::LOCAL);
 }
 
 Controller::~Controller()
@@ -50,4 +51,19 @@ void Controller::makeConnections()
 	connect(actionStep, SIGNAL(triggered()), this, SLOT(step()));
 	connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
 	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
+}
+
+void Controller::createCa(CaType type)
+{
+	switch(type)
+	{
+	case GLOBAL:
+		break;
+
+	case LOCAL:
+		break;
+
+	case MOVEMENT:
+		break;
+	}
 }
