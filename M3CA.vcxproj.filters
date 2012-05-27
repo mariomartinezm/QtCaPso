@@ -33,12 +33,15 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Header Files\Application">
+      <UniqueIdentifier>{72794603-f789-4042-be9b-ec1ee7565027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Application">
+      <UniqueIdentifier>{a37b7da1-20f4-4446-a80b-735bb31508cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_controller.cpp">
@@ -50,16 +53,19 @@
     <ClCompile Include="GeneratedFiles\qrc_controller.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="controller.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="controller.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="controller.qrc">
       <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="controller.h">
+      <Filter>Header Files\Application</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
