@@ -87,7 +87,24 @@ void Controller::clear()
 
 void Controller::initialize()
 {
+	if(mTimerId != -1)
+	{
+		killTimer(mTimerId);
 
+		mTimerId = -1;
+	}
+
+	mCellularAutomaton->initialize();
+
+	mTimerCount = 0;
+
+	// Reset the contents of the results file
+	/*mResultsFile->close();
+	mResultsFile->setFileName(mCurrentFileName);
+	mResultsFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
+	mResultsStream.seek(0)*/
+
+	mView->update();
 }
 
 void Controller::showSettings()
