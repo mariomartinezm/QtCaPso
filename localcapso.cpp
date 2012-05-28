@@ -1,195 +1,177 @@
 #include <algorithm>
 #include <ctime>
-#include <QtGlobal>
+#include <cmath>
+#include <memory>
 #include "localcapso.h"
 
-CaPso::CaPso(int width, int height)
-    : CellularAutomata(width, height),
-      // Containers
-      mTemp(width*height),
-      mPreyHistogram(width * height),
-      mNumberOfPreys(0),
-      mNumberOfPredators(0),
-      mRandom(time(NULL)),
-      // Real uniform distribution
-      mDistReal_0_1(0.0, 1.0),
-      // Model paremeters
-      mInitialAlivePercentage(0.3),
-      mCompetenceFactor(0.3),
-      mPreyMeanOffspring(10),
-      mPreyReproductionRadius(2),
-      mPredatorMeanOffspring(10),
-      mPredatorReproductionRadius(2),
-      mSearchRadius(3),
-      NEIGHBORHOOD_SIZE((2 * mSearchRadius + 1)*(2 * mSearchRadius + 1) - 1),
-      // PSO parameters
-      mInitialSwarmSize(3),
-      mPFactor(2.0),
-      mGFactor(2.0),
-      mMigrationTime(5),
-      mMigrationCount(0),
-      mInitialInertiaWeight(0.9),
-      mCurrentInertiaWeight(mInitialInertiaWeight),
-      mFinalInertiaWeight(0.2),
-      INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight)  / mMigrationTime),
-      mMaxSpeed(10)
+using std::list;
+using std::weak_ptr;
+using std::shared_ptr;
+using std::make_shared;
+using std::for_each;
+using std::copy;
+using std::transform;
+
+LocalCaPso::LocalCaPso(int width, int height)
+	: CellularAutomaton(width, height),
+	mPredatorSwarm(1.0, 2.0, 10),
+	// Containers
+	mTemp(width * height),
+	mPreyDensities(width * height),
+	mNumberOfPreys(0),
+	mNumberOfPredators(0),
+	mRandom(time(NULL)),
+	// Real uniform distribution
+	mDistReal_0_1(0.0, 1.0),
+	// Model paremeters
+	mInitialAlivePercentage(0.3),
+	mCompetenceFactor(0.3),
+	mPreyMeanOffspring(10),
+	mPreyReproductionRadius(2),
+	mPredatorMeanOffspring(10),
+	mPredatorReproductionRadius(2),
+	mSearchRadius(3),
+	NEIGHBORHOOD_SIZE((2 * mSearchRadius + 1)*(2 * mSearchRadius + 1) - 1),
+	// Pso parameters
+	mInitialSwarmSize(3),
+	mMigrationTime(5),
+	mMigrationCount(0),
+	mInitialInertiaWeight(0.9),
+	mCurrentInertiaWeight(mInitialInertiaWeight),
+	mFinalInertiaWeight(0.2),
+	INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight)  / mMigrationTime)
 {
     initialize();
 }
 
-void CaPso::initialize()
+void LocalCaPso::initialize()
 {
-    // Reset the prey histogram
-	std::transform(mPreyHistogram.begin(), mPreyHistogram.end(), mPreyHistogram.begin(), [](unsigned char)
+	clear();
+
+	// Create and render predators
+	mPredatorSwarm.initialize(mInitialSwarmSize, mWidth, mHeight, mRandom);
+
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+	{
+		if(auto p = wp.lock())
+		{
+			setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
+
+			mNumberOfPredators++;
+		}
+	});
+
+	// Randomly create preys
+	for(int row = 0; row < mHeight; row++)
+	{
+		for(int col = 0; col < mWidth; col++)
+		{
+			if(mDistReal_0_1(mRandom) < mInitialAlivePercentage)
+			{
+				setState(getAddress(row, col), PREY);
+
+				notifyNeighbors(row, col, false);
+				
+				mNumberOfPreys++;
+			}
+		}
+	}
+
+	// Reset the migration counter
+	mMigrationCount = 0;
+
+	mNextStage = &LocalCaPso::competenceOfPreys;
+}
+
+void LocalCaPso::clear()
+{
+	CellularAutomaton::clear();
+
+	// Reset the densities
+	std::transform(mPreyDensities.begin(), mPreyDensities.end(), mPreyDensities.begin(), [](unsigned char)
 	{
 		return 0;
 	});
 
-    // Reset the number of preys and predators
-    mNumberOfPreys = 0;
-    mNumberOfPredators = 0;
-
-    // Randomly create preys
-    for(int row = 0; row < mHeight; row++)
-    {
-        for(int col = 0; col < mWidth; col++)
-        {
-            if(mDistReal_0_1(mRandom) < mInitialAlivePercentage)
-            {
-                mLattice[getAddress(row, col)] = PREY;
-
-                notifyNeighbors(row, col, false);
-
-                mNumberOfPreys++;
-            }
-            else
-            {
-                mLattice[getAddress(row, col)] = EMPTY;
-            }
-        }
-    }
-
-    // Erase the particles from the lattice
-	std::for_each(mParticles.begin(), mParticles.end(), [this](Particle& p)
-	{
-		LatticePoint position = p.position();
-		mLattice[p.position().row(), p.position().col()] &= ~PREDATOR;
-	});
-
-    // Destroy all particles
-    mParticles.clear();
-
-    std::uniform_int_distribution<int> randomRow(0, mWidth - 1);
-    std::uniform_int_distribution<int> randomCol(0, mHeight - 1);
-    std::uniform_int_distribution<int> randomVel(0, mMaxSpeed);
-
-    // Create and render all particles
-    for(int i = 0; i < mInitialSwarmSize; i++)
-    {
-        Particle particle;
-        particle.setPosition(randomRow(mRandom), randomCol(mRandom));
-        particle.setBestPosition(particle.position().row(), particle.position().col());
-        particle.setVelocity(randomVel(mRandom), randomVel(mRandom));
-        mParticles.push_back(particle);
-
-        mLattice[getAddress(particle.position().row(),
-                            particle.position().col())] |= PREDATOR;
-    }
-
-    // Set the initial size for the population of predators
-    mNumberOfPredators = mInitialSwarmSize;
-
-    // Reset the migration counter
-    mMigrationCount = 0;
-
-    mNextStage = &CaPso::competenceOfPreys;
+	mNumberOfPreys = 0;
+	mNumberOfPredators = 0;
 }
 
-void CaPso::nextGen()
+void LocalCaPso::nextGen()
 {
     (this->*mNextStage)();
 }
 
-void CaPso::setCompetenceFactor(double value)
+void LocalCaPso::setCompetenceFactor(double value)
 {
     mCompetenceFactor = value;
 }
 
-void CaPso::setInitialAlivePreys(double value)
+void LocalCaPso::setInitialAlivePreys(double value)
 {
     mInitialAlivePercentage = value;
 }
 
-void CaPso::setPreyMeanOffspring(int value)
+void LocalCaPso::setPreyMeanOffspring(int value)
 {
     mPreyMeanOffspring = value;
 }
 
-void CaPso::setPreyReproductionRadius(int value)
+void LocalCaPso::setPreyReproductionRadius(int value)
 {
     mPreyReproductionRadius = value;
 }
 
-void CaPso::setPredatorMeanOffspring(int value)
+void LocalCaPso::setPredatorMeanOffspring(int value)
 {
     mPredatorMeanOffspring = value;
 }
 
-void CaPso::setPredatorReproductionRadius(int value)
+void LocalCaPso::setPredatorReproductionRadius(int value)
 {
     mPredatorReproductionRadius = value;
 }
  
-void CaPso::setSearchRadius(int value)
+void LocalCaPso::setSearchRadius(int value)
 {
     mSearchRadius = value;
 
 	NEIGHBORHOOD_SIZE = (2 * mSearchRadius + 1)*(2 * mSearchRadius + 1) - 1;
 }
 
-void CaPso::setInitialSwarmSize(int value)
+void LocalCaPso::setInitialSwarmSize(int value)
 {
     mInitialSwarmSize = value;
 }
 
-void CaPso::setPFactor(double value)
-{
-    mPFactor = value;
-}
-
-void CaPso::setGFactor(double value)
-{
-    mGFactor = value;
-}
-
-void CaPso::setMitrationTime(int value)
+void LocalCaPso::setMitrationTime(int value)
 {
     mMigrationTime = value;
 }
 
-void CaPso::setInitialInertialWeight(double value)
+void LocalCaPso::setInitialInertialWeight(double value)
 {
     mInitialInertiaWeight = value;
 }
 
-void CaPso::setFinalInertiaWeight(double value)
+void LocalCaPso::setFinalInertiaWeight(double value)
 {
     mFinalInertiaWeight = value;
 }
 
-int CaPso::numberOfPreys() const
+int LocalCaPso::numberOfPreys() const
 {
     return mNumberOfPreys;
 }
 
-int CaPso::numberOfPredators() const
+int LocalCaPso::numberOfPredators() const
 {
     return mNumberOfPredators;
 }
 
-void CaPso::competenceOfPreys()
+void LocalCaPso::competenceOfPreys()
 {
-    std::copy(mPreyHistogram.begin(), mPreyHistogram.end(), mTemp.begin());
+    std::copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
 
     int currentAddress;
     double deathProbability;
@@ -200,135 +182,246 @@ void CaPso::competenceOfPreys()
         {
             currentAddress = getAddress(row, col);
 
-            if(mLattice[currentAddress] & PREY)
-            {
-                deathProbability = mTemp[currentAddress] *
-                        mCompetenceFactor / NEIGHBORHOOD_SIZE;
+            if(checkState(currentAddress, PREY))
+			{
+				deathProbability = mTemp[currentAddress] * 
+					mCompetenceFactor / NEIGHBORHOOD_SIZE;
 
-                if(mDistReal_0_1(mRandom) <= deathProbability)
-                {
-                    // Only kill the prey
-                    mLattice[currentAddress] &= ~PREY;
+				if(mDistReal_0_1(mRandom) <= deathProbability)
+				{
+					// Only kill the prey
+					clearState(currentAddress, PREY);
 
-                    notifyNeighbors(row, col, true);
+					notifyNeighbors(row, col, true);
 
-                    mNumberOfPreys--;
-                }
-            }
+					mNumberOfPreys--;
+				}
+			}
         }
     }
 
-    mNextStage = &CaPso::migration;
+    mNextStage = &LocalCaPso::migration;
 }
 
-void CaPso::migration()
+void LocalCaPso::migration()
 {
-    int finalRow, finalCol, neighbourAddress;
-    int pRow, pCol, bestRow, bestCol, bestAddress;
+	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-    std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
-
-	std::for_each(mParticles.begin(), mParticles.end(), [&, this](Particle& p)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
 	{
-		pRow = bestRow = p.position().row();
-		pCol = bestCol = p.position().col();
-
-		bestAddress = getAddress(pRow, pCol);
-
-		// Clear the previous position of the predator
-		mLattice[getAddress(pRow, pCol)] &= ~PREDATOR;
-
-		// Get the best position among the neighbors of the predator
-		for(int nRow = pRow - mSearchRadius; nRow <= pRow + mSearchRadius; nRow++)
+		if(auto p = wp.lock())
 		{
-			for(int nCol = pCol - mSearchRadius; nCol <= pCol + mSearchRadius; nCol++)
+			int pRow = p->position().row();
+			int pCol = p->position().col();
+
+			int bestRow = pRow;
+			int bestCol = pCol;
+
+			int bestAddress = getAddress(bestRow, bestCol);
+
+			// Clear the previous position of the predator
+			clearState(bestAddress, PREDATOR);
+
+			// Get the best position among the neighbors of the predator
+			for(int nRow = pRow - mSearchRadius; nRow <= pRow + mSearchRadius; nRow++)
 			{
-				if(nRow == pRow && nCol == pCol)
+				for(int nCol = pCol - mSearchRadius; nCol <= pCol + mSearchRadius; nCol++)
 				{
-					continue;
-				}
-
-				finalRow = (mHeight + nRow) % mHeight;
-				finalCol = (mWidth + nCol) % mWidth;
-
-				neighbourAddress = getAddress(finalRow, finalCol);
-
-				if(mTemp[neighbourAddress] & PREDATOR)
-				{
-					// Update if necessary
-					if(mPreyHistogram[bestAddress] < mPreyHistogram[neighbourAddress])
+					if(nRow == pRow && nCol == pCol)
 					{
-						bestRow = nRow;
-						bestCol = nCol;
+						continue;
+					}
 
-						bestAddress = neighbourAddress;
+					int finalRow = (mHeight + nRow) % mHeight;
+					int finalCol = (mWidth + nCol) % mWidth;
+
+					int neighbourAddress = getAddress(finalRow, finalCol);
+
+					if(checkState(neighbourAddress, PREDATOR))
+					{
+						// Update if necessary
+						if(mPreyDensities[bestAddress] < mPreyDensities[neighbourAddress])
+						{
+							bestRow = nRow;
+							bestCol = nCol;
+
+							bestAddress = neighbourAddress;
+						}
 					}
 				}
 			}
-		}
 
-		double r1 = mDistReal_0_1(mRandom);
-		double r2 = mDistReal_0_1(mRandom);
+			float r1 = mDistReal_0_1(mRandom);
+			float r2 = mDistReal_0_1(mRandom);
 
-		// Get the new velocity
-		int velRow = (int)(mCurrentInertiaWeight * p.velocity().row() +
-			mPFactor * r1 * (p.bestPosition().row() - pRow) +
-			mGFactor * r2 * (bestRow - pRow));
-		int velCol = (int)(mCurrentInertiaWeight * p.velocity().col() +
-			mPFactor * r1 * (p.bestPosition().col() - pCol) +
-			mGFactor * r2 * (bestCol - pCol));
+			// Get the new velocity
+			int velRow = (int)(mCurrentInertiaWeight * p->velocity().row() +
+				mPredatorSwarm.cognitiveFactor() * r1 * (p->bestPosition().row() - pRow) +
+				mPredatorSwarm.socialFactor() * r2 * (bestRow - pRow));
+			int velCol = (int)(mCurrentInertiaWeight * p->velocity().col() +
+				mPredatorSwarm.socialFactor() * r1 * (p->bestPosition().col() - pCol) +
+				mPredatorSwarm.socialFactor() * r2 * (bestCol - pCol));
 
-		// Adjust speed
-		double speed = sqrt((double)(velRow * velRow + velCol * velCol));
+			// Adjust speed
+			double speed = sqrt((double)(velRow * velRow + velCol * velCol));
 
-		while(speed > mMaxSpeed)
-		{
-			velRow *= 0.9;
-			velCol *= 0.9;
+			while(speed > mPredatorSwarm.maxSpeed())
+			{
+				velRow *= 0.9;
+				velCol *= 0.9;
 
-			speed = sqrt((double)(velRow * velRow + velCol * velCol));
-		}
+				speed = sqrt((double)(velRow * velRow + velCol * velCol));
+			}
 
-		p.setVelocity(velRow, velCol);
+			p->setVelocity(velRow, velCol);
 
-		// Move the particle
-		velRow += pRow;
-		velCol += pCol;
+			// Move the particle
+			velRow += pRow;
+			velCol += pCol;
 
-		// Adjust position
-		velRow = (mHeight + velRow) % mHeight;
-		velCol = (mWidth + velCol) % mWidth;
+			// Adjust position
+			velRow = (mHeight + velRow) % mHeight;
+			velCol = (mWidth + velCol) % mWidth;
 
-		p.setPosition(velRow, velCol);
+			p->setPosition(velRow, velCol);
 
-		// If necessary, update the particle's best know position
-		if(mPreyHistogram[getAddress(pRow, pCol)] < mPreyHistogram[getAddress(velRow, velCol)])
-		{
-			p.setBestPosition(velRow, velCol);
+			// If necessary, update the particle's best know position
+			if(mPreyDensities[getAddress(pRow, pCol)] < mPreyDensities[getAddress(velRow, velCol)])
+			{
+				p->setBestPosition(velRow, velCol);
+			}
 		}
 	});
 
 	// Render the particles at their new positions
-	std::for_each(mParticles.begin(), mParticles.end(), [this](Particle& p)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
 	{
-		mLattice[getAddress(p.position().row(), p.position().col())] |= PREDATOR;
+		if(auto p = wp.lock())
+		{
+			setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
+		}
+		//mLattice[getAddress(p.position().row(), p.position().col())] |= PREDATOR;
 	});
 
-    // Decrease the inertia weight and increase the migration counter
-    mCurrentInertiaWeight -= INERTIA_STEP;
-    mMigrationCount++;
+	// Decrease the inertia weight and increase the migration counter
+	mCurrentInertiaWeight -= INERTIA_STEP;
+	mMigrationCount++;
 
-    // If migration has ended, point to the next stage and reset the inertia
-    // weight and migration count
-    if(mMigrationCount == mMigrationTime)
-    {
-		mNextStage = &CaPso::reproductionOfPredators;
-        mMigrationCount = 0;
-        mCurrentInertiaWeight = mInitialInertiaWeight;
-    }
+	// If migration has ended, point to the next stage and reset the inertia
+	// weight and migration count
+	if(mMigrationCount == mMigrationTime)
+	{
+		mNextStage = &LocalCaPso::reproductionOfPredators;
+		mMigrationCount = 0;
+		mCurrentInertiaWeight = mInitialInertiaWeight;
+	}
+
+ //   int finalRow, finalCol, neighbourAddress;
+ //   int pRow, pCol, bestRow, bestCol, bestAddress;
+
+ //   std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+
+	//std::for_each(mParticles.begin(), mParticles.end(), [&, this](Particle& p)
+	//{
+	//	pRow = bestRow = p.position().row();
+	//	pCol = bestCol = p.position().col();
+
+	//	bestAddress = getAddress(pRow, pCol);
+
+	//	// Clear the previous position of the predator
+	//	mLattice[getAddress(pRow, pCol)] &= ~PREDATOR;
+
+	//	// Get the best position among the neighbors of the predator
+	//	for(int nRow = pRow - mSearchRadius; nRow <= pRow + mSearchRadius; nRow++)
+	//	{
+	//		for(int nCol = pCol - mSearchRadius; nCol <= pCol + mSearchRadius; nCol++)
+	//		{
+	//			if(nRow == pRow && nCol == pCol)
+	//			{
+	//				continue;
+	//			}
+
+	//			finalRow = (mHeight + nRow) % mHeight;
+	//			finalCol = (mWidth + nCol) % mWidth;
+
+	//			neighbourAddress = getAddress(finalRow, finalCol);
+
+	//			if(mTemp[neighbourAddress] & PREDATOR)
+	//			{
+	//				// Update if necessary
+	//				if(mPreyDensities[bestAddress] < mPreyDensities[neighbourAddress])
+	//				{
+	//					bestRow = nRow;
+	//					bestCol = nCol;
+
+	//					bestAddress = neighbourAddress;
+	//				}
+	//			}
+	//		}
+	//	}
+
+	//	double r1 = mDistReal_0_1(mRandom);
+	//	double r2 = mDistReal_0_1(mRandom);
+
+	//	// Get the new velocity
+	//	int velRow = (int)(mCurrentInertiaWeight * p.velocity().row() +
+	//		mPFactor * r1 * (p.bestPosition().row() - pRow) +
+	//		mGFactor * r2 * (bestRow - pRow));
+	//	int velCol = (int)(mCurrentInertiaWeight * p.velocity().col() +
+	//		mPFactor * r1 * (p.bestPosition().col() - pCol) +
+	//		mGFactor * r2 * (bestCol - pCol));
+
+	//	// Adjust speed
+	//	double speed = sqrt((double)(velRow * velRow + velCol * velCol));
+
+	//	while(speed > mMaxSpeed)
+	//	{
+	//		velRow *= 0.9;
+	//		velCol *= 0.9;
+
+	//		speed = sqrt((double)(velRow * velRow + velCol * velCol));
+	//	}
+
+	//	p.setVelocity(velRow, velCol);
+
+	//	// Move the particle
+	//	velRow += pRow;
+	//	velCol += pCol;
+
+	//	// Adjust position
+	//	velRow = (mHeight + velRow) % mHeight;
+	//	velCol = (mWidth + velCol) % mWidth;
+
+	//	p.setPosition(velRow, velCol);
+
+	//	// If necessary, update the particle's best know position
+	//	if(mPreyDensities[getAddress(pRow, pCol)] < mPreyDensities[getAddress(velRow, velCol)])
+	//	{
+	//		p.setBestPosition(velRow, velCol);
+	//	}
+	//});
+
+	//// Render the particles at their new positions
+	//std::for_each(mParticles.begin(), mParticles.end(), [this](Particle& p)
+	//{
+	//	mLattice[getAddress(p.position().row(), p.position().col())] |= PREDATOR;
+	//});
+
+ //   // Decrease the inertia weight and increase the migration counter
+ //   mCurrentInertiaWeight -= INERTIA_STEP;
+ //   mMigrationCount++;
+
+ //   // If migration has ended, point to the next stage and reset the inertia
+ //   // weight and migration count
+ //   if(mMigrationCount == mMigrationTime)
+ //   {
+	//	mNextStage = &LocalCaPso::reproductionOfPredators;
+ //       mMigrationCount = 0;
+ //       mCurrentInertiaWeight = mInitialInertiaWeight;
+ //   }
 }
 
-void CaPso::reproductionOfPredators()
+void LocalCaPso::reproductionOfPredators()
 {
     std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
@@ -338,93 +431,94 @@ void CaPso::reproductionOfPredators()
 	std::uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
 #endif
 
-    std::vector<Particle> newParticles;
-    int pRow, pCol, finalRow, finalCol, birthCount;
+	list<shared_ptr<Particle>> newParticles;
 
-	std::for_each(mParticles.begin(), mParticles.end(), [&, this](Particle& p)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
 	{
-		pRow = p.position().row();
-		pCol = p.position().col();
-
-		birthCount = 0;
-
-		while(birthCount < mPredatorMeanOffspring)
+		if(auto p = wp.lock())
 		{
-			// Obtain an offset
-			finalRow = randomOffset(mRandom);
-			finalCol = randomOffset(mRandom);
+			int pRow = p->position().row();
+			int pCol = p->position().col();
 
-			if(finalRow == 0 && finalCol == 0)
+			int birthCount = 0;
+
+			while(birthCount < mPredatorMeanOffspring)
 			{
-				continue;
+				// Obtain an offset
+				int finalRow = randomOffset(mRandom);
+				int finalCol = randomOffset(mRandom);
+
+				if(finalRow == 0 && finalCol == 0)
+				{
+					continue;
+				}
+
+				// Get relative coordinates
+				finalRow += pRow;
+				finalCol += pCol;
+
+				// Get final coordinates
+				if (finalRow < 0 && finalCol < 0)
+				{
+					finalRow = mHeight + finalRow % mHeight;
+					finalCol = mWidth + finalCol % mWidth;
+				}
+				else if (finalRow < 0 && finalCol >= 0)
+				{
+					finalRow = mHeight + finalRow % mHeight;
+					finalCol = finalCol % mWidth;
+				}
+				else if (finalRow >= 0 && finalCol < 0)
+				{
+					finalRow = finalRow % mHeight;
+					finalCol = mWidth + finalCol % mHeight;
+				}
+				else
+				{
+					finalRow = finalRow % mHeight;
+					finalCol = finalCol % mWidth;
+				}
+
+				if(!checkState(getAddress(finalRow, finalCol), PREDATOR))
+				{
+					// Create a new particle
+					auto particle = make_shared<Particle>();
+					particle->setPosition(finalRow, finalCol);
+					particle->setBestPosition(p->bestPosition().row(), p->bestPosition().col());
+
+					setState(getAddress(finalRow, finalCol), PREDATOR);
+
+					newParticles.push_back(particle);
+
+					mNumberOfPredators++;
+				}
+
+				birthCount++;
 			}
-
-			// Get relative coordinates
-			finalRow += pRow;
-			finalCol += pCol;
-
-			// Get final coordinates
-			if (finalRow < 0 && finalCol < 0)
-			{
-				finalRow = mHeight + finalRow % mHeight;
-				finalCol = mWidth + finalCol % mWidth;
-			}
-			else if (finalRow < 0 && finalCol >= 0)
-			{
-				finalRow = mHeight + finalRow % mHeight;
-				finalCol = finalCol % mWidth;
-			}
-			else if (finalRow >= 0 && finalCol < 0)
-			{
-				finalRow = finalRow % mHeight;
-				finalCol = mWidth + finalCol % mHeight;
-			}
-			else
-			{
-				finalRow = finalRow % mHeight;
-				finalCol = finalCol % mWidth;
-			}
-
-			if(!(mLattice[getAddress(finalRow, finalCol)] & PREDATOR))
-			{
-				// Create a new particle
-				Particle particle;
-				particle.setPosition(finalRow, finalCol);
-				particle.setBestPosition(p.bestPosition().row(), p.bestPosition().col());
-
-				mLattice[getAddress(finalRow, finalCol)] |= PREDATOR;
-
-				newParticles.push_back(particle);
-
-				mNumberOfPredators++;
-			}
-
-			birthCount++;
 		}
 	});
 
-    mParticles.insert(mParticles.end(), newParticles.begin(), newParticles.end());
+	mPredatorSwarm.add(newParticles);
 
-	mNextStage = &CaPso::predatorsDeath;
+	mNextStage = &LocalCaPso::predatorsDeath;
 }
 
-void CaPso::predatorsDeath()
+void LocalCaPso::predatorsDeath()
 {
     int currentAddress;
 
-    for(auto it = mParticles.begin(); it != mParticles.end();)
+    for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
     {
-        currentAddress = getAddress((*it).position().row(), (*it).position().col());
+        currentAddress = getAddress((*it)->position().row(), (*it)->position().col());
 
-        if(!(mLattice[currentAddress] & PREY))
+        if(!checkState(currentAddress, PREY))
         {
-            mLattice[currentAddress] &= ~PREDATOR;
-
+			clearState(currentAddress, PREDATOR);
+			
 			// Since the iterator is invalidated when erase() is called, we must
 			// use its return value (an iterator pointing to the element following
 			// the element that has just been erased) to keep a valid iterator.
-            it = mParticles.erase(it);
-
+            it = mPredatorSwarm.erase(it);
             mNumberOfPredators--;
         }
         else
@@ -433,34 +527,36 @@ void CaPso::predatorsDeath()
         }
     }
 
-	mNextStage = &CaPso::predatorsFeeding;
+	mNextStage = &LocalCaPso::predation;
 }
 
-void CaPso::predatorsFeeding()
+void LocalCaPso::predation()
 {
-    int pRow, pCol, currentAddress;
-
-	std::for_each(mParticles.begin(), mParticles.end(), [&, this](Particle& p)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
 	{
-		pRow = p.position().row();
-		pCol = p.position().col();
-		currentAddress = getAddress(pRow, pCol);
-
-		// Kill the prey in the current cell
-		if(mLattice[currentAddress] & PREY)
+		if(auto p = wp.lock())
 		{
-			mLattice[currentAddress] &= ~PREY;
+			int pRow = p->position().row();
+			int pCol = p->position().col();
 
-			notifyNeighbors(pRow, pCol, true);
+			int currentAddress = getAddress(pRow, pCol);
 
-			mNumberOfPreys--;
+			// Kill the prey in the current cell
+			if(checkState(currentAddress, PREY))
+			{
+				clearState(currentAddress, PREY);
+
+				notifyNeighbors(pRow, pCol, true);
+
+				mNumberOfPreys--;
+			}
 		}
 	});
 
-	mNextStage = &CaPso::reproductionOfPreys;
+	mNextStage = &LocalCaPso::reproductionOfPreys;
 }
 
-void CaPso::reproductionOfPreys()
+void LocalCaPso::reproductionOfPreys()
 {
     std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
@@ -538,10 +634,10 @@ void CaPso::reproductionOfPreys()
         }
     }
 
-    mNextStage = &CaPso::competenceOfPreys;
+    mNextStage = &LocalCaPso::competenceOfPreys;
 }
 
-void CaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
+void LocalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
 {
     int finalRow, finalCol;
 
@@ -559,12 +655,27 @@ void CaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
 
             if(death)
             {
-                mPreyHistogram[getAddress(finalRow, finalCol)]--;
+                mPreyDensities[getAddress(finalRow, finalCol)]--;
             }
             else
             {
-                mPreyHistogram[getAddress(finalRow, finalCol)]++;
+                mPreyDensities[getAddress(finalRow, finalCol)]++;
             }
         }
     }
+}
+
+bool LocalCaPso::checkState(int address, State state)
+{
+	return mLattice[address] & state;
+}
+
+void LocalCaPso::setState(int address, State state)
+{
+	mLattice[address] |= state;
+}
+
+void LocalCaPso::clearState(int address, State state)
+{
+	mLattice[address] &= ~state;
 }

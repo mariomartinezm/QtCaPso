@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "localcapso.h"
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
@@ -9,12 +10,15 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 
 	makeConnections();
 	createCa(LOCAL);
+
+	mView = new CaView(this, mCellularAutomaton);
+	setCentralWidget(mView);
 }
 
 Controller::~Controller()
 {
-	//delete mCellularAutomaton;
-	//delete mView;
+	delete mCellularAutomaton;
+	delete mView;
 }
 
 void Controller::timerEvent(QTimerEvent* e)
@@ -108,6 +112,7 @@ void Controller::createCa(CaType type)
 		break;
 
 	case LOCAL:
+		mCellularAutomaton = new LocalCaPso(256, 256);
 		break;
 
 	case MOVEMENT:

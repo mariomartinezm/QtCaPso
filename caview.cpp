@@ -3,7 +3,7 @@
 #include "caview.h"
 
 CaView::CaView(QWidget* parent, CellularAutomaton* ca) :
-QWidget(parent), mDesiredWidth(ca->width() * 4), mDesiredHeight(ca->height() * 4)
+QWidget(parent), mDesiredWidth(ca->width()), mDesiredHeight(ca->height())
 {
 	mCellularAutomaton = ca;
 	mLatticeImage = new QImage(mCellularAutomaton->latticeData(), mCellularAutomaton->width(),

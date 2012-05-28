@@ -3,16 +3,15 @@
 
 #include <random>
 #include <list>
-#include "cellularautomata.h"
-#include "particle.h"
-#include "latticepoint.h"
+#include "cellularautomaton.h"
+#include "swarm.h"
 
-class CaPso : public CellularAutomata
+class LocalCaPso : public CellularAutomaton
 {
 public:
-	enum { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
+	enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
 
-	CaPso(int width, int height);
+	LocalCaPso(int width, int height);
 
 	void initialize();
 
@@ -35,20 +34,23 @@ public:
 	int numberOfPreys() const;
 	int numberOfPredators() const;
 
+	virtual void clear();
+
 private:
+	Swarm mPredatorSwarm;
+
 	// Containers
 	std::vector<unsigned char> mTemp;
-	std::vector<unsigned char> mPreyHistogram;
-	std::list<Particle> mParticles;
+	std::vector<unsigned char> mPreyDensities;
 
 	int mNumberOfPreys, mNumberOfPredators;
 
 	// Use the c++0x implementation of the Mersenne twister RNG
 	std::mt19937 mRandom;
-	std::uniform_real_distribution<double> mDistReal_0_1;
+	std::uniform_real_distribution<float> mDistReal_0_1;
 
 	// A function pointer that handles transitions
-	void (CaPso::*mNextStage)();
+	void (LocalCaPso::*mNextStage)();
 
 	// Model parameters
 	double mInitialAlivePercentage;
@@ -62,27 +64,27 @@ private:
 
 	// PSO parameters
 	int mInitialSwarmSize;
-	double mPFactor;
-	double mGFactor;
 	int mMigrationTime;
 	int mMigrationCount;
-	double mInitialInertiaWeight;
-	double mCurrentInertiaWeight;
-	double mFinalInertiaWeight;
-	const double INERTIA_STEP;
-	const int mMaxSpeed;
+	float mInitialInertiaWeight;
+	float mCurrentInertiaWeight;
+	float mFinalInertiaWeight;
+	const float INERTIA_STEP;
 
 	// Model stages
 	void competenceOfPreys();
 	void migration();
 	void reproductionOfPredators();
 	void predatorsDeath();
-	void predatorsFeeding();
+	void predation();
 	void reproductionOfPreys();
 
 	// Misc methods
 	void notifyNeighbors(const int& row, const int& col,
-						 const bool& death);
+						 const bool& death_birth);
+	bool checkState(int address, State state);
+	void setState(int address, State state);
+	void clearState(int address, State state);
 };
 
 #endif // CAPSO_H
