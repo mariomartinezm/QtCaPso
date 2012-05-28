@@ -144,6 +144,21 @@ void LocalCaPso::setInitialSwarmSize(int value)
     mInitialSwarmSize = value;
 }
 
+void LocalCaPso::setCognitiveFactor(float value)
+{
+	mPredatorSwarm.setCognitiveFactor(value);
+}
+
+void LocalCaPso::setSocialFactor(float value)
+{
+	mPredatorSwarm.setSocialFactor(value);
+}
+
+void LocalCaPso::setMaximumSpeed(int value)
+{
+	mPredatorSwarm.setMaxSpeed(value);
+}
+
 void LocalCaPso::setMitrationTime(int value)
 {
     mMigrationTime = value;

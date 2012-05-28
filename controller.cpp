@@ -3,13 +3,15 @@
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
+	mCurrentType(LOCAL),
+	mSettingsDialog(new LocalSettingsDialog()),
 	mTimerId(-1),
 	mTimerCount(0)
 {
 	this->setupUi(this);
 
 	makeConnections();
-	createCa(LOCAL);
+	createCa();
 
 	mView = new CaView(this, mCellularAutomaton);
 	setCentralWidget(mView);
@@ -109,7 +111,38 @@ void Controller::initialize()
 
 void Controller::showSettings()
 {
+	mSettingsDialog->exec();
+}
 
+void Controller::updateSettings(QMap<QString, QVariant> settings)
+{
+	switch(mCurrentType)
+	{
+	case GLOBAL:
+		break;
+
+	case LOCAL:
+		{
+			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+
+			local->setInitialAlivePreys(settings["initialNumberOfPreys"].toFloat());
+			local->setCompetenceFactor(settings["competenceFactor"].toFloat());
+			local->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
+			local->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
+
+			local->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
+			local->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
+			local->setSocialFactor(settings["predatorSocialFactor"].toFloat());
+			local->setMaximumSpeed(settings["predatorMaximumSpeed"].toFloat());
+			local->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
+			local->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
+			local->setSearchRadius(settings["predatorSocialRadius"].toInt());
+		}
+		break;
+
+	case MOVEMENT:
+		break;
+	}
 }
 
 void Controller::makeConnections()
@@ -119,11 +152,15 @@ void Controller::makeConnections()
 	connect(actionStep, SIGNAL(triggered()), this, SLOT(step()));
 	connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
 	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
+	connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
+
+	connect(mSettingsDialog, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
+		this, SLOT(updateSettings(QMap<QString, QVariant>)));
 }
 
-void Controller::createCa(CaType type)
+void Controller::createCa()
 {
-	switch(type)
+	switch(mCurrentType)
 	{
 	case GLOBAL:
 		break;

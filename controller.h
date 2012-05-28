@@ -6,6 +6,7 @@
 #include "catype.h"
 #include "cellularautomaton.h"
 #include "caview.h"
+#include "localsettingsdialog.h"
 
 class Controller : public QMainWindow, private Ui::ControllerClass
 {
@@ -26,13 +27,17 @@ private slots:
 	void clear();
 	void initialize();
 	void showSettings();
+	void updateSettings(QMap<QString, QVariant> settigns);
 
 private:
 	void makeConnections();
-	void createCa(CaType);
+	void createCa();
 
+	CaType mCurrentType;
 	CellularAutomaton* mCellularAutomaton;
 	CaView* mView;
+	LocalSettingsDialog* mSettingsDialog;
+
 	int mTimerId;
 	int mTimerCount;
 };

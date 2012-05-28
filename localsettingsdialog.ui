@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>LocalSettingsDialog</class>
+ <widget class="QDialog" name="LocalSettingsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -104,15 +104,6 @@
          </layout>
         </item>
        </layout>
-       <zorder>labelInitialPreys</zorder>
-       <zorder>labelPreyReproductionRadius</zorder>
-       <zorder>labelCompetenceFactor</zorder>
-       <zorder>labelPreyReproductiveCapacity</zorder>
-       <zorder>lineEditInitialPreys</zorder>
-       <zorder>lineEditCompetenceFactor</zorder>
-       <zorder>groupBoxPredators</zorder>
-       <zorder>spinBoxPreyReproductionRadius</zorder>
-       <zorder>spinBoxPreyReproductiveCapacity</zorder>
       </widget>
      </item>
      <item>
@@ -245,21 +236,6 @@
          </layout>
         </item>
        </layout>
-       <zorder>labelInitialPredators</zorder>
-       <zorder>labelCognitiveFactor</zorder>
-       <zorder>labelSocialFactor</zorder>
-       <zorder>labelMaxSpeed</zorder>
-       <zorder>labelPredatorReproductionRadius</zorder>
-       <zorder>labelPredatorReproductiveCapacity</zorder>
-       <zorder>label_12</zorder>
-       <zorder>lineEditInitialPredators</zorder>
-       <zorder>lineEditCognitiveFactor</zorder>
-       <zorder>lineEditSocialFactor</zorder>
-       <zorder>spinBoxMaxSpeed</zorder>
-       <zorder>spinBoxPredatorReproductionRadius</zorder>
-       <zorder>spinBoxSocialRadius</zorder>
-       <zorder>spinBoxPredatorReproductiveCapacity</zorder>
-       <zorder>groupBoxPreys</zorder>
       </widget>
      </item>
     </layout>
@@ -329,7 +305,7 @@
   <connection>
    <sender>okButton</sender>
    <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>LocalSettingsDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -345,7 +321,7 @@
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>LocalSettingsDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
