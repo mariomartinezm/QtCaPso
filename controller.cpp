@@ -168,7 +168,7 @@ void Controller::createCa()
 		break;
 
 	case LOCAL:
-		mCellularAutomaton = new LocalCaPso(256, 256);
+		mCellularAutomaton = new LocalCaPso(512, 256);
 		break;
 
 	case MOVEMENT:
