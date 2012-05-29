@@ -137,6 +137,8 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 			local->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
 			local->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
 			local->setSearchRadius(settings["predatorSocialRadius"].toInt());
+			local->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
+			local->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
 		}
 		break;
 

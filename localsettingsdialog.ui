@@ -249,7 +249,14 @@
              </widget>
             </item>
             <item row="7" column="1">
-             <widget class="QLineEdit" name="lineEditInitialWeight"/>
+             <widget class="QLineEdit" name="lineEditInitialWeight">
+              <property name="text">
+               <string>0.9</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
             </item>
             <item row="8" column="0">
              <widget class="QLabel" name="labelFinalWeight">
@@ -259,7 +266,14 @@
              </widget>
             </item>
             <item row="8" column="1">
-             <widget class="QLineEdit" name="lineEditFinalWeight"/>
+             <widget class="QLineEdit" name="lineEditFinalWeight">
+              <property name="text">
+               <string>0.2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -329,7 +343,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>groupBoxPredators</zorder>
  </widget>
  <resources/>
  <connections>

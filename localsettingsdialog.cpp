@@ -42,6 +42,8 @@ void LocalSettingsDialog::accept()
 	mSettings.insert("predatorReproductiveCapacity", spinBoxPredatorReproductiveCapacity->value());
 	mSettings.insert("predatorReproductionRadius", spinBoxPredatorReproductionRadius->value());
 	mSettings.insert("predatorSocialRadius", spinBoxSocialRadius->value());
+	mSettings.insert("initialInertiaWeight", lineEditInitialWeight->text().toFloat());
+	mSettings.insert("finalInertiaWeight", lineEditFinalWeight->text().toFloat());
 
 	// Insert path to results file
 	mSettings.insert("resultsFilePath", lineEditPath->text());
