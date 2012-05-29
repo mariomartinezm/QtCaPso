@@ -32,6 +32,7 @@ private slots:
 private:
 	void makeConnections();
 	void createCa();
+	void createView();
 
 	CaType mCurrentType;
 	CellularAutomaton* mCellularAutomaton;

@@ -12,9 +12,7 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 
 	makeConnections();
 	createCa();
-
-	mView = new CaView(this, mCellularAutomaton);
-	setCentralWidget(mView);
+	createView();
 }
 
 Controller::~Controller()
@@ -174,4 +172,10 @@ void Controller::createCa()
 	case MOVEMENT:
 		break;
 	}
+}
+
+void Controller::createView()
+{
+	mView = new CaView(this, mCellularAutomaton);
+	setCentralWidget(mView);
 }
