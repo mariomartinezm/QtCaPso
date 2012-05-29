@@ -5,6 +5,9 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
 	mCurrentType(LOCAL),
 	mSettingsDialog(new LocalSettingsDialog()),
+	mCurrFileName("results.txt"),
+	mResultsFile(new QFile(mCurrFileName, this)),
+	mResultsStream(mResultsFile),
 	mTimerId(-1),
 	mTimerCount(0),
 	mSeasonLength(10)

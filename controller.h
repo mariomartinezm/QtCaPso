@@ -2,6 +2,8 @@
 #define CONTROLLER_H
 
 #include <QtGui/QMainWindow>
+#include <qfile.h>
+#include <qtextstream.h>
 #include "ui_controller.h"
 #include "catype.h"
 #include "cellularautomaton.h"
@@ -33,11 +35,17 @@ private:
 	void makeConnections();
 	void createCa();
 	void createView();
+	void writeResults();
 
 	CaType mCurrentType;
 	CellularAutomaton* mCellularAutomaton;
 	CaView* mView;
 	LocalSettingsDialog* mSettingsDialog;
+
+	// Support for a results file
+	QFile* mResultsFile;
+	QTextStream mResultsStream;
+	QString mCurrFileName;
 
 	int mTimerId;
 	int mTimerCount;
