@@ -43,9 +43,9 @@ private:
 	LocalSettingsDialog* mSettingsDialog;
 
 	// Support for a results file
+	QString mCurrFileName;
 	QFile* mResultsFile;
 	QTextStream mResultsStream;
-	QString mCurrFileName;
 
 	int mTimerId;
 	int mTimerCount;

@@ -288,34 +288,36 @@ void LocalCaPso::migration()
 				speed = sqrt((double)(velRow * velRow + velCol * velCol));
 			}
 
-			p->setVelocity(velRow, velCol);
-
 			// Move the particle
-			velRow += pRow;
-			velCol += pCol;
+			int posRow = pRow + velRow;
+			int posCol = pCol + velCol;
 
 			// Adjust position
-			velRow = (mHeight + velRow) % mHeight;
-			velCol = (mWidth + velCol) % mWidth;
+			posRow = (mHeight + posRow) % mHeight;
+			posCol = (mWidth + posCol) % mWidth;
 
-			p->setPosition(velRow, velCol);
-
-			// If necessary, update the particle's best know position
-			if(mPreyDensities[getAddress(pRow, pCol)] < mPreyDensities[getAddress(velRow, velCol)])
+			// Check if destination is not already occupied
+			if(!checkState(getAddress(posRow, posCol), PREDATOR))
 			{
-				p->setBestPosition(velRow, velCol);
+				p->setPosition(posRow, posCol);
+				p->setVelocity(velRow, velCol);
+
+				// Render the particle at its new position
+				setState(getAddress(posRow, posCol), PREDATOR);
+
+				// If necessary, update the particle's best known position
+				if(mPreyDensities[getAddress(p->bestPosition().row(), p->bestPosition().col())] < 
+					mPreyDensities[getAddress(posRow, posCol)])
+				{
+					p->setBestPosition(posRow, posCol);
+				}
+			}
+			else
+			{
+				// Restore the particle's previous position
+				setState(getAddress(pRow, pCol), PREDATOR);
 			}
 		}
-	});
-
-	// Render the particles at their new positions
-	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
-	{
-		if(auto p = wp.lock())
-		{
-			setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
-		}
-		//mLattice[getAddress(p.position().row(), p.position().col())] |= PREDATOR;
 	});
 
 	// Decrease the inertia weight and increase the migration counter
@@ -330,110 +332,6 @@ void LocalCaPso::migration()
 		mMigrationCount = 0;
 		mCurrentInertiaWeight = mInitialInertiaWeight;
 	}
-
- //   int finalRow, finalCol, neighbourAddress;
- //   int pRow, pCol, bestRow, bestCol, bestAddress;
-
- //   std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
-
-	//std::for_each(mParticles.begin(), mParticles.end(), [&, this](Particle& p)
-	//{
-	//	pRow = bestRow = p.position().row();
-	//	pCol = bestCol = p.position().col();
-
-	//	bestAddress = getAddress(pRow, pCol);
-
-	//	// Clear the previous position of the predator
-	//	mLattice[getAddress(pRow, pCol)] &= ~PREDATOR;
-
-	//	// Get the best position among the neighbors of the predator
-	//	for(int nRow = pRow - mSearchRadius; nRow <= pRow + mSearchRadius; nRow++)
-	//	{
-	//		for(int nCol = pCol - mSearchRadius; nCol <= pCol + mSearchRadius; nCol++)
-	//		{
-	//			if(nRow == pRow && nCol == pCol)
-	//			{
-	//				continue;
-	//			}
-
-	//			finalRow = (mHeight + nRow) % mHeight;
-	//			finalCol = (mWidth + nCol) % mWidth;
-
-	//			neighbourAddress = getAddress(finalRow, finalCol);
-
-	//			if(mTemp[neighbourAddress] & PREDATOR)
-	//			{
-	//				// Update if necessary
-	//				if(mPreyDensities[bestAddress] < mPreyDensities[neighbourAddress])
-	//				{
-	//					bestRow = nRow;
-	//					bestCol = nCol;
-
-	//					bestAddress = neighbourAddress;
-	//				}
-	//			}
-	//		}
-	//	}
-
-	//	double r1 = mDistReal_0_1(mRandom);
-	//	double r2 = mDistReal_0_1(mRandom);
-
-	//	// Get the new velocity
-	//	int velRow = (int)(mCurrentInertiaWeight * p.velocity().row() +
-	//		mPFactor * r1 * (p.bestPosition().row() - pRow) +
-	//		mGFactor * r2 * (bestRow - pRow));
-	//	int velCol = (int)(mCurrentInertiaWeight * p.velocity().col() +
-	//		mPFactor * r1 * (p.bestPosition().col() - pCol) +
-	//		mGFactor * r2 * (bestCol - pCol));
-
-	//	// Adjust speed
-	//	double speed = sqrt((double)(velRow * velRow + velCol * velCol));
-
-	//	while(speed > mMaxSpeed)
-	//	{
-	//		velRow *= 0.9;
-	//		velCol *= 0.9;
-
-	//		speed = sqrt((double)(velRow * velRow + velCol * velCol));
-	//	}
-
-	//	p.setVelocity(velRow, velCol);
-
-	//	// Move the particle
-	//	velRow += pRow;
-	//	velCol += pCol;
-
-	//	// Adjust position
-	//	velRow = (mHeight + velRow) % mHeight;
-	//	velCol = (mWidth + velCol) % mWidth;
-
-	//	p.setPosition(velRow, velCol);
-
-	//	// If necessary, update the particle's best know position
-	//	if(mPreyDensities[getAddress(pRow, pCol)] < mPreyDensities[getAddress(velRow, velCol)])
-	//	{
-	//		p.setBestPosition(velRow, velCol);
-	//	}
-	//});
-
-	//// Render the particles at their new positions
-	//std::for_each(mParticles.begin(), mParticles.end(), [this](Particle& p)
-	//{
-	//	mLattice[getAddress(p.position().row(), p.position().col())] |= PREDATOR;
-	//});
-
- //   // Decrease the inertia weight and increase the migration counter
- //   mCurrentInertiaWeight -= INERTIA_STEP;
- //   mMigrationCount++;
-
- //   // If migration has ended, point to the next stage and reset the inertia
- //   // weight and migration count
- //   if(mMigrationCount == mMigrationTime)
- //   {
-	//	mNextStage = &LocalCaPso::reproductionOfPredators;
- //       mMigrationCount = 0;
- //       mCurrentInertiaWeight = mInitialInertiaWeight;
- //   }
 }
 
 void LocalCaPso::reproductionOfPredators()
