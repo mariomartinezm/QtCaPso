@@ -41,6 +41,7 @@ private:
 
 	int mTimerId;
 	int mTimerCount;
+	int mSeasonLength;
 };
 
 #endif // CONTROLLER_H

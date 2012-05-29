@@ -6,7 +6,8 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	mCurrentType(LOCAL),
 	mSettingsDialog(new LocalSettingsDialog()),
 	mTimerId(-1),
-	mTimerCount(0)
+	mTimerCount(0),
+	mSeasonLength(10)
 {
 	this->setupUi(this);
 
@@ -167,6 +168,7 @@ void Controller::createCa()
 
 	case LOCAL:
 		mCellularAutomaton = new LocalCaPso(256, 256);
+		mSeasonLength = 10;
 		break;
 
 	case MOVEMENT:
