@@ -33,7 +33,7 @@
    <addaction name="actionClear"/>
    <addaction name="actionInitialize"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBarGeneration"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>

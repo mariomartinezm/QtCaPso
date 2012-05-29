@@ -34,9 +34,7 @@ void Controller::timerEvent(QTimerEvent* e)
 		writeResults();
 	}*/
 
-	//mStatusBarString.setNum(mTimerCount);
-
-	//mStatusBar->showMessage(mStatusBarString);
+	statusBarGeneration->showMessage(QString::number(mTimerCount));
 
 	mView->update();
 }
@@ -77,7 +75,9 @@ void Controller::step()
 		//writeResults();
 	}
 
-	update();
+	statusBarGeneration->showMessage(QString::number(mTimerCount));
+
+	mView->update();
 }
 
 void Controller::clear()
@@ -168,7 +168,7 @@ void Controller::createCa()
 		break;
 
 	case LOCAL:
-		mCellularAutomaton = new LocalCaPso(512, 256);
+		mCellularAutomaton = new LocalCaPso(256, 256);
 		break;
 
 	case MOVEMENT:
