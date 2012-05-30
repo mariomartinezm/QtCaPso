@@ -35,6 +35,7 @@ private:
 	void makeConnections();
 	void createCa();
 	void createView();
+	void initializeResultsFile();
 	void writeResults();
 
 	CaType mCurrentType;
@@ -43,9 +44,9 @@ private:
 	LocalSettingsDialog* mSettingsDialog;
 
 	// Support for a results file
+	QString mCurrFileName;
 	QFile* mResultsFile;
 	QTextStream mResultsStream;
-	QString mCurrFileName;
 
 	int mTimerId;
 	int mTimerCount;

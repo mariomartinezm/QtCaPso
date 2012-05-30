@@ -17,10 +17,14 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	makeConnections();
 	createCa();
 	createView();
+	initializeResultsFile();
+	writeResults();
 }
 
 Controller::~Controller()
 {
+	mResultsFile->close();
+
 	delete mCellularAutomaton;
 	delete mView;
 }
@@ -31,10 +35,10 @@ void Controller::timerEvent(QTimerEvent* e)
 
 	mTimerCount++;
 
-	/*if(!(mTimerCount % 10))
+	if(!(mTimerCount % mSeasonLength))
 	{
 		writeResults();
-	}*/
+	}
 
 	statusBarGeneration->showMessage(QString::number(mTimerCount));
 
@@ -55,6 +59,8 @@ void Controller::pause()
 	{
 		killTimer(mTimerId);
 
+		mResultsStream.flush();
+
 		mTimerId = -1;
 	}
 }
@@ -72,9 +78,9 @@ void Controller::step()
 
 	mTimerCount++;
 
-	if(!(mTimerCount % 5))
+	if(!(mTimerCount % mSeasonLength))
 	{
-		//writeResults();
+		writeResults();
 	}
 
 	statusBarGeneration->showMessage(QString::number(mTimerCount));
@@ -102,11 +108,7 @@ void Controller::initialize()
 
 	mTimerCount = 0;
 
-	// Reset the contents of the results file
-	/*mResultsFile->close();
-	mResultsFile->setFileName(mCurrentFileName);
-	mResultsFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
-	mResultsStream.seek(0)*/
+	initializeResultsFile();
 
 	mView->update();
 }
@@ -147,6 +149,8 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 	case MOVEMENT:
 		break;
 	}
+
+	mCurrFileName = settings["resultsFilePath"].toString() + "results.txt";
 }
 
 void Controller::makeConnections()
@@ -183,4 +187,26 @@ void Controller::createView()
 {
 	mView = new CaView(this, mCellularAutomaton);
 	setCentralWidget(mView);
+}
+
+void Controller::initializeResultsFile()
+{
+	mResultsFile->close();
+	mResultsFile->setFileName(mCurrFileName);
+	mResultsFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
+	mResultsStream.seek(0);
+}
+
+void Controller::writeResults()
+{
+	switch(mCurrentType)
+	{
+	case LOCAL:
+		{
+			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+			mResultsStream << mTimerCount / mSeasonLength << " " << local->numberOfPreys() <<
+				" " << local->numberOfPredators() << "\n";
+		}
+		break;
+	}
 }
