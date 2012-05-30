@@ -150,7 +150,7 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 		break;
 	}
 
-	mCurrFileName = settings["resultsFilePath"].toString() + "results.txt";
+	mCurrFileName = settings["resultsFilePath"].toString();
 }
 
 void Controller::makeConnections()

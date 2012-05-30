@@ -6,6 +6,9 @@ LocalSettingsDialog::LocalSettingsDialog(QWidget* parent)
 {
 	this->setupUi(this);
 
+	// Set the application's path to the correspoinding lineEdit's text
+	lineEditPath->setText(QCoreApplication::applicationDirPath() + "/results.txt");
+
 	// Connect the browse button to its corresponding slot
 	connect(pushButtonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 }
