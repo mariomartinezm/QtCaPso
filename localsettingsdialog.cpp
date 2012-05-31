@@ -25,7 +25,7 @@ void LocalSettingsDialog::showFileDialog()
 
 	if(!path.isEmpty())
 	{
-		lineEditPath->setText(path);
+		lineEditPath->setText(path + "/results.txt");
 	}
 }
 
