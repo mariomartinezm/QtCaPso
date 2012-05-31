@@ -60,6 +60,13 @@
      <string>&amp;Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionExportBitmap"/>
+   </widget>
+   <addaction name="menu_File"/>
    <addaction name="menu_Simulation"/>
    <addaction name="menu_Help"/>
   </widget>
@@ -121,6 +128,14 @@
    </property>
    <property name="toolTip">
     <string>Open settings dialog</string>
+   </property>
+  </action>
+  <action name="actionExportBitmap">
+   <property name="text">
+    <string>Export Bitmap</string>
+   </property>
+   <property name="toolTip">
+    <string>Export the lattice as a Png image</string>
    </property>
   </action>
  </widget>

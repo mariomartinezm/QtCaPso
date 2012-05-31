@@ -1,3 +1,4 @@
+#include <qfiledialog.h>
 #include "controller.h"
 #include "localcapso.h"
 
@@ -118,6 +119,17 @@ void Controller::showSettings()
 	mSettingsDialog->exec();
 }
 
+void Controller::exportBitmap()
+{
+	QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
+		QCoreApplication::applicationDirPath() + "/lattice.PNG", tr("PNG images (*.PNG)"));
+
+	if(!fileName.isEmpty())
+	{
+		mView->latticeImage().save(fileName);
+	}
+}
+
 void Controller::updateSettings(QMap<QString, QVariant> settings)
 {
 	switch(mCurrentType)
@@ -161,6 +173,7 @@ void Controller::makeConnections()
 	connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
 	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
 	connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
+	connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
 
 	connect(mSettingsDialog, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
 		this, SLOT(updateSettings(QMap<QString, QVariant>)));

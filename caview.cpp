@@ -29,6 +29,11 @@ QSize CaView::sizeHint() const
 	return QSize(mDesiredWidth, mDesiredHeight);
 }
 
+const QImage& CaView::latticeImage() const
+{
+	return *mLatticeImage;
+}
+
 void CaView::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);

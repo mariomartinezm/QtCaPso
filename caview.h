@@ -11,9 +11,12 @@ class CaView : public QWidget
 
 public:
 	explicit CaView(QWidget* parent = 0, CellularAutomaton* ca = 0);
+
 	~CaView();
 
 	QSize sizeHint() const;
+
+	const QImage& latticeImage() const;
 
 protected:
 	void paintEvent(QPaintEvent*);

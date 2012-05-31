@@ -29,6 +29,7 @@ private slots:
 	void clear();
 	void initialize();
 	void showSettings();
+	void exportBitmap();
 	void updateSettings(QMap<QString, QVariant> settigns);
 
 private:
