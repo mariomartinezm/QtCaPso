@@ -124,7 +124,7 @@
   </action>
   <action name="actionSettings">
    <property name="text">
-    <string>Settings</string>
+    <string>Settings...</string>
    </property>
    <property name="toolTip">
     <string>Open settings dialog</string>
@@ -132,7 +132,7 @@
   </action>
   <action name="actionExportBitmap">
    <property name="text">
-    <string>Export Bitmap</string>
+    <string>Export Bitmap...</string>
    </property>
    <property name="toolTip">
     <string>Export the lattice as a Png image</string>
