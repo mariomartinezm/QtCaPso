@@ -102,12 +102,12 @@ void LocalCaPso::nextGen()
     (this->*mNextStage)();
 }
 
-void LocalCaPso::setCompetenceFactor(double value)
+void LocalCaPso::setCompetenceFactor(float value)
 {
     mCompetenceFactor = value;
 }
 
-void LocalCaPso::setInitialAlivePreys(double value)
+void LocalCaPso::setInitialAlivePreys(float value)
 {
     mInitialAlivePercentage = value;
 }
@@ -164,12 +164,12 @@ void LocalCaPso::setMitrationTime(int value)
     mMigrationTime = value;
 }
 
-void LocalCaPso::setInitialInertialWeight(double value)
+void LocalCaPso::setInitialInertialWeight(float value)
 {
     mInitialInertiaWeight = value;
 }
 
-void LocalCaPso::setFinalInertiaWeight(double value)
+void LocalCaPso::setFinalInertiaWeight(float value)
 {
     mFinalInertiaWeight = value;
 }

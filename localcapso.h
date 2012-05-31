@@ -17,8 +17,8 @@ public:
 
 	void nextGen();
 
-	void setInitialAlivePreys(double value);
-	void setCompetenceFactor(double value);
+	void setInitialAlivePreys(float value);
+	void setCompetenceFactor(float value);
 	void setPreyMeanOffspring(int value);
 	void setPreyReproductionRadius(int value);
 	void setPredatorMeanOffspring(int value);
@@ -29,8 +29,8 @@ public:
 	void setSocialFactor(float value);
 	void setMaximumSpeed(int value);
 	void setMitrationTime(int value);
-	void setInitialInertialWeight(double value);
-	void setFinalInertiaWeight(double value);
+	void setInitialInertialWeight(float value);
+	void setFinalInertiaWeight(float value);
 
 	int numberOfPreys() const;
 	int numberOfPredators() const;
