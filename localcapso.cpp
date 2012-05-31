@@ -274,7 +274,7 @@ void LocalCaPso::migration()
 				mPredatorSwarm.cognitiveFactor() * r1 * (p->bestPosition().row() - pRow) +
 				mPredatorSwarm.socialFactor() * r2 * (bestRow - pRow));
 			int velCol = (int)(mCurrentInertiaWeight * p->velocity().col() +
-				mPredatorSwarm.socialFactor() * r1 * (p->bestPosition().col() - pCol) +
+				mPredatorSwarm.cognitiveFactor() * r1 * (p->bestPosition().col() - pCol) +
 				mPredatorSwarm.socialFactor() * r2 * (bestCol - pCol));
 
 			// Adjust speed
