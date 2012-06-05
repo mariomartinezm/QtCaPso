@@ -149,7 +149,7 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 			local->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
 			local->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
 			local->setSocialFactor(settings["predatorSocialFactor"].toFloat());
-			local->setMaximumSpeed(settings["predatorMaximumSpeed"].toFloat());
+			local->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
 			local->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
 			local->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
 			local->setSearchRadius(settings["predatorSocialRadius"].toInt());
