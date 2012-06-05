@@ -1,10 +1,11 @@
 #include <qfiledialog.h>
 #include "controller.h"
 #include "localcapso.h"
+#include "globalcapso.h"
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
-	mCurrentType(LOCAL),
+	mCurrentType(GLOBAL),
 	mSettingsDialog(new LocalSettingsDialog()),
 	mCurrFileName("results.txt"),
 	mResultsFile(new QFile(mCurrFileName, this)),
@@ -184,6 +185,7 @@ void Controller::createCa()
 	switch(mCurrentType)
 	{
 	case GLOBAL:
+		mCellularAutomaton = new GlobalCaPso(256, 256);
 		break;
 
 	case LOCAL:

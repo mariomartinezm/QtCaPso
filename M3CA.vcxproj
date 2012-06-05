@@ -99,6 +99,7 @@
     <ClCompile Include="GeneratedFiles\Release\moc_localsettingsdialog.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="globalcapso.cpp" />
     <ClCompile Include="latticepoint.cpp" />
     <ClCompile Include="localcapso.cpp" />
     <ClCompile Include="localsettingsdialog.cpp" />
@@ -133,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_localsettingsdialog.h" />
+    <ClInclude Include="globalcapso.h" />
     <ClInclude Include="latticepoint.h" />
     <ClInclude Include="localcapso.h" />
     <CustomBuild Include="localsettingsdialog.h">

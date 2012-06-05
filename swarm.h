@@ -31,6 +31,8 @@ public:
 	std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
 		std::allocator<std::shared_ptr<Particle>>>::const_iterator it);
 
+	bool empty() const;
+
 private:
 	std::list<std::shared_ptr<Particle>> mParticles;
 	float mCognitiveFactor;

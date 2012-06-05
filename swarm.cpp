@@ -51,3 +51,8 @@ std::list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator 
 {
 	return mParticles.erase(it);
 }
+
+bool Swarm::empty() const
+{
+	return mParticles.empty();
+}

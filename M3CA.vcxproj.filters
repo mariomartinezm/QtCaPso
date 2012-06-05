@@ -95,6 +95,9 @@
     <ClCompile Include="localsettingsdialog.cpp">
       <Filter>Source Files\Application</Filter>
     </ClCompile>
+    <ClCompile Include="globalcapso.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="controller.ui">
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_localsettingsdialog.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="globalcapso.h">
+      <Filter>Header Files\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
