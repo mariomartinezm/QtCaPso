@@ -7,7 +7,7 @@
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
-	mCurrentType(GLOBAL),
+	mCurrentType(LOCAL),
 	mCurrFileName("results.txt"),
 	mResultsFile(new QFile(mCurrFileName, this)),
 	mResultsStream(mResultsFile),
