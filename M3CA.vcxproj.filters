@@ -118,6 +118,9 @@
     <CustomBuild Include="localsettingsdialog.h">
       <Filter>Header Files\Application</Filter>
     </CustomBuild>
+    <CustomBuild Include="globalsettingsdialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_controller.h">
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="globalcapso.h">
       <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_globalsettingsdialog.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
