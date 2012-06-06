@@ -1,12 +1,13 @@
 #include <qfiledialog.h>
 #include "controller.h"
 #include "localcapso.h"
+#include "localsettingsdialog.h"
+#include "globalsettingsdialog.h"
 #include "globalcapso.h"
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
 	mCurrentType(GLOBAL),
-	mSettingsDialog(new LocalSettingsDialog()),
 	mCurrFileName("results.txt"),
 	mResultsFile(new QFile(mCurrFileName, this)),
 	mResultsStream(mResultsFile),
@@ -19,6 +20,7 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	makeConnections();
 	createCa();
 	createView();
+	createSettingsDialog();
 	initializeResultsFile();
 	writeResults();
 }
@@ -136,6 +138,24 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 	switch(mCurrentType)
 	{
 	case GLOBAL:
+		{
+			auto globalDialog = dynamic_cast<GlobalCaPso*>(mCellularAutomaton);
+
+			globalDialog->setInitialPreyPercentage(settings["initialNumberOfPreys"].toFloat());
+			globalDialog->setCompetenceFactor(settings["competenceFactor"].toFloat());
+			globalDialog->setCompetenceRadius(settings["competenceRadius"].toInt());
+			globalDialog->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
+			globalDialog->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
+
+			globalDialog->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
+			globalDialog->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
+			globalDialog->setSocialFactor(settings["predatorSocialFactor"].toFloat());
+			globalDialog->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
+			globalDialog->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
+			globalDialog->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
+			globalDialog->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
+			globalDialog->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
+		}
 		break;
 
 	case LOCAL:
@@ -175,9 +195,6 @@ void Controller::makeConnections()
 	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
 	connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
 	connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
-
-	connect(mSettingsDialog, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
-		this, SLOT(updateSettings(QMap<QString, QVariant>)));
 }
 
 void Controller::createCa()
@@ -202,6 +219,28 @@ void Controller::createView()
 {
 	mView = new CaView(this, mCellularAutomaton);
 	setCentralWidget(mView);
+}
+
+void Controller::createSettingsDialog()
+{
+	switch(mCurrentType)
+	{
+	case GLOBAL:
+		{
+			mSettingsDialog = new GlobalSettingsDialog(this);
+			auto p = dynamic_cast<GlobalSettingsDialog*>(mSettingsDialog);
+			connect(p, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
+				this, SLOT(updateSettings(QMap<QString, QVariant>)));
+		}
+		break;
+
+	case LOCAL:
+		mSettingsDialog = new LocalSettingsDialog(this);
+		break;
+
+	case MOVEMENT:
+		break;
+	}
 }
 
 void Controller::initializeResultsFile()

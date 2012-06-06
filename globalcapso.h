@@ -21,8 +21,9 @@ public:
 	void setPredatorMeanOffspring(int value);
 	void setPredatorReproductionRadius(int value);
 	void setInitialSwarmSize(int value);
-	void setPFactor(float value);
-	void setGFactor(float value);
+	void setCognitiveFactor(float value);
+	void setSocialFactor(float value);
+	void setMaximumSpeed(int value);
 	void setMitrationTime(int value);
 	void setInitialInertialWeight(float value);
 	void setFinalInertiaWeight(float value);

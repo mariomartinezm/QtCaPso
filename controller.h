@@ -1,14 +1,14 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
+#include <QDialog>
 #include <qfile.h>
 #include <qtextstream.h>
 #include "ui_controller.h"
 #include "catype.h"
 #include "cellularautomaton.h"
 #include "caview.h"
-#include "localsettingsdialog.h"
 
 class Controller : public QMainWindow, private Ui::ControllerClass
 {
@@ -36,13 +36,14 @@ private:
 	void makeConnections();
 	void createCa();
 	void createView();
+	void createSettingsDialog();
 	void initializeResultsFile();
 	void writeResults();
 
 	CaType mCurrentType;
 	CellularAutomaton* mCellularAutomaton;
 	CaView* mView;
-	LocalSettingsDialog* mSettingsDialog;
+	QDialog* mSettingsDialog;
 
 	// Support for a results file
 	QString mCurrFileName;

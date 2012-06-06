@@ -81,14 +81,19 @@ void GlobalCaPso::setInitialSwarmSize(int value)
 	mInitialSwarmSize = value;
 }
 
-void GlobalCaPso::setPFactor(float value)
+void GlobalCaPso::setCognitiveFactor(float value)
 {
 	mPredatorSwarm.setCognitiveFactor(value);
 }
 
-void GlobalCaPso::setGFactor(float value)
+void GlobalCaPso::setSocialFactor(float value)
 {
 	mPredatorSwarm.setSocialFactor(value);
+}
+
+void GlobalCaPso::setMaximumSpeed(int value)
+{
+	mPredatorSwarm.setMaxSpeed(value);
 }
 
 void GlobalCaPso::setMitrationTime(int value)
