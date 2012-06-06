@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LocalSettingsDialog</class>
- <widget class="QDialog" name="LocalSettingsDialog">
+ <class>GlobalSettingsDialog</class>
+ <widget class="QDialog" name="GlobalSettingsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -349,7 +349,7 @@
   <connection>
    <sender>okButton</sender>
    <signal>clicked()</signal>
-   <receiver>LocalSettingsDialog</receiver>
+   <receiver>GlobalSettingsDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -365,7 +365,7 @@
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>LocalSettingsDialog</receiver>
+   <receiver>GlobalSettingsDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

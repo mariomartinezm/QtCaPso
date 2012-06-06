@@ -98,6 +98,15 @@
     <ClCompile Include="globalcapso.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_globalsettingsdialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_globalsettingsdialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="globalsettingsdialog.cpp">
+      <Filter>Source Files\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="controller.ui">
@@ -120,6 +129,9 @@
     </CustomBuild>
     <CustomBuild Include="globalsettingsdialog.ui">
       <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="globalsettingsdialog.h">
+      <Filter>Header Files\Application</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
