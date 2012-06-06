@@ -4,8 +4,14 @@
 #include <memory>
 #include "globalcapso.h"
 
+using std::list;
 using std::shared_ptr;
+using std::weak_ptr;
 using std::make_shared;
+using std::for_each;
+using std::copy;
+using std::transform;
+using std::uniform_int_distribution;
 
 GlobalCaPso::GlobalCaPso(int width, int height)
 	: CellularAutomaton(width, height),
@@ -128,7 +134,7 @@ void GlobalCaPso::initialize()
 	// Create and render predators
 	mPredatorSwarm.initialize(mInitialSwarmSize, mWidth, mHeight, mRandom);
 
-	std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](std::weak_ptr<Particle> wp)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
 	{
 		if(auto p = wp.lock())
 		{
@@ -159,7 +165,7 @@ void GlobalCaPso::initialize()
 	mBestPosition.setRow((*it)->bestPosition().row());
 	mBestPosition.setCol((*it)->bestPosition().col());
 
-	std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](std::weak_ptr<Particle> wp)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
 	{
 		if(auto p = wp.lock())
 		{
@@ -188,7 +194,7 @@ void GlobalCaPso::clear()
 	CellularAutomaton::clear();
 
 	// Reset the densities
-	std::transform(mPreyDensities.begin(), mPreyDensities.end(), mPreyDensities.begin(), [](unsigned char)
+	transform(mPreyDensities.begin(), mPreyDensities.end(), mPreyDensities.begin(), [](unsigned char)
 	{
 		return 0;
 	});
@@ -204,7 +210,7 @@ void GlobalCaPso::nextGen()
 
 void GlobalCaPso::competenceOfPreys()
 {
-	std::copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
+	copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
 
 	int currentAddress;
 	double deathProbability;
@@ -265,7 +271,7 @@ void GlobalCaPso::migration()
 		}
 	};
 
-	std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](std::weak_ptr<Particle> wp)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
 	{
 		if(auto p = wp.lock())
 		{
@@ -349,17 +355,17 @@ void GlobalCaPso::migration()
 
 void GlobalCaPso::reproductionOfPredators()
 {
-	std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
 #if defined(Q_WS_X11)
-	std::uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius, mPredatorReproductionRadius);
+	uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius, mPredatorReproductionRadius);
 #else
-	std::uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
+	uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
 #endif
 
-	std::list<shared_ptr<Particle>> newParticles;
+	list<shared_ptr<Particle>> newParticles;
 
-	std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](std::weak_ptr<Particle> wp)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
 	{
 		if(auto p = wp.lock())
 		{
@@ -454,7 +460,7 @@ void GlobalCaPso::predatorsDeath()
 
 void GlobalCaPso::predation()
 {
-	std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](std::weak_ptr<Particle> wp)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
 	{
 		if(auto p = wp.lock())
 		{
@@ -485,7 +491,7 @@ void GlobalCaPso::predation()
 		mBestPosition.setRow((*it)->bestPosition().row());
 		mBestPosition.setCol((*it)->bestPosition().col());
 
-		std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](std::weak_ptr<Particle> wp)
+		for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
 		{
 			if(auto p = wp.lock())
 			{
@@ -509,9 +515,9 @@ void GlobalCaPso::predation()
 
 void GlobalCaPso::predation2()
 {
-	std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-	std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](std::weak_ptr<Particle> wp)
+	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
 	{
 		if(auto p = wp.lock())
 		{
@@ -551,7 +557,7 @@ void GlobalCaPso::predation2()
 		mBestPosition.setRow((*it)->bestPosition().row());
 		mBestPosition.setCol((*it)->bestPosition().col());
 
-		std::for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](std::weak_ptr<Particle> wp)
+		for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
 		{
 			if(auto p = wp.lock())
 			{
@@ -575,12 +581,12 @@ void GlobalCaPso::predation2()
 
 void GlobalCaPso::reproductionOfPreys()
 {
-	std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
 #if defined(Q_WS_X11)
-	std::uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius, mPreyReproductionRadius);
+	uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius, mPreyReproductionRadius);
 #else
-	std::uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius - 1, mPreyReproductionRadius);
+	uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius - 1, mPreyReproductionRadius);
 #endif
 
 	int finalRow, finalCol, neighbourAddress;

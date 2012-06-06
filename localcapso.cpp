@@ -220,6 +220,33 @@ void LocalCaPso::competenceOfPreys()
 
 void LocalCaPso::migration()
 {
+	auto validateVector = [this] (int& row, int& col)
+	{
+		if(abs(row) > mHeight / 2)
+		{
+			if(row < 0)
+			{
+				row = row + mHeight;
+			}
+			else
+			{
+				row = row - mHeight;
+			}
+		}
+
+		if(abs(col) > mWidth / 2)
+		{
+			if(col < 0)
+			{
+				col = col + mWidth;
+			}
+			else
+			{
+				col = col - mWidth;
+			}
+		}
+	};
+
 	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
 	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
