@@ -14,6 +14,10 @@ QWidget(parent), mDesiredWidth(ca->width() * 2), mDesiredHeight(ca->height() * 2
 	mLatticeImage->setColor(1, qRgb(0, 128, 0));		// Prey
 	mLatticeImage->setColor(2, qRgb(0, 0, 255));		// Predator
 	mLatticeImage->setColor(3, qRgb(255, 0, 0));		// Prey and predator
+	mLatticeImage->setColor(4, qRgb(255, 255, 255));	// Global Best
+	mLatticeImage->setColor(5, qRgb(255, 255, 255));	// Global Best
+	mLatticeImage->setColor(6, qRgb(255, 255, 255));	// Global Best
+	mLatticeImage->setColor(7, qRgb(255, 255, 255));	// Global Best
 
 	// Do not allow this widget to resize
 	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
