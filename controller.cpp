@@ -203,6 +203,7 @@ void Controller::createCa()
 	{
 	case GLOBAL:
 		mCellularAutomaton = new GlobalCaPso(256, 256);
+		mSeasonLength = 10;
 		break;
 
 	case LOCAL:
@@ -235,7 +236,12 @@ void Controller::createSettingsDialog()
 		break;
 
 	case LOCAL:
-		mSettingsDialog = new LocalSettingsDialog(this);
+		{
+			mSettingsDialog = new LocalSettingsDialog(this);
+			auto p = dynamic_cast<LocalSettingsDialog*>(mSettingsDialog);
+			connect(p, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
+				this, SLOT(updateSettings(QMap<QString, QVariant>)));
+		}
 		break;
 
 	case MOVEMENT:
