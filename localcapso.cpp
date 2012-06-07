@@ -279,13 +279,13 @@ void LocalCaPso::migration()
 
 					int neighbourAddress = getAddress(finalRow, finalCol);
 
-					if(checkState(neighbourAddress, PREDATOR))
+					if(mTemp[neighbourAddress] & PREDATOR)
 					{
 						// Update if necessary
 						if(mPreyDensities[bestAddress] < mPreyDensities[neighbourAddress])
 						{
-							bestRow = nRow;
-							bestCol = nCol;
+							bestRow = finalRow;
+							bestCol = finalCol;
 
 							bestAddress = neighbourAddress;
 						}
@@ -296,23 +296,39 @@ void LocalCaPso::migration()
 			float r1 = mDistReal_0_1(mRandom);
 			float r2 = mDistReal_0_1(mRandom);
 
+			int currentVelRow = p->velocity().row();
+			int currentVelCol = p->velocity().col();
+
+			validateVector(currentVelRow, currentVelCol);
+			
+			int cognitiveVelRow = p->bestPosition().row() - pRow;
+			int cognitiveVelCol = p->bestPosition().col() - pCol;
+
+			validateVector(cognitiveVelRow, cognitiveVelCol);
+
+			int socialVelRow = bestRow - pRow;
+			int socialVelCol = bestCol - pCol;
+
+			validateVector(socialVelRow, socialVelCol);
+
 			// Get the new velocity
-			int velRow = (int)(mCurrentInertiaWeight * p->velocity().row() +
-				mPredatorSwarm.cognitiveFactor() * r1 * (p->bestPosition().row() - pRow) +
-				mPredatorSwarm.socialFactor() * r2 * (bestRow - pRow));
-			int velCol = (int)(mCurrentInertiaWeight * p->velocity().col() +
-				mPredatorSwarm.cognitiveFactor() * r1 * (p->bestPosition().col() - pCol) +
-				mPredatorSwarm.socialFactor() * r2 * (bestCol - pCol));
+			int velRow = mCurrentInertiaWeight * currentVelRow +
+				mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelRow +
+				mPredatorSwarm.socialFactor() * r2 * socialVelRow;
+
+			int velCol = mCurrentInertiaWeight * currentVelCol +
+				mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelCol +
+				mPredatorSwarm.socialFactor() * r2 * socialVelCol;
 
 			// Adjust speed
-			double speed = sqrt((double)(velRow * velRow + velCol * velCol));
+			float speed = sqrt((float)(velRow * velRow + velCol * velCol));
 
 			while(speed > mPredatorSwarm.maxSpeed())
 			{
 				velRow *= 0.9;
 				velCol *= 0.9;
 
-				speed = sqrt((double)(velRow * velRow + velCol * velCol));
+				speed = sqrt((float)(velRow * velRow + velCol * velCol));
 			}
 
 			// Move the particle
