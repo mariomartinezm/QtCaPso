@@ -125,7 +125,7 @@ void Controller::showSettings()
 void Controller::exportBitmap()
 {
 	QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
-		QCoreApplication::applicationDirPath() + "/lattice.PNG", tr("PNG images (*.PNG)"));
+		QCoreApplication::applicationDirPath() + "/lattice.PNG", tr("PNG (*.PNG);;JPG (*.jpg);; TIFF (*.tiff)"));
 
 	if(!fileName.isEmpty())
 	{
