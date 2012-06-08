@@ -7,7 +7,7 @@
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
-	mCurrentType(LOCAL),
+	mCurrentType(GLOBAL),
 	mCurrFileName("results.txt"),
 	mResultsFile(new QFile(mCurrFileName, this)),
 	mResultsStream(mResultsFile),
@@ -202,12 +202,12 @@ void Controller::createCa()
 	switch(mCurrentType)
 	{
 	case GLOBAL:
-		mCellularAutomaton = new GlobalCaPso(256, 256);
+		mCellularAutomaton = new GlobalCaPso(512, 512);
 		mSeasonLength = 10;
 		break;
 
 	case LOCAL:
-		mCellularAutomaton = new LocalCaPso(768, 768);
+		mCellularAutomaton = new LocalCaPso(512, 512);
 		mSeasonLength = 10;
 		break;
 

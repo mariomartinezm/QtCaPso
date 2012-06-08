@@ -10,14 +10,14 @@ QWidget(parent), mDesiredWidth(ca->width()), mDesiredHeight(ca->height())
 		mCellularAutomaton->height(),  QImage::Format_Indexed8);
 
 	// Initialize the state table
-	mLatticeImage->setColor(0, qRgb(255, 255, 255));			// Empty
-	mLatticeImage->setColor(1, qRgb(0, 128, 0));		// Prey
-	mLatticeImage->setColor(2, qRgb(0, 0, 255));		// Predator
-	mLatticeImage->setColor(3, qRgb(255, 0, 0));		// Prey and predator
-	mLatticeImage->setColor(4, qRgb(255, 255, 255));	// Global Best
-	mLatticeImage->setColor(5, qRgb(255, 255, 255));	// Global Best
-	mLatticeImage->setColor(6, qRgb(255, 255, 255));	// Global Best
-	mLatticeImage->setColor(7, qRgb(255, 255, 255));	// Global Best
+	mLatticeImage->setColor(0, qRgb(0, 0, 0));			// Empty
+	mLatticeImage->setColor(1, qRgb(130, 130, 130));	// Prey
+	mLatticeImage->setColor(2, qRgb(80, 80, 80));		// Predator
+	mLatticeImage->setColor(3, qRgb(255, 255, 255));		// Prey and predator
+	mLatticeImage->setColor(4, qRgb(255, 0, 0));	// Global Best
+	mLatticeImage->setColor(5, qRgb(255, 0, 0));	// Global Best
+	mLatticeImage->setColor(6, qRgb(255, 0, 0));	// Global Best
+	mLatticeImage->setColor(7, qRgb(255, 0, 0));	// Global Best
 
 	// Do not allow this widget to resize
 	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
