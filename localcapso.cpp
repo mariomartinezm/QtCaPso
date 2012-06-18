@@ -31,7 +31,8 @@ LocalCaPso::LocalCaPso(int width, int height)
 	mPredatorMeanOffspring(10),
 	mPredatorReproductionRadius(2),
 	mSocialRadius(3),
-	NEIGHBORHOOD_SIZE((2 * mSocialRadius + 1)*(2 * mSocialRadius + 1) - 1),
+	mFitnessRadius(3),
+	NEIGHBORHOOD_SIZE((2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1),
 	// Pso parameters
 	mInitialSwarmSize(3),
 	mMigrationTime(5),
@@ -135,8 +136,13 @@ void LocalCaPso::setPredatorReproductionRadius(int value)
 void LocalCaPso::setSocialRadius(int value)
 {
     mSocialRadius = value;
+}
 
-	NEIGHBORHOOD_SIZE = (2 * mSocialRadius + 1)*(2 * mSocialRadius + 1) - 1;
+void LocalCaPso::setFitnessRadius(int value)
+{
+	mFitnessRadius = value;	
+
+	NEIGHBORHOOD_SIZE = (2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1;
 }
 
 void LocalCaPso::setInitialSwarmSize(int value)
@@ -597,9 +603,9 @@ void LocalCaPso::notifyNeighbors(const int& row, const int& col, const bool& dea
 {
     int finalRow, finalCol;
 
-    for(int nRow = row - mSocialRadius; nRow <= row + mSocialRadius; nRow++)
+    for(int nRow = row - mFitnessRadius; nRow <= row + mFitnessRadius; nRow++)
     {
-        for(int nCol = col - mSocialRadius; nCol <= col + mSocialRadius; nCol++)
+        for(int nCol = col - mFitnessRadius; nCol <= col + mFitnessRadius; nCol++)
         {
             if(nRow == row && nCol == col)
             {
