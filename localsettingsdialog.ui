@@ -348,6 +348,9 @@
          <property name="text">
           <string>OK</string>
          </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -363,6 +366,26 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEditInitialPreys</tabstop>
+  <tabstop>lineEditCompetenceFactor</tabstop>
+  <tabstop>spinBoxPreyReproductiveCapacity</tabstop>
+  <tabstop>spinBoxPreyReproductionRadius</tabstop>
+  <tabstop>spinBoxFitnessRadius</tabstop>
+  <tabstop>lineEditInitialPredators</tabstop>
+  <tabstop>lineEditCognitiveFactor</tabstop>
+  <tabstop>lineEditSocialFactor</tabstop>
+  <tabstop>spinBoxMaxSpeed</tabstop>
+  <tabstop>spinBoxPredatorReproductiveCapacity</tabstop>
+  <tabstop>spinBoxPredatorReproductionRadius</tabstop>
+  <tabstop>spinBoxSocialRadius</tabstop>
+  <tabstop>lineEditInitialWeight</tabstop>
+  <tabstop>lineEditFinalWeight</tabstop>
+  <tabstop>lineEditPath</tabstop>
+  <tabstop>pushButtonBrowse</tabstop>
+  <tabstop>okButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
