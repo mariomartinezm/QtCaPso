@@ -23,7 +23,7 @@ public:
 	void setPreyReproductionRadius(int value);
 	void setPredatorMeanOffspring(int value);
 	void setPredatorReproductionRadius(int value);
-	void setSearchRadius(int value);
+	void setSocialRadius(int value);
 	void setInitialSwarmSize(int value);
 	void setCognitiveFactor(float value);
 	void setSocialFactor(float value);
@@ -60,7 +60,7 @@ private:
 	int mPreyReproductionRadius;
 	int mPredatorMeanOffspring;
 	int mPredatorReproductionRadius;
-	int mSearchRadius;
+	int mSocialRadius;
 	int NEIGHBORHOOD_SIZE;
 
 	// PSO parameters

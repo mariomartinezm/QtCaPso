@@ -30,8 +30,8 @@ LocalCaPso::LocalCaPso(int width, int height)
 	mPreyReproductionRadius(2),
 	mPredatorMeanOffspring(10),
 	mPredatorReproductionRadius(2),
-	mSearchRadius(3),
-	NEIGHBORHOOD_SIZE((2 * mSearchRadius + 1)*(2 * mSearchRadius + 1) - 1),
+	mSocialRadius(3),
+	NEIGHBORHOOD_SIZE((2 * mSocialRadius + 1)*(2 * mSocialRadius + 1) - 1),
 	// Pso parameters
 	mInitialSwarmSize(3),
 	mMigrationTime(5),
@@ -132,11 +132,11 @@ void LocalCaPso::setPredatorReproductionRadius(int value)
     mPredatorReproductionRadius = value;
 }
  
-void LocalCaPso::setSearchRadius(int value)
+void LocalCaPso::setSocialRadius(int value)
 {
-    mSearchRadius = value;
+    mSocialRadius = value;
 
-	NEIGHBORHOOD_SIZE = (2 * mSearchRadius + 1)*(2 * mSearchRadius + 1) - 1;
+	NEIGHBORHOOD_SIZE = (2 * mSocialRadius + 1)*(2 * mSocialRadius + 1) - 1;
 }
 
 void LocalCaPso::setInitialSwarmSize(int value)
@@ -265,9 +265,9 @@ void LocalCaPso::migration()
 			clearState(bestAddress, PREDATOR);
 
 			// Get the best position among the neighbors of the predator
-			for(int nRow = pRow - mSearchRadius; nRow <= pRow + mSearchRadius; nRow++)
+			for(int nRow = pRow - mSocialRadius; nRow <= pRow + mSocialRadius; nRow++)
 			{
-				for(int nCol = pCol - mSearchRadius; nCol <= pCol + mSearchRadius; nCol++)
+				for(int nCol = pCol - mSocialRadius; nCol <= pCol + mSocialRadius; nCol++)
 				{
 					if(nRow == pRow && nCol == pCol)
 					{
@@ -597,9 +597,9 @@ void LocalCaPso::notifyNeighbors(const int& row, const int& col, const bool& dea
 {
     int finalRow, finalCol;
 
-    for(int nRow = row - mSearchRadius; nRow <= row + mSearchRadius; nRow++)
+    for(int nRow = row - mSocialRadius; nRow <= row + mSocialRadius; nRow++)
     {
-        for(int nCol = col - mSearchRadius; nCol <= col + mSearchRadius; nCol++)
+        for(int nCol = col - mSocialRadius; nCol <= col + mSocialRadius; nCol++)
         {
             if(nRow == row && nCol == col)
             {
