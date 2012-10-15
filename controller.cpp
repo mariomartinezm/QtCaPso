@@ -208,7 +208,7 @@ void Controller::createCa()
 		break;
 
 	case LOCAL:
-		mCellularAutomaton = new LocalCaPso(512, 512);
+		mCellularAutomaton = new LocalCaPso(256, 256);
 		mSeasonLength = 10;
 		break;
 
