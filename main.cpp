@@ -1,5 +1,7 @@
-#include "controller.h"
+#pragma warning(push, 3)
 #include <QtGui/QApplication>
+#pragma warning(pop)
+#include "controller.h"
 
 int main(int argc, char *argv[])
 {

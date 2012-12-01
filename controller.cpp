@@ -1,4 +1,6 @@
+#pragma warning(push, 3)
 #include <qfiledialog.h>
+#pragma warning(pop)
 #include "controller.h"
 #include "localcapso.h"
 #include "localsettingsdialog.h"

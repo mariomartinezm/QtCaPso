@@ -1,8 +1,11 @@
 #ifndef CAVIEW_H
 #define CAVIEW_H
 
+#pragma warning(push, 3)
+#pragma warning(disable:4800)
 #include <QWidget>
 #include <QImage>
+#pragma warning(pop)
 #include "cellularautomaton.h"
 
 class CaView : public QWidget

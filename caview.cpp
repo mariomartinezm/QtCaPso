@@ -1,5 +1,7 @@
+#pragma warning(push, 3)
 #include <QPainter>
 #include <QColor>
+#pragma warning(pop)
 #include "caview.h"
 
 CaView::CaView(QWidget* parent, CellularAutomaton* ca) :

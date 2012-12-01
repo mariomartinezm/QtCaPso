@@ -1,11 +1,15 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#pragma warning(push, 3)
+#pragma warning(disable:4251)
+#pragma warning(disable:4800)
 #include <QMainWindow>
 #include <QDialog>
 #include <qfile.h>
 #include <qtextstream.h>
 #include "ui_controller.h"
+#pragma warning(pop)
 #include "catype.h"
 #include "cellularautomaton.h"
 #include "caview.h"
