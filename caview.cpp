@@ -44,5 +44,5 @@ void CaView::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
 	painter.setViewport(0, 0, mDesiredWidth, mDesiredHeight);
-	painter.drawImage(QPoint(0, 0), mLatticeImage->scaledToWidth(mDesiredWidth));
+	painter.drawImage(QPoint(0, 0), mLatticeImage->scaled(mDesiredWidth, mDesiredHeight));
 }

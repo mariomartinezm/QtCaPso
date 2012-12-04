@@ -15,7 +15,7 @@ public:
 
 	float cognitiveFactor() const { return mCognitiveFactor; }
 	float socialFactor() const { return mSocialFactor; }
-	float maxSpeed() const { return mMaxSpeed; }
+	int maxSpeed() const { return mMaxSpeed; }
 	float inertiaWeight() const { return mInertiaWeight; }
 
 	void setCognitiveFactor(float factor) { mCognitiveFactor = factor; }

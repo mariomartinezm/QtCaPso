@@ -21,7 +21,7 @@ GlobalCaPso::GlobalCaPso(int width, int height)
 	mPreyDensities(width * height),
 	mNumberOfPreys(0),
 	mNumberOfPredators(0),
-	mRandom(time(NULL)),
+	mRandom(static_cast<unsigned int>(time(NULL))),
 	// Real uniform distribution
 	mDistReal_0_1(0.0, 1.0),
 	// Model Parameters
@@ -37,9 +37,9 @@ GlobalCaPso::GlobalCaPso(int width, int height)
 	mInitialSwarmSize(3),
 	mMigrationTime(5),
 	mMigrationCount(0),
-	mInitialInertiaWeight(0.9),
+	mInitialInertiaWeight(0.9f),
 	mCurrentInertiaWeight(mInitialInertiaWeight),
-	mFinalInertiaWeight(0.2),
+	mFinalInertiaWeight(0.2f),
 	INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight) / mMigrationTime)
 {
 	initialize();
@@ -299,20 +299,20 @@ void GlobalCaPso::migration()
 
 			validateVector(globalVelRow, globalVelCol);
 
-			int velRow = mCurrentInertiaWeight * currentVelRow + 
+			int velRow = (int)(mCurrentInertiaWeight * currentVelRow + 
 				mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelRow + 
-				mPredatorSwarm.socialFactor() * r2 * globalVelRow;
-			int velCol = mCurrentInertiaWeight * currentVelCol + 
+				mPredatorSwarm.socialFactor() * r2 * globalVelRow);
+			int velCol = (int)(mCurrentInertiaWeight * currentVelCol + 
 				mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelCol + 
-				mPredatorSwarm.socialFactor() * r2 * globalVelCol;
+				mPredatorSwarm.socialFactor() * r2 * globalVelCol);
 
 			// Adjust speed
 			double speed = sqrt((double)(velRow * velRow + velCol * velCol));
 
 			while(speed > mPredatorSwarm.maxSpeed())
 			{
-				velRow *= 0.9;
-				velCol *= 0.9;
+				velRow *= (int)(0.9);
+				velCol *= (int)(0.9);
 
 				speed = sqrt((double)(velRow * velRow + velCol * velCol));
 			}

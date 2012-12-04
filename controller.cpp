@@ -11,8 +11,8 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
 	mCurrentType(LOCAL),
 	mCurrFileName("results.txt"),
-	mResultsFile(new QFile(mCurrFileName, this)),
-	mResultsStream(mResultsFile),
+	mResultsFile(mCurrFileName),
+	mResultsStream(&mResultsFile),
 	mTimerId(-1),
 	mTimerCount(0),
 	mSeasonLength(10)
@@ -23,19 +23,20 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 	createCa();
 	createView();
 	createSettingsDialog();
+
 	initializeResultsFile();
 	writeResults();
 }
 
 Controller::~Controller()
 {
-	mResultsFile->close();
+	mResultsFile.close();
 
 	delete mCellularAutomaton;
 	delete mView;
 }
 
-void Controller::timerEvent(QTimerEvent* e)
+void Controller::timerEvent(QTimerEvent*)
 {
 	mCellularAutomaton->nextGen();
 
@@ -254,9 +255,9 @@ void Controller::createSettingsDialog()
 
 void Controller::initializeResultsFile()
 {
-	mResultsFile->close();
-	mResultsFile->setFileName(mCurrFileName);
-	mResultsFile->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
+	mResultsFile.close();
+	mResultsFile.setFileName(mCurrFileName);
+	mResultsFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 	mResultsStream.seek(0);
 }
 

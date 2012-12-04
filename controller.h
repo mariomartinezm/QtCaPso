@@ -51,7 +51,7 @@ private:
 
 	// Support for a results file
 	QString mCurrFileName;
-	QFile* mResultsFile;
+	QFile mResultsFile;
 	QTextStream mResultsStream;
 
 	int mTimerId;

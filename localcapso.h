@@ -39,6 +39,10 @@ public:
 	virtual void clear();
 
 private:
+	LocalCaPso(const LocalCaPso&);
+	LocalCaPso& operator=(const LocalCaPso&);
+
+private:
 	Swarm mPredatorSwarm;
 
 	// Containers

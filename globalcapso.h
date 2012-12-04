@@ -36,6 +36,10 @@ public:
 	void nextGen();
 
 private:
+	GlobalCaPso(const GlobalCaPso&);
+	GlobalCaPso& operator=(const GlobalCaPso&);
+
+private:
 	Swarm mPredatorSwarm;
 
 	// Containers
