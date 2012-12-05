@@ -27,7 +27,6 @@ protected:
 private:
 	CellularAutomaton* mCellularAutomaton;
 	QImage* mLatticeImage;
-	int mDesiredWidth, mDesiredHeight;
 	int mTimerId, mGenerationCount;
 };
 

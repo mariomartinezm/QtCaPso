@@ -1,11 +1,12 @@
 #pragma warning(push, 3)
 #include <QPainter>
 #include <QColor>
+#include <QWidget>
 #pragma warning(pop)
 #include "caview.h"
 
-CaView::CaView(QWidget* parent, CellularAutomaton* ca) :
-QWidget(parent), mDesiredWidth(ca->width() * 1), mDesiredHeight(ca->height() * 1)
+CaView::CaView(QWidget* parent, CellularAutomaton* ca)
+	: QWidget(parent)
 {
 	mCellularAutomaton = ca;
 	mLatticeImage = new QImage(mCellularAutomaton->latticeData(), mCellularAutomaton->width(),
@@ -32,7 +33,7 @@ CaView::~CaView()
 
 QSize CaView::sizeHint() const
 {
-	return QSize(mDesiredWidth, mDesiredHeight);
+	return QSize(mCellularAutomaton->width(), mCellularAutomaton->height());
 }
 
 const QImage& CaView::latticeImage() const
@@ -43,6 +44,7 @@ const QImage& CaView::latticeImage() const
 void CaView::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
-	painter.setViewport(0, 0, mDesiredWidth, mDesiredHeight);
-	painter.drawImage(QPoint(0, 0), mLatticeImage->scaled(mDesiredWidth, mDesiredHeight));
+
+	QWidget* parentWidget = dynamic_cast<QWidget*>(this->parent());
+	painter.drawImage(QPoint(0, 0), mLatticeImage->scaled(parentWidget->width(), parentWidget->height()));
 }
