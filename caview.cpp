@@ -17,10 +17,10 @@ CaView::CaView(QWidget* parent, CellularAutomaton* ca)
 	mLatticeImage->setColor(1, qRgb(38, 127, 0));	// Prey
 	mLatticeImage->setColor(2, qRgb(255, 0, 0));	// Predator
 	mLatticeImage->setColor(3, qRgb(255, 216, 0));	// Prey and predator
-	mLatticeImage->setColor(4, qRgb(255, 0, 0));	// Global Best
-	mLatticeImage->setColor(5, qRgb(255, 0, 0));	// Global Best
-	mLatticeImage->setColor(6, qRgb(255, 0, 0));	// Global Best
-	mLatticeImage->setColor(7, qRgb(255, 0, 0));	// Global Best
+	mLatticeImage->setColor(4, qRgb(255, 255, 255));	// Global Best
+	mLatticeImage->setColor(5, qRgb(255, 255, 255));	// Global Best
+	mLatticeImage->setColor(6, qRgb(255, 255, 255));	// Global Best
+	mLatticeImage->setColor(7, qRgb(255, 255, 255));	// Global Best
 
 	// Do not allow this widget to resize
 	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

@@ -3,8 +3,8 @@
 
 #pragma warning(push, 3)
 #pragma warning(disable:4251)
-#include <qdialog.h>
-#include <qmap.h>
+#include <QDialog>
+#include <QMap>
 #include "ui_localsettingsdialog.h"
 #pragma warning(pop)
 

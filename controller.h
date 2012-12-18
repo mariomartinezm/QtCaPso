@@ -6,8 +6,8 @@
 #pragma warning(disable:4800)
 #include <QMainWindow>
 #include <QDialog>
-#include <qfile.h>
-#include <qtextstream.h>
+#include <QFile>
+#include <QTextStream>
 #include "ui_controller.h"
 #pragma warning(pop)
 #include "catype.h"

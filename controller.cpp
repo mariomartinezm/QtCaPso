@@ -1,5 +1,5 @@
 #pragma warning(push, 3)
-#include <qfiledialog.h>
+#include <QFileDialog>
 #pragma warning(pop)
 #include "controller.h"
 #include "localcapso.h"
@@ -117,6 +117,8 @@ void Controller::initialize()
 
 	initializeResultsFile();
 
+	writeResults();
+
 	mView->update();
 }
 
@@ -206,7 +208,7 @@ void Controller::createCa()
 	switch(mCurrentType)
 	{
 	case GLOBAL:
-		mCellularAutomaton = new GlobalCaPso(512, 512);
+		mCellularAutomaton = new GlobalCaPso(512, 256);
 		mSeasonLength = 10;
 		break;
 

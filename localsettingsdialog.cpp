@@ -1,5 +1,5 @@
 #pragma warning(push, 3)
-#include <qfiledialog.h>
+#include <QFileDialog>
 #pragma warning(pop)
 #include "localsettingsdialog.h"
 

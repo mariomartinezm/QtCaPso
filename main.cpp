@@ -1,5 +1,5 @@
 #pragma warning(push, 3)
-#include <QtGui/QApplication>
+#include <QApplication>
 #pragma warning(pop)
 #include "controller.h"
 
