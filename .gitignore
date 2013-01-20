@@ -1,0 +1,14 @@
+# QtCreator project files
+*.pro.user
+*.pro.user*
+
+# Visual Studio files
+*.sln
+*.vcproj
+*.suo
+*.ncb
+*.user
+
+# Vim backup and swap files
+*~
+*.swp
