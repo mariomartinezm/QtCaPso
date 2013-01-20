@@ -78,6 +78,19 @@ void LocalCaPso::initialize()
 		}
 	}
 
+	// Obtain the mean fitness of the population of preys
+	float sumOfFitness = 0;
+
+	for(int row = 0; row < mHeight; row++)
+	{
+		for(int col = 0; col < mWidth; col++)
+		{
+			sumOfFitness += mPreyDensities[getAddress(row, col)];
+		}
+	}
+
+	float meanFitness = sumOfFitness / mPreyDensities.size();
+
 	// Reset the migration counter
 	mMigrationCount = 0;
 
