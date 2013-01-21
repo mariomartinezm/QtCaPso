@@ -2,6 +2,7 @@
 #include <ctime>
 #include <cmath>
 #include <memory>
+#include <QtGlobal>
 #include "localcapso.h"
 
 using std::list;
@@ -400,7 +401,7 @@ void LocalCaPso::reproductionOfPredators()
 {
     std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
 	std::uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius, mPredatorReproductionRadius);
 #else
 	std::uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
@@ -535,7 +536,7 @@ void LocalCaPso::reproductionOfPreys()
 {
     std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
 	std::uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius, mPreyReproductionRadius);
 #else
 	std::uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius - 1, mPreyReproductionRadius);
