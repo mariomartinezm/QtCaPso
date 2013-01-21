@@ -4,6 +4,7 @@
 #include <list>
 #include <random>
 #include <memory>
+#include <QtGlobal>
 #include "particle.h"
 
 class Swarm
@@ -28,8 +29,13 @@ public:
 	void initialize(int size, int width, int height, std::mt19937& random);
 	void add(std::list<std::shared_ptr<Particle>>& newParticles);
 
+#if defined(Q_OS_LINUX)
 	std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
-		std::allocator<std::shared_ptr<Particle>>>::const_iterator it);
+        std::allocator<std::shared_ptr<Particle>>>::iterator it);
+#else
+    std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
+        std::allocator<std::shared_ptr<Particle>>>::const_iterator it);
+#endif
 
 	bool empty() const;
 

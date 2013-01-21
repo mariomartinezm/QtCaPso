@@ -31,3 +31,5 @@ SOURCES += \
     controller.cpp \
     cellularautomaton.cpp \
     caview.cpp
+
+QMAKE_CXXFLAGS += -std=c++11
