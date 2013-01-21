@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "swarm.h"
 
+using std::list;
 using std::make_shared;
 using std::shared_ptr;
 
@@ -15,12 +16,12 @@ Swarm::~Swarm()
 {
 }
 
-std::list<shared_ptr<Particle>>::iterator Swarm::begin()
+list<shared_ptr<Particle>>::iterator Swarm::begin()
 {
 	return mParticles.begin();
 }
 
-std::list<shared_ptr<Particle>>::iterator Swarm::end()
+list<shared_ptr<Particle>>::iterator Swarm::end()
 {
 	return mParticles.end();
 }
@@ -41,16 +42,16 @@ void Swarm::initialize(int size, int width, int height, std::mt19937& random)
 	}
 }
 
-void Swarm::add(std::list<shared_ptr<Particle>>& newParticles)
+void Swarm::add(list<shared_ptr<Particle>>& newParticles)
 {
 	mParticles.insert(mParticles.end(), newParticles.begin(), newParticles.end());
 }
 
 #if defined(Q_OS_LINUX)
-std::list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator Swarm::erase(std::list<shared_ptr<Particle>,
+list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator Swarm::erase(list<shared_ptr<Particle>,
         std::allocator<shared_ptr<Particle>>>::iterator it)
 #else
-std::list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator Swarm::erase(std::list<shared_ptr<Particle>,
+list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator Swarm::erase(list<shared_ptr<Particle>,
         std::allocator<shared_ptr<Particle>>>::const_iterator it)
 #endif
 {
