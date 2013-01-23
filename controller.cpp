@@ -97,6 +97,13 @@ void Controller::step()
 
 void Controller::clear()
 {
+    if(mTimerId != -1)
+    {
+        killTimer(mTimerId);
+
+        mTimerId = -1;
+    }
+
 	mCellularAutomaton->clear();
 
 	mView->update();
