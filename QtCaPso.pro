@@ -32,4 +32,7 @@ SOURCES += \
     cellularautomaton.cpp \
     caview.cpp
 
-QMAKE_CXXFLAGS += -std=c++11
+# This option should only be used in linux or mingw
+!win32{
+    QMAKE_CXXFLAGS += -std=c++11
+}
