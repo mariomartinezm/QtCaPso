@@ -151,22 +151,22 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 	{
 	case GLOBAL:
 		{
-			auto globalDialog = dynamic_cast<GlobalCaPso*>(mCellularAutomaton);
+            auto global = dynamic_cast<GlobalCaPso*>(mCellularAutomaton);
 
-			globalDialog->setInitialPreyPercentage(settings["initialNumberOfPreys"].toFloat());
-			globalDialog->setCompetenceFactor(settings["competenceFactor"].toFloat());
-			globalDialog->setCompetenceRadius(settings["competenceRadius"].toInt());
-			globalDialog->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
-			globalDialog->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
+            global->setInitialPreyPercentage(settings["initialNumberOfPreys"].toFloat());
+            global->setCompetenceFactor(settings["competenceFactor"].toFloat());
+            global->setCompetenceRadius(settings["competenceRadius"].toInt());
+            global->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
+            global->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
 
-			globalDialog->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
-			globalDialog->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
-			globalDialog->setSocialFactor(settings["predatorSocialFactor"].toFloat());
-			globalDialog->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
-			globalDialog->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
-			globalDialog->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
-			globalDialog->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
-			globalDialog->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
+            global->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
+            global->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
+            global->setSocialFactor(settings["predatorSocialFactor"].toFloat());
+            global->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
+            global->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
+            global->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
+            global->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
+            global->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
 		}
 		break;
 
