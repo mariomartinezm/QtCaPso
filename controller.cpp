@@ -231,7 +231,11 @@ void Controller::createCa()
 
 void Controller::createView()
 {
-	mView = new CaView(this, mCellularAutomaton);
+    mView = new CaView(mCellularAutomaton->latticeData(),
+                       mCellularAutomaton->width(),
+                       mCellularAutomaton->height(),
+                       this);
+
 	setCentralWidget(mView);
 }
 

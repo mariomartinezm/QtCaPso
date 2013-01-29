@@ -6,14 +6,14 @@
 #include <QWidget>
 #include <QImage>
 #pragma warning(pop)
-#include "cellularautomaton.h"
 
 class CaView : public QWidget
 {
 	Q_OBJECT
 
 public:
-	explicit CaView(QWidget* parent = 0, CellularAutomaton* ca = 0);
+    explicit CaView(unsigned char* latticeData, const int& width,
+                    const int& height, QWidget* parent = 0);
 
 	~CaView();
 
@@ -25,9 +25,8 @@ protected:
 	void paintEvent(QPaintEvent*);
 
 private:
-	CellularAutomaton* mCellularAutomaton;
 	QImage* mLatticeImage;
-	int mTimerId, mGenerationCount;
+    const int mWidth, mHeight;
 };
 
 #endif // CAVIEW_H
