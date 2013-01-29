@@ -14,8 +14,8 @@ public:
 	GlobalCaPso(int width, int height);
 
 	void setInitialPreyPercentage(float value);
-	void setCompetenceFactor(float value);
-	void setCompetenceRadius(int value);
+    void setCompetitionFactor(float value);
+    void setCompetitionRadius(int value);
 	void setPreyMeanOffspring(int value);
 	void setPreyReproductionRadius(int value);
 	void setPredatorMeanOffspring(int value);
@@ -32,7 +32,7 @@ public:
 	int numberOfPredators() const;
 
 	void initialize();
-	virtual void clear();
+    virtual void clear();
 	void nextGen();
 
 private:
@@ -57,8 +57,8 @@ private:
 
 	// Model parameters
 	double mInitialPreyPercentage;
-	double mCompetenceFactor;
-	int mCompetenceRadius;
+    double mCompetitionFactor;
+    int mCompetitionRadius;
 	int mPreyMeanOffspring;
 	int mPreyReproductionRadius;
 	int mPredatorMeanOffspring;
@@ -76,7 +76,7 @@ private:
 	LatticePoint mBestPosition;
 
 	// Model Stages
-	void competenceOfPreys();
+    void competitionOfPreys();
 	void migration();
 	void reproductionOfPredators();
 	void predatorsDeath();

@@ -18,7 +18,7 @@ public:
 	void nextGen();
 
 	void setInitialAlivePreys(float value);
-	void setCompetenceFactor(float value);
+    void setCompetitionFactor(float value);
 	void setPreyMeanOffspring(int value);
 	void setPreyReproductionRadius(int value);
 	void setPredatorMeanOffspring(int value);
@@ -60,7 +60,7 @@ private:
 
 	// Model parameters
 	double mInitialAlivePercentage;
-	double mCompetenceFactor;
+    double mCompetitionFactor;
 	int mPreyMeanOffspring;
 	int mPreyReproductionRadius;
 	int mPredatorMeanOffspring;
@@ -79,7 +79,7 @@ private:
 	const float INERTIA_STEP;
 
 	// Model stages
-	void competenceOfPreys();
+    void competitionOfPreys();
 	void migration();
 	void reproductionOfPredators();
 	void predatorsDeath();

@@ -27,13 +27,13 @@ GlobalCaPso::GlobalCaPso(int width, int height)
 	mDistReal_0_1(0.0, 1.0),
 	// Model Parameters
 	mInitialPreyPercentage(0.5),
-	mCompetenceFactor(0.3),
-	mCompetenceRadius(5),
+    mCompetitionFactor(0.3),
+    mCompetitionRadius(5),
 	mPreyMeanOffspring(2),
 	mPreyReproductionRadius(1),
 	mPredatorMeanOffspring(5),
 	mPredatorReproductionRadius(3),
-	NEIGHBORHOOD_SIZE((2 * mCompetenceRadius + 1)*(2 * mCompetenceRadius + 1) - 1),
+    NEIGHBORHOOD_SIZE((2 * mCompetitionRadius + 1)*(2 * mCompetitionRadius + 1) - 1),
 	// Pso Parameters
 	mInitialSwarmSize(3),
 	mMigrationTime(5),
@@ -51,14 +51,14 @@ void GlobalCaPso::setInitialPreyPercentage(float value)
 	mInitialPreyPercentage = value;
 }
 
-void GlobalCaPso::setCompetenceFactor(float value)
+void GlobalCaPso::setCompetitionFactor(float value)
 {
-	mCompetenceFactor = value;
+    mCompetitionFactor = value;
 }
 
-void GlobalCaPso::setCompetenceRadius(int value)
+void GlobalCaPso::setCompetitionRadius(int value)
 {
-	mCompetenceRadius = value;
+    mCompetitionRadius = value;
 
 	NEIGHBORHOOD_SIZE = (2 * value + 1)*(2 * value + 1) - 1;
 }
@@ -187,7 +187,7 @@ void GlobalCaPso::initialize()
 	// Reset the migration counter
 	mMigrationCount = 0;
 
-	mNextStage = &GlobalCaPso::competenceOfPreys;
+    mNextStage = &GlobalCaPso::competitionOfPreys;
 }
 
 void GlobalCaPso::clear()
@@ -209,7 +209,7 @@ void GlobalCaPso::nextGen()
 	(this->*mNextStage)();
 }
 
-void GlobalCaPso::competenceOfPreys()
+void GlobalCaPso::competitionOfPreys()
 {
 	copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
 
@@ -225,7 +225,7 @@ void GlobalCaPso::competenceOfPreys()
 			if(checkState(currentAddress, PREY))
 			{
 				deathProbability = mTemp[currentAddress] *
-						mCompetenceFactor / NEIGHBORHOOD_SIZE;
+                        mCompetitionFactor / NEIGHBORHOOD_SIZE;
 
 				if(mDistReal_0_1(mRandom) <= deathProbability)
 				{
@@ -655,16 +655,16 @@ void GlobalCaPso::reproductionOfPreys()
 		}
 	}
 
-	mNextStage = &GlobalCaPso::competenceOfPreys;
+    mNextStage = &GlobalCaPso::competitionOfPreys;
 }
 
 void GlobalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
 {
 	int finalRow, finalCol;
 
-	for(int nRow = row - mCompetenceRadius; nRow <= row + mCompetenceRadius; nRow++)
+    for(int nRow = row - mCompetitionRadius; nRow <= row + mCompetitionRadius; nRow++)
 	{
-		for(int nCol = col - mCompetenceRadius; nCol <= col + mCompetenceRadius; nCol++)
+        for(int nCol = col - mCompetitionRadius; nCol <= col + mCompetitionRadius; nCol++)
 		{
 			if(nRow == row && nCol == col)
 			{

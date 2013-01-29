@@ -154,8 +154,8 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
             auto global = dynamic_cast<GlobalCaPso*>(mCellularAutomaton);
 
             global->setInitialPreyPercentage(settings["initialNumberOfPreys"].toFloat());
-            global->setCompetenceFactor(settings["competenceFactor"].toFloat());
-            global->setCompetenceRadius(settings["competenceRadius"].toInt());
+            global->setCompetitionFactor(settings["competenceFactor"].toFloat());
+            global->setCompetitionRadius(settings["competenceRadius"].toInt());
             global->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
             global->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
 
@@ -175,7 +175,7 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
 
 			local->setInitialAlivePreys(settings["initialNumberOfPreys"].toFloat());
-			local->setCompetenceFactor(settings["competenceFactor"].toFloat());
+            local->setCompetitionFactor(settings["competenceFactor"].toFloat());
 			local->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
 			local->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
 

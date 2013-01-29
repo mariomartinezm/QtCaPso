@@ -26,7 +26,7 @@ LocalCaPso::LocalCaPso(int width, int height)
 	mDistReal_0_1(0.0, 1.0),
 	// Model paremeters
 	mInitialAlivePercentage(0.3),
-	mCompetenceFactor(0.3),
+    mCompetitionFactor(0.3),
 	mPreyMeanOffspring(10),
 	mPreyReproductionRadius(2),
 	mPredatorMeanOffspring(10),
@@ -95,7 +95,7 @@ void LocalCaPso::initialize()
 	// Reset the migration counter
 	mMigrationCount = 0;
 
-	mNextStage = &LocalCaPso::competenceOfPreys;
+    mNextStage = &LocalCaPso::competitionOfPreys;
 }
 
 void LocalCaPso::clear()
@@ -117,9 +117,9 @@ void LocalCaPso::nextGen()
     (this->*mNextStage)();
 }
 
-void LocalCaPso::setCompetenceFactor(float value)
+void LocalCaPso::setCompetitionFactor(float value)
 {
-    mCompetenceFactor = value;
+    mCompetitionFactor = value;
 }
 
 void LocalCaPso::setInitialAlivePreys(float value)
@@ -204,7 +204,7 @@ int LocalCaPso::numberOfPredators() const
     return mNumberOfPredators;
 }
 
-void LocalCaPso::competenceOfPreys()
+void LocalCaPso::competitionOfPreys()
 {
     std::copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
 
@@ -220,7 +220,7 @@ void LocalCaPso::competenceOfPreys()
             if(checkState(currentAddress, PREY))
 			{
 				deathProbability = mTemp[currentAddress] * 
-					mCompetenceFactor / NEIGHBORHOOD_SIZE;
+                    mCompetitionFactor / NEIGHBORHOOD_SIZE;
 
 				if(mDistReal_0_1(mRandom) <= deathProbability)
 				{
@@ -610,7 +610,7 @@ void LocalCaPso::reproductionOfPreys()
         }
     }
 
-    mNextStage = &LocalCaPso::competenceOfPreys;
+    mNextStage = &LocalCaPso::competitionOfPreys;
 }
 
 void LocalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
