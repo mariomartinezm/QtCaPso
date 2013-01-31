@@ -13,7 +13,7 @@ class LocalSettingsDialog : public QDialog, private Ui::LocalSettingsDialog
 	Q_OBJECT
 
 public:
-	LocalSettingsDialog(QWidget* parent = 0);
+    LocalSettingsDialog(QMap<QString, QVariant> settings, QWidget* parent = 0);
 	~LocalSettingsDialog();
 
 signals:
@@ -25,7 +25,7 @@ private slots:
 
 private:
 	// Object used to send the new settings
-	QMap<QString, QVariant> mSettings;
+    QMap<QString, QVariant> mSettings;
 };
 
 #endif // LOCALSETTINGSDIALOG_H
