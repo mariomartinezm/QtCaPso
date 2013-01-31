@@ -37,8 +37,9 @@ private slots:
 	void updateSettings(QMap<QString, QVariant> settigns);
 
 private:
+    void createCa();
+    void initializeSettings();
 	void makeConnections();
-	void createCa();
 	void createView();
 	void createSettingsDialog();
 	void initializeResultsFile();
@@ -56,7 +57,9 @@ private:
 
 	int mTimerId;
 	int mTimerCount;
-	int mSeasonLength;
+    int mSeasonLength;
+
+    QMap<QString, QVariant> mSettings;
 };
 
 #endif // CONTROLLER_H
