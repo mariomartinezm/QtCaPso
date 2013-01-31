@@ -19,8 +19,9 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
 {
 	this->setupUi(this);
 
+    createCa();
+    initializeSettings();
 	makeConnections();
-	createCa();
 	createView();
 	createSettingsDialog();
 
@@ -199,6 +200,42 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 	mCurrFileName = settings["resultsFilePath"].toString();
 }
 
+void Controller::initializeSettings()
+{
+    switch(mCurrentType)
+    {
+    case GLOBAL:
+        break;
+    case LOCAL:
+        // Insert prey data
+        mSettings.insert("initialNumberOfPreys", 0.3f);
+        mSettings.insert("competenceFactor", 0.3f);
+        mSettings.insert("preyReproductionRadius", 2);
+        mSettings.insert("preyReproductiveCapacity", 10);
+        mSettings.insert("fitnessRadius", 3);
+
+        // Insert predator data
+        mSettings.insert("initialNumberOfPredators", 3);
+        mSettings.insert("predatorCognitiveFactor", 1.0f);
+        mSettings.insert("predatorSocialFactor", 2.0f);
+        mSettings.insert("predatorMaximumSpeed", 10);
+        mSettings.insert("predatorReproductiveCapacity", 10);
+        mSettings.insert("predatorReproductionRadius", 2);
+        mSettings.insert("predatorSocialRadius", 3);
+        mSettings.insert("initialInertiaWeight", 0.9f);
+        mSettings.insert("finalInertiaWeight", 0.2f);
+
+        // Insert path to results file
+        mSettings.insert("resultsFilePath", QCoreApplication::applicationDirPath() +
+                         "/results.txt");
+        break;
+    case MOVEMENT:
+        break;
+    }
+
+    updateSettings(mSettings);
+}
+
 void Controller::makeConnections()
 {
 	connect(actionPlay, SIGNAL(triggered()), this, SLOT(play()));
@@ -254,7 +291,7 @@ void Controller::createSettingsDialog()
 
 	case LOCAL:
 		{
-			mSettingsDialog = new LocalSettingsDialog(this);
+            mSettingsDialog = new LocalSettingsDialog(mSettings, this);
 			auto p = dynamic_cast<LocalSettingsDialog*>(mSettingsDialog);
 			connect(p, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
 				this, SLOT(updateSettings(QMap<QString, QVariant>)));
@@ -281,8 +318,9 @@ void Controller::writeResults()
 	case LOCAL:
 		{
 			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
-			mResultsStream << mTimerCount / mSeasonLength << " " << local->numberOfPreys() <<
-				" " << local->numberOfPredators() << "\n";
+            mResultsStream << mTimerCount / mSeasonLength << " " <<
+                              local->numberOfPreys() << " " <<
+                              local->numberOfPredators() << "\n";
 		}
 		break;
 	}
