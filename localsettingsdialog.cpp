@@ -1,35 +1,138 @@
 #pragma warning(push, 3)
 #include <QFileDialog>
+#include <QXmlStreamReader>
 #pragma warning(pop)
+#include <QMessageBox>
 #include "localsettingsdialog.h"
 
-LocalSettingsDialog::LocalSettingsDialog(QMap<QString, QVariant> settings,
-                                         QWidget *parent)
+LocalSettingsDialog::LocalSettingsDialog(QWidget *parent)
     : QDialog(parent)
 {
     this->setupUi(this);
 
-    mSettings = settings;
+    // Populate the form
+    QFile settingsFile;
+    settingsFile.setFileName("settings.xml");
 
-    // Populate form
-    lineEditInitialPreys->setText(mSettings["initialNumberOfPreys"].toString());
-    lineEditCompetenceFactor->setText(mSettings["competenceFactor"].toString());
-    spinBoxPreyReproductionRadius->setValue(mSettings["preyReproductionRadius"].toInt());
-    spinBoxPreyReproductiveCapacity->setValue(mSettings["preyReproductiveCapacity"].toInt());
-    lineEditInitialPredators->setText(mSettings["initialNumberOfPredators"].toString());
-    lineEditCognitiveFactor->setText(mSettings["predatorCognitiveFactor"].toString());
-    lineEditSocialFactor->setText(mSettings["predatorSocialFactor"].toString());
-    spinBoxMaxSpeed->setValue(mSettings["predatorMaximumSpeed"].toInt());
-    spinBoxPredatorReproductiveCapacity->setValue(mSettings["predatorReproductiveCapacity"].toInt());
-    spinBoxPredatorReproductionRadius->setValue(mSettings["predatorReproductionRadius"].toInt());
-    spinBoxSocialRadius->setValue(mSettings["predatorSocialRadius"].toInt());
-    spinBoxFitnessRadius->setValue(mSettings["fitnessRadius"].toInt());
-    lineEditInitialWeight->setText(mSettings["initialInertiaWeight"].toString());
-    lineEditFinalWeight->setText(mSettings["finalInertiaWeight"].toString());
+    if(!settingsFile.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::critical(this, "Error!", "Cannot open file: " +
+                              settingsFile.fileName());
 
-    lineEditPath->setText(mSettings["resultsFilePath"].toString());
+        exit(1);
+    }
 
-    // Connect the browse button to its corresponding slot
+    QXmlStreamReader reader(&settingsFile);
+
+    while(!reader.atEnd() && !reader.hasError())
+    {
+        reader.readNext();
+
+        if(reader.isStartElement())
+        {
+            QString elementName = reader.name().toString();
+
+            if(elementName == "initialNumberOfPreys")
+            {
+                QString value = reader.readElementText();
+
+                lineEditInitialPreys->setText(value);
+            }
+            else if(elementName == "competitionFactor")
+            {
+                QString value = reader.readElementText();
+
+                lineEditCompetenceFactor->setText(value);
+            }
+            else if(elementName == "preyReproductionRadius")
+            {
+                QString value = reader.readElementText();
+
+                spinBoxPreyReproductionRadius->setValue(value.toInt());
+            }
+            else if(elementName == "preyReproductiveCapacity")
+            {
+                QString value = reader.readElementText();
+
+                spinBoxPreyReproductiveCapacity->setValue(value.toInt());
+            }
+            else if(elementName == "fitnessRadius")
+            {
+                QString value = reader.readElementText();
+
+                spinBoxSocialRadius->setValue(value.toInt());
+            }
+            else if(elementName == "initialNumberOfPredators")
+            {
+                QString value = reader.readElementText();
+
+                lineEditInitialPredators->setText(value);
+            }
+            else if(elementName == "predatorCognitiveFactor")
+            {
+                QString value = reader.readElementText();
+
+                lineEditCognitiveFactor->setText(value);
+            }
+            else if(elementName == "predatorSocialFactor")
+            {
+                QString value = reader.readElementText();
+
+                lineEditSocialFactor->setText(value);
+            }
+            else if(elementName == "predatorMaximumSpeed")
+            {
+                QString value = reader.readElementText();
+
+                spinBoxMaxSpeed->setValue(value.toInt());
+            }
+            else if(elementName == "predatorReproductiveCapacity")
+            {
+                QString value = reader.readElementText();
+
+                spinBoxPredatorReproductiveCapacity->setValue(value.toInt());
+            }
+            else if(elementName == "predatorReproductionRadius")
+            {
+                QString value = reader.readElementText();
+
+                spinBoxPredatorReproductionRadius->setValue(value.toInt());
+            }
+            else if(elementName == "predatorSocialRadius")
+            {
+                QString value = reader.readElementText();
+
+                spinBoxSocialRadius->setValue(value.toInt());
+            }
+            else if(elementName == "initialInertiaWeight")
+            {
+                QString value = reader.readElementText();
+
+                lineEditInitialWeight->setText(value);
+            }
+            else if(elementName == "finalInertiaWeight")
+            {
+                QString value = reader.readElementText();
+
+                lineEditFinalWeight->setText(value);
+            }
+            else if(elementName == "resultsFilePath")
+            {
+                QString value = reader.readElementText();
+
+                lineEditPath->setText(value);
+            }
+        }
+    }
+
+    if(reader.hasError())
+    {
+        QMessageBox::critical(this, "Error reading settings file",
+                              reader.errorString());
+    }
+
+    settingsFile.close();
+
     connect(pushButtonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 }
 
@@ -51,28 +154,7 @@ void LocalSettingsDialog::showFileDialog()
 
 void LocalSettingsDialog::accept()
 {
-	// Insert prey data
-    mSettings["initialNumberOfPreys"] =  lineEditInitialPreys->text().toFloat();
-    mSettings["competenceFactor"] =  lineEditCompetenceFactor->text().toFloat();
-    mSettings["preyReproductionRadius"] = spinBoxPreyReproductionRadius->value();
-    mSettings["preyReproductiveCapacity"] = spinBoxPreyReproductiveCapacity->value();
-
-	// Insert predator data
-    mSettings["initialNumberOfPredators"] = lineEditInitialPredators->text().toInt();
-    mSettings["predatorCognitiveFactor"] = lineEditCognitiveFactor->text().toFloat();
-    mSettings["predatorSocialFactor"] = lineEditSocialFactor->text().toFloat();
-    mSettings["predatorMaximumSpeed"] = spinBoxMaxSpeed->value();
-    mSettings["predatorReproductiveCapacity"] = spinBoxPredatorReproductiveCapacity->value();
-    mSettings["predatorReproductionRadius"] = spinBoxPredatorReproductionRadius->value();
-    mSettings["predatorSocialRadius"] = spinBoxSocialRadius->value();
-    mSettings["fitnessRadius"] = spinBoxFitnessRadius->value();
-    mSettings["initialInertiaWeight"] = lineEditInitialWeight->text().toFloat();
-    mSettings["finalInertiaWeight"] = lineEditFinalWeight->text().toFloat();
-
-	// Insert path to results file
-    mSettings["resultsFilePath"] = lineEditPath->text();
-
-	emit settingsChanged(mSettings);
+    emit settingsChanged();
 
 	QDialog::accept();
 }

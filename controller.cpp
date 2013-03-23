@@ -149,59 +149,8 @@ void Controller::exportBitmap()
 	}
 }
 
-void Controller::updateSettings(QMap<QString, QVariant> settings)
+void Controller::updateSettings()
 {
-	switch(mCurrentType)
-	{
-	case GLOBAL:
-		{
-            auto global = dynamic_cast<GlobalCaPso*>(mCellularAutomaton);
-
-            global->setInitialPreyPercentage(settings["initialNumberOfPreys"].toFloat());
-            global->setCompetitionFactor(settings["competenceFactor"].toFloat());
-            global->setCompetitionRadius(settings["competenceRadius"].toInt());
-            global->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
-            global->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
-
-            global->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
-            global->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
-            global->setSocialFactor(settings["predatorSocialFactor"].toFloat());
-            global->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
-            global->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
-            global->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
-            global->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
-            global->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
-		}
-		break;
-
-	case LOCAL:
-		{
-//			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
-
-//			local->setInitialAlivePreys(settings["initialNumberOfPreys"].toFloat());
-//            local->setCompetitionFactor(settings["competenceFactor"].toFloat());
-//			local->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
-//			local->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
-
-//			local->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
-//			local->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
-//			local->setSocialFactor(settings["predatorSocialFactor"].toFloat());
-//			local->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
-//			local->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
-//			local->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
-//			local->setSocialRadius(settings["predatorSocialRadius"].toInt());
-//			local->setFitnessRadius(settings["fitnessRadius"].toInt());
-//			local->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
-//			local->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
-		}
-		break;
-
-	case MOVEMENT:
-		break;
-	}
-
-	mCurrFileName = settings["resultsFilePath"].toString();
-
     auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
 
     QFile settingsFile;
@@ -332,27 +281,6 @@ void Controller::initializeSettings()
     case GLOBAL:
         break;
     case LOCAL:
-        // Insert prey data
-//        mSettings.insert("initialNumberOfPreys", 0.3f);
-//        mSettings.insert("competenceFactor", 0.3f);
-//        mSettings.insert("preyReproductionRadius", 2);
-//        mSettings.insert("preyReproductiveCapacity", 10);
-//        mSettings.insert("fitnessRadius", 3);
-
-        // Insert predator data
-//        mSettings.insert("initialNumberOfPredators", 3);
-//        mSettings.insert("predatorCognitiveFactor", 1.0f);
-//        mSettings.insert("predatorSocialFactor", 2.0f);
-//        mSettings.insert("predatorMaximumSpeed", 10);
-//        mSettings.insert("predatorReproductiveCapacity", 10);
-//        mSettings.insert("predatorReproductionRadius", 2);
-//        mSettings.insert("predatorSocialRadius", 3);
-//        mSettings.insert("initialInertiaWeight", 0.9f);
-//        mSettings.insert("finalInertiaWeight", 0.2f);
-
-        // Insert path to results file
-//        mSettings.insert("resultsFilePath", QCoreApplication::applicationDirPath() +
-//                         "/results.txt");
         break;
     case MOVEMENT:
         break;
@@ -392,7 +320,7 @@ void Controller::initializeSettings()
         settingsFile.close();
     }
 
-    updateSettings(mSettings);
+    updateSettings();
 }
 
 void Controller::makeConnections()
@@ -450,10 +378,10 @@ void Controller::createSettingsDialog()
 
 	case LOCAL:
 		{
-            mSettingsDialog = new LocalSettingsDialog(mSettings, this);
+            mSettingsDialog = new LocalSettingsDialog(this);
 			auto p = dynamic_cast<LocalSettingsDialog*>(mSettingsDialog);
-			connect(p, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
-				this, SLOT(updateSettings(QMap<QString, QVariant>)));
+            connect(p, SIGNAL(settingsChanged()),
+                this, SLOT(updateSettings()));
 		}
 		break;
 

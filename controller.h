@@ -34,7 +34,7 @@ private slots:
 	void initialize();
 	void showSettings();
 	void exportBitmap();
-	void updateSettings(QMap<QString, QVariant> settigns);
+    void updateSettings();
 
 private:
     void createCa();
@@ -58,8 +58,6 @@ private:
 	int mTimerId;
 	int mTimerCount;
     int mSeasonLength;
-
-    QMap<QString, QVariant> mSettings;
 };
 
 #endif // CONTROLLER_H
