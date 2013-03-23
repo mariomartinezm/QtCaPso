@@ -1,6 +1,9 @@
 #pragma warning(push, 3)
 #include <QFileDialog>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
 #pragma warning(pop)
+#include <QMessageBox>
 #include "controller.h"
 #include "localcapso.h"
 #include "localsettingsdialog.h"
@@ -173,23 +176,23 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 
 	case LOCAL:
 		{
-			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+//			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
 
-			local->setInitialAlivePreys(settings["initialNumberOfPreys"].toFloat());
-            local->setCompetitionFactor(settings["competenceFactor"].toFloat());
-			local->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
-			local->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
+//			local->setInitialAlivePreys(settings["initialNumberOfPreys"].toFloat());
+//            local->setCompetitionFactor(settings["competenceFactor"].toFloat());
+//			local->setPreyReproductionRadius(settings["preyReproductionRadius"].toInt());
+//			local->setPreyMeanOffspring(settings["preyReproductiveCapacity"].toInt());
 
-			local->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
-			local->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
-			local->setSocialFactor(settings["predatorSocialFactor"].toFloat());
-			local->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
-			local->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
-			local->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
-			local->setSocialRadius(settings["predatorSocialRadius"].toInt());
-			local->setFitnessRadius(settings["fitnessRadius"].toInt());
-			local->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
-			local->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
+//			local->setInitialSwarmSize(settings["initialNumberOfPredators"].toInt());
+//			local->setCognitiveFactor(settings["predatorCognitiveFactor"].toFloat());
+//			local->setSocialFactor(settings["predatorSocialFactor"].toFloat());
+//			local->setMaximumSpeed(settings["predatorMaximumSpeed"].toInt());
+//			local->setPredatorMeanOffspring(settings["predatorReproductiveCapacity"].toInt());
+//			local->setPredatorReproductionRadius(settings["predatorReproductionRadius"].toInt());
+//			local->setSocialRadius(settings["predatorSocialRadius"].toInt());
+//			local->setFitnessRadius(settings["fitnessRadius"].toInt());
+//			local->setInitialInertialWeight(settings["initialInertiaWeight"].toFloat());
+//			local->setFinalInertiaWeight(settings["finalInertiaWeight"].toFloat());
 		}
 		break;
 
@@ -198,6 +201,128 @@ void Controller::updateSettings(QMap<QString, QVariant> settings)
 	}
 
 	mCurrFileName = settings["resultsFilePath"].toString();
+
+    auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+
+    QFile settingsFile;
+    settingsFile.setFileName("settings.xml");
+
+    if(!settingsFile.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::critical(this, "Error!", "Cannot open file: " +
+                              settingsFile.fileName());
+
+        exit(1);
+    }
+
+    QXmlStreamReader reader(&settingsFile);
+
+    while(!reader.atEnd() && !reader.hasError())
+    {
+        reader.readNext();
+
+        if(reader.isStartElement())
+        {
+            QString elementName = reader.name().toString();
+
+            if(elementName == "initialNumberOfPreys")
+            {
+                QString value = reader.readElementText();
+
+                local->setInitialAlivePreys(value.toFloat());
+            }
+            else if(elementName == "competitionFactor")
+            {
+                QString value = reader.readElementText();
+
+                local->setCompetitionFactor(value.toFloat());
+            }
+            else if(elementName == "preyReproductionRadius")
+            {
+                QString value = reader.readElementText();
+
+                local->setPreyReproductionRadius(value.toInt());
+            }
+            else if(elementName == "preyReproductiveCapacity")
+            {
+                QString value = reader.readElementText();
+
+                local->setPreyMeanOffspring(value.toInt());
+            }
+            else if(elementName == "fitnessRadius")
+            {
+                QString value = reader.readElementText();
+
+                local->setFitnessRadius(value.toInt());
+            }
+            else if(elementName == "initialNumberOfPredators")
+            {
+                QString value = reader.readElementText();
+
+                local->setInitialSwarmSize(value.toInt());
+            }
+            else if(elementName == "predatorCognitiveFactor")
+            {
+                QString value = reader.readElementText();
+
+                local->setCognitiveFactor(value.toFloat());
+            }
+            else if(elementName == "predatorSocialFactor")
+            {
+                QString value = reader.readElementText();
+
+                local->setSocialFactor(value.toFloat());
+            }
+            else if(elementName == "predatorMaximumSpeed")
+            {
+                QString value = reader.readElementText();
+
+                local->setMaximumSpeed(value.toInt());
+            }
+            else if(elementName == "predatorReproductiveCapacity")
+            {
+                QString value = reader.readElementText();
+
+                local->setPredatorMeanOffspring(value.toInt());
+            }
+            else if(elementName == "predatorReproductionRadius")
+            {
+                QString value = reader.readElementText();
+
+                local->setPredatorReproductionRadius(value.toInt());
+            }
+            else if(elementName == "predatorSocialRadius")
+            {
+                QString value = reader.readElementText();
+
+                local->setSocialRadius(value.toInt());
+            }
+            else if(elementName == "initialInertiaWeight")
+            {
+                QString value = reader.readElementText();
+
+                local->setInitialInertialWeight(value.toFloat());
+            }
+            else if(elementName == "finalInertiaWeight")
+            {
+                QString value = reader.readElementText();
+
+                local->setFinalInertiaWeight(value.toFloat());
+            }
+            else if(elementName == "resultsFilePath")
+            {
+                mCurrFileName = reader.readElementText();
+            }
+        }
+    }
+
+    if(reader.hasError())
+    {
+        QMessageBox::critical(this, "Error reading settings file",
+                              reader.errorString());
+    }
+
+    settingsFile.close();
 }
 
 void Controller::initializeSettings()
@@ -208,29 +333,63 @@ void Controller::initializeSettings()
         break;
     case LOCAL:
         // Insert prey data
-        mSettings.insert("initialNumberOfPreys", 0.3f);
-        mSettings.insert("competenceFactor", 0.3f);
-        mSettings.insert("preyReproductionRadius", 2);
-        mSettings.insert("preyReproductiveCapacity", 10);
-        mSettings.insert("fitnessRadius", 3);
+//        mSettings.insert("initialNumberOfPreys", 0.3f);
+//        mSettings.insert("competenceFactor", 0.3f);
+//        mSettings.insert("preyReproductionRadius", 2);
+//        mSettings.insert("preyReproductiveCapacity", 10);
+//        mSettings.insert("fitnessRadius", 3);
 
         // Insert predator data
-        mSettings.insert("initialNumberOfPredators", 3);
-        mSettings.insert("predatorCognitiveFactor", 1.0f);
-        mSettings.insert("predatorSocialFactor", 2.0f);
-        mSettings.insert("predatorMaximumSpeed", 10);
-        mSettings.insert("predatorReproductiveCapacity", 10);
-        mSettings.insert("predatorReproductionRadius", 2);
-        mSettings.insert("predatorSocialRadius", 3);
-        mSettings.insert("initialInertiaWeight", 0.9f);
-        mSettings.insert("finalInertiaWeight", 0.2f);
+//        mSettings.insert("initialNumberOfPredators", 3);
+//        mSettings.insert("predatorCognitiveFactor", 1.0f);
+//        mSettings.insert("predatorSocialFactor", 2.0f);
+//        mSettings.insert("predatorMaximumSpeed", 10);
+//        mSettings.insert("predatorReproductiveCapacity", 10);
+//        mSettings.insert("predatorReproductionRadius", 2);
+//        mSettings.insert("predatorSocialRadius", 3);
+//        mSettings.insert("initialInertiaWeight", 0.9f);
+//        mSettings.insert("finalInertiaWeight", 0.2f);
 
         // Insert path to results file
-        mSettings.insert("resultsFilePath", QCoreApplication::applicationDirPath() +
-                         "/results.txt");
+//        mSettings.insert("resultsFilePath", QCoreApplication::applicationDirPath() +
+//                         "/results.txt");
         break;
     case MOVEMENT:
         break;
+    }
+
+    if(!QFile::exists("settings.xml"))
+    {
+        QFile settingsFile;
+        settingsFile.setFileName("settings.xml");
+        settingsFile.open(QIODevice::WriteOnly);
+
+        QXmlStreamWriter writer(&settingsFile);
+        writer.setAutoFormatting(true);
+        writer.writeStartDocument();
+        writer.writeStartElement("project");
+        writer.writeAttribute("type", "local");
+        writer.writeTextElement("initialNumberOfPreys", "0.3");
+        writer.writeTextElement("competitionFactor", "0.3");
+        writer.writeTextElement("preyReproductionRadius", "2");
+        writer.writeTextElement("preyReproductiveCapacity", "10");
+        writer.writeTextElement("fitnessRadius", "3");
+        writer.writeTextElement("initialNumberOfPredators", "3");
+        writer.writeTextElement("predatorCognitiveFactor", "1.0");
+        writer.writeTextElement("predatorSocialFactor", "2.0");
+        writer.writeTextElement("predatorMaximumSpeed", "10");
+        writer.writeTextElement("predatorReproductiveCapacity", "10");
+        writer.writeTextElement("predatorReproductionRadius", "2");
+        writer.writeTextElement("predatorSocialRadius", "3");
+        writer.writeTextElement("initialInertiaWeight", "0.9");
+        writer.writeTextElement("finalInertiaWeight", "0.2");
+        writer.writeTextElement("resultsFilePath",
+                                QCoreApplication::applicationDirPath() +
+                                "/results.txt");
+        writer.writeEndElement();
+        writer.writeEndDocument();
+
+        settingsFile.close();
     }
 
     updateSettings(mSettings);
