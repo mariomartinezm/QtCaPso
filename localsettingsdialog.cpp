@@ -1,6 +1,7 @@
 #pragma warning(push, 3)
 #include <QFileDialog>
 #include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 #pragma warning(pop)
 #include <QMessageBox>
 #include "localsettingsdialog.h"
@@ -154,6 +155,36 @@ void LocalSettingsDialog::showFileDialog()
 
 void LocalSettingsDialog::accept()
 {
+
+    QFile settingsFile;
+    settingsFile.setFileName("settings.xml");
+    settingsFile.open(QIODevice::WriteOnly);
+
+    QXmlStreamWriter writer(&settingsFile);
+    writer.setAutoFormatting(true);
+    writer.writeStartDocument();
+    writer.writeStartElement("project");
+    writer.writeAttribute("type", "local");
+    writer.writeTextElement("initialNumberOfPreys", lineEditInitialPreys->text());
+    writer.writeTextElement("competitionFactor", lineEditCompetenceFactor->text());
+    writer.writeTextElement("preyReproductionRadius", QString::number(spinBoxPreyReproductionRadius->value()));
+    writer.writeTextElement("preyReproductiveCapacity", QString::number(spinBoxPreyReproductiveCapacity->value()));
+    writer.writeTextElement("fitnessRadius", QString::number(spinBoxFitnessRadius->value()));
+    writer.writeTextElement("initialNumberOfPredators", lineEditInitialPredators->text());
+    writer.writeTextElement("predatorCognitiveFactor", lineEditCognitiveFactor->text());
+    writer.writeTextElement("predatorSocialFactor", lineEditSocialFactor->text());
+    writer.writeTextElement("predatorMaximumSpeed", QString::number(spinBoxMaxSpeed->value()));
+    writer.writeTextElement("predatorReproductiveCapacity", QString::number(spinBoxPredatorReproductiveCapacity->value()));
+    writer.writeTextElement("predatorReproductionRadius", QString::number(spinBoxPredatorReproductionRadius->value()));
+    writer.writeTextElement("predatorSocialRadius", QString::number(spinBoxSocialRadius->value()));
+    writer.writeTextElement("initialInertiaWeight", lineEditInitialWeight->text());
+    writer.writeTextElement("finalInertiaWeight", lineEditFinalWeight->text());
+    writer.writeTextElement("resultsFilePath", lineEditPath->text());
+    writer.writeEndElement();
+    writer.writeEndDocument();
+
+    settingsFile.close();
+
     emit settingsChanged();
 
 	QDialog::accept();
