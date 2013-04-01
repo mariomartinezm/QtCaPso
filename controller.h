@@ -35,6 +35,8 @@ private slots:
 	void showSettings();
 	void exportBitmap();
     void updateSettings();
+    void importSettings();
+    void exportSettings();
 
 private:
     void createCa();

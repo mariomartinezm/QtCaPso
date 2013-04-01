@@ -274,6 +274,44 @@ void Controller::updateSettings()
     settingsFile.close();
 }
 
+void Controller::exportSettings()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Export current settings",
+        QCoreApplication::applicationDirPath() + "/settings.xml", tr("xml (*.xml)"));
+
+    if(!fileName.isEmpty())
+    {
+        QFile::copy("settings.xml", fileName);
+    }
+}
+
+void Controller::importSettings()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Import settings", "",
+                                                    tr("xml (*.xml)"));
+
+    QString destiny = "settings.xml";
+
+    if(!QFile::remove(destiny))
+    {
+        QMessageBox::critical(this, "Error!", "Cannot remove file");
+    }
+    else
+    {
+        if(!fileName.isEmpty())
+        {
+            if(!QFile::copy(fileName, destiny))
+            {
+                QMessageBox::critical(this, "Error!", "Cannot copy new file");
+            }
+            else
+            {
+                updateSettings();
+            }
+        }
+    }
+}
+
 void Controller::initializeSettings()
 {
     switch(mCurrentType)
@@ -332,6 +370,8 @@ void Controller::makeConnections()
 	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
 	connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
 	connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
+    connect(actionImportSettings, SIGNAL(triggered()), this, SLOT(importSettings()));
+    connect(actionExportSettings, SIGNAL(triggered()), this, SLOT(exportSettings()));
 }
 
 void Controller::createCa()
