@@ -281,7 +281,20 @@ void Controller::exportSettings()
 
     if(!fileName.isEmpty())
     {
-        QFile::copy("settings.xml", fileName);
+        if(QFile::exists(fileName))
+        {
+            if(!QFile::remove(fileName))
+            {
+                QMessageBox::critical(this, "Error!", "Cannot remove file");
+            }
+            else
+            {
+                if(!QFile::copy("settings.xml", fileName))
+                {
+                    QMessageBox::critical(this, "Error!", "Cannot copy file");
+                }
+            }
+        }
     }
 }
 
@@ -290,17 +303,17 @@ void Controller::importSettings()
     QString fileName = QFileDialog::getOpenFileName(this, "Import settings", "",
                                                     tr("xml (*.xml)"));
 
-    QString destiny = "settings.xml";
+    if(!fileName.isEmpty())
+    {
+        QString originalFile = "settings.xml";
 
-    if(!QFile::remove(destiny))
-    {
-        QMessageBox::critical(this, "Error!", "Cannot remove file");
-    }
-    else
-    {
-        if(!fileName.isEmpty())
+        if(!QFile::remove(originalFile))
         {
-            if(!QFile::copy(fileName, destiny))
+            QMessageBox::critical(this, "Error!", "Cannot remove file");
+        }
+        else
+        {
+            if(!QFile::copy(fileName, originalFile))
             {
                 QMessageBox::critical(this, "Error!", "Cannot copy new file");
             }
