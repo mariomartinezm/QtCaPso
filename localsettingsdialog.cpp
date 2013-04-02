@@ -11,6 +11,16 @@ LocalSettingsDialog::LocalSettingsDialog(QWidget *parent)
 {
     this->setupUi(this);
 
+    connect(pushButtonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
+}
+
+LocalSettingsDialog::~LocalSettingsDialog()
+{
+
+}
+
+void LocalSettingsDialog::showEvent(QShowEvent*)
+{
     // Populate the form
     QFile settingsFile;
     settingsFile.setFileName("settings.xml");
@@ -133,13 +143,6 @@ LocalSettingsDialog::LocalSettingsDialog(QWidget *parent)
     }
 
     settingsFile.close();
-
-    connect(pushButtonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
-}
-
-LocalSettingsDialog::~LocalSettingsDialog()
-{
-	
 }
 
 void LocalSettingsDialog::showFileDialog()
