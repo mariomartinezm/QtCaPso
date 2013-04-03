@@ -287,12 +287,12 @@ void Controller::exportSettings()
             {
                 QMessageBox::critical(this, "Error!", "Cannot remove file");
             }
-            else
+        }
+        else
+        {
+            if(!QFile::copy("settings.xml", fileName))
             {
-                if(!QFile::copy("settings.xml", fileName))
-                {
-                    QMessageBox::critical(this, "Error!", "Cannot copy file");
-                }
+                QMessageBox::critical(this, "Error!", "Cannot copy file");
             }
         }
     }
