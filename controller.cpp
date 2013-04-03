@@ -372,6 +372,9 @@ void Controller::initializeSettings()
     }
 
     updateSettings();
+
+    // Initialize CA according to the updated settings file
+    mCellularAutomaton->initialize();
 }
 
 void Controller::makeConnections()
