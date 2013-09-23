@@ -23,11 +23,11 @@ GlobalSettingsDialog::~GlobalSettingsDialog()
 void GlobalSettingsDialog::showFileDialog()
 {
 	QString path = QFileDialog::getExistingDirectory(this, tr("Select a folder"),
-		"/home", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        QDir::separator() + QString("home"), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
 	if(!path.isEmpty())
 	{
-		lineEditPath->setText(path + "/results.txt");
+        lineEditPath->setText(path + QDir::separator() + "results.txt");
 	}
 }
 

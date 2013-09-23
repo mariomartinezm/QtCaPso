@@ -141,7 +141,8 @@ void Controller::showSettings()
 void Controller::exportBitmap()
 {
 	QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
-		QCoreApplication::applicationDirPath() + "/lattice.PNG", tr("PNG (*.PNG);;JPG (*.jpg);; TIFF (*.tiff)"));
+        QCoreApplication::applicationDirPath() + QDir::separator() +
+        "lattice.PNG", tr("PNG (*.PNG);;JPG (*.jpg);; TIFF (*.tiff)"));
 
 	if(!fileName.isEmpty())
 	{
@@ -277,7 +278,7 @@ void Controller::updateSettings()
 void Controller::exportSettings()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Export current settings",
-        QCoreApplication::applicationDirPath() + "/settings.xml", tr("xml (*.xml)"));
+        QCoreApplication::applicationDirPath() + QDir::separator() + "settings.xml", tr("xml (*.xml)"));
 
     if(!fileName.isEmpty())
     {
@@ -364,7 +365,7 @@ void Controller::initializeSettings()
         writer.writeTextElement("finalInertiaWeight", "0.2");
         writer.writeTextElement("resultsFilePath",
                                 QCoreApplication::applicationDirPath() +
-                                "/results.txt");
+                                QDir::separator() + "results.txt");
         writer.writeEndElement();
         writer.writeEndDocument();
 
