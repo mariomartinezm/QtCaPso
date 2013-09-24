@@ -40,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>229</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Simulation">
@@ -67,6 +67,7 @@
     <addaction name="actionExportBitmap"/>
     <addaction name="actionImportSettings"/>
     <addaction name="actionExportSettings"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Simulation"/>
@@ -154,6 +155,14 @@
    </property>
    <property name="toolTip">
     <string>Import settings from file</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
  </widget>

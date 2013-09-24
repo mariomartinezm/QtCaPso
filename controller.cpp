@@ -389,6 +389,7 @@ void Controller::makeConnections()
 	connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
     connect(actionImportSettings, SIGNAL(triggered()), this, SLOT(importSettings()));
     connect(actionExportSettings, SIGNAL(triggered()), this, SLOT(exportSettings()));
+    connect(actionExit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 void Controller::createCa()
