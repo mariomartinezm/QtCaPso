@@ -33,6 +33,7 @@ private slots:
 	void clear();
 	void initialize();
 	void showSettings();
+    void showBatchDialog();
 	void exportBitmap();
     void updateSettings();
     void importSettings();

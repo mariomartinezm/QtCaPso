@@ -138,6 +138,11 @@ void Controller::showSettings()
 	mSettingsDialog->exec();
 }
 
+void Controller::showBatchDialog()
+{
+
+}
+
 void Controller::exportBitmap()
 {
 	QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
@@ -384,6 +389,7 @@ void Controller::makeConnections()
 	connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
 	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
 	connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
+    connect(actionBatch, SIGNAL(triggered()), this, SLOT(showBatchDialog()));
 	connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
     connect(actionImportSettings, SIGNAL(triggered()), this, SLOT(importSettings()));
     connect(actionExportSettings, SIGNAL(triggered()), this, SLOT(exportSettings()));

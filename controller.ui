@@ -40,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>229</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Simulation">
@@ -54,6 +54,7 @@
     <addaction name="actionInitialize"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
+    <addaction name="actionBatch"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -163,6 +164,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionBatch">
+   <property name="text">
+    <string>Batch...</string>
    </property>
   </action>
  </widget>
