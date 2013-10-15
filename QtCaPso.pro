@@ -17,7 +17,8 @@ HEADERS += \
 FORMS += \
     localsettingsdialog.ui \
     globalsettingsdialog.ui \
-    controller.ui
+    controller.ui \
+    batchdialog.ui
 
 SOURCES += \
     swarm.cpp \
