@@ -8,6 +8,7 @@
 #include "localcapso.h"
 #include "localsettingsdialog.h"
 #include "globalsettingsdialog.h"
+#include "batchdialog.h"
 #include "globalcapso.h"
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
@@ -140,7 +141,8 @@ void Controller::showSettings()
 
 void Controller::showBatchDialog()
 {
-
+    BatchDialog* batchDialog = new BatchDialog(this);
+    batchDialog->exec();
 }
 
 void Controller::exportBitmap()
