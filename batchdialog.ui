@@ -78,7 +78,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QSpinBox" name="spinBox">
+    <widget class="QSpinBox" name="spinBoxSimulations">
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
@@ -149,14 +149,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="startButton">
+      <widget class="QPushButton" name="buttonStart">
        <property name="text">
         <string>Start</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelButton">
+      <widget class="QPushButton" name="buttonCancel">
        <property name="text">
         <string>Cancel</string>
        </property>
@@ -169,7 +169,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>cancelButton</sender>
+   <sender>buttonCancel</sender>
    <signal>clicked()</signal>
    <receiver>BatchDialog</receiver>
    <slot>reject()</slot>
