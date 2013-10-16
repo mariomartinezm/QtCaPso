@@ -3,17 +3,20 @@
 
 #include <QDialog>
 #include "ui_batchdialog.h"
+#include "catype.h"
 
 class BatchDialog : public QDialog, private Ui::BatchDialog
 {
     Q_OBJECT
 public:
-    explicit BatchDialog(QWidget *parent = 0);
+    explicit BatchDialog(QWidget *parent = 0, CaType type = LOCAL);
 
 signals:
 
 public slots:
 
+private:
+    CaType mType;
 };
 
 #endif // BATCHDIALOG_H
