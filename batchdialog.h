@@ -11,9 +11,8 @@ class BatchDialog : public QDialog, private Ui::BatchDialog
 public:
     explicit BatchDialog(QWidget *parent = 0, CaType type = LOCAL);
 
-signals:
-
-public slots:
+private slots:
+    void startBatch();
 
 private:
     CaType mType;
