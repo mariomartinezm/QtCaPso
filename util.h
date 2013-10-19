@@ -3,12 +3,10 @@
 
 #include "catype.h"
 #include "cellularautomaton.h"
-#include "localcapso.h"
-#include "globalcapso.h"
 
 namespace util
 {
-    void loadSettings(CellularAutomaton& ca, CaType type);
+    void loadSettings(CellularAutomaton* ca, CaType type, QString& currFilename);
 }
 
 #endif // UTIL_H

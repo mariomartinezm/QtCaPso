@@ -9,94 +9,95 @@
 #include "localsettingsdialog.h"
 #include "globalsettingsdialog.h"
 #include "globalcapso.h"
+#include "util.h"
 
 Controller::Controller(QWidget *parent, Qt::WFlags flags)
-	: QMainWindow(parent, flags),
-	mCurrentType(LOCAL),
-	mCurrFileName("results.txt"),
-	mResultsFile(mCurrFileName),
-	mResultsStream(&mResultsFile),
-	mTimerId(-1),
-	mTimerCount(0),
-	mSeasonLength(10)
+    : QMainWindow(parent, flags),
+    mCurrentType(LOCAL),
+    mCurrFileName("results.txt"),
+    mResultsFile(mCurrFileName),
+    mResultsStream(&mResultsFile),
+    mTimerId(-1),
+    mTimerCount(0),
+    mSeasonLength(10)
 {
-	this->setupUi(this);
+    this->setupUi(this);
 
     createCa();
     initializeSettings();
-	makeConnections();
-	createView();
-	createSettingsDialog();
+    makeConnections();
+    createView();
+    createSettingsDialog();
 
-	initializeResultsFile();
-	writeResults();
+    initializeResultsFile();
+    writeResults();
 }
 
 Controller::~Controller()
 {
-	mResultsFile.close();
+    mResultsFile.close();
 
-	delete mCellularAutomaton;
-	delete mView;
+    delete mCellularAutomaton;
+    delete mView;
 }
 
 void Controller::timerEvent(QTimerEvent*)
 {
-	mCellularAutomaton->nextGen();
+    mCellularAutomaton->nextGen();
 
-	mTimerCount++;
+    mTimerCount++;
 
-	if(!(mTimerCount % mSeasonLength))
-	{
-		writeResults();
-	}
+    if(!(mTimerCount % mSeasonLength))
+    {
+        writeResults();
+    }
 
-	statusBarGeneration->showMessage(QString::number(mTimerCount));
+    statusBarGeneration->showMessage(QString::number(mTimerCount));
 
-	mView->update();
+    mView->update();
 }
 
 void Controller::play()
 {
-	if(mTimerId == -1)
-	{
-		mTimerId = startTimer(0);
-	}
+    if(mTimerId == -1)
+    {
+        mTimerId = startTimer(0);
+    }
 }
 
 void Controller::pause()
 {
-	if(mTimerId != -1)
-	{
-		killTimer(mTimerId);
+    if(mTimerId != -1)
+    {
+        killTimer(mTimerId);
 
-		mResultsStream.flush();
+        mResultsStream.flush();
 
-		mTimerId = -1;
-	}
+        mTimerId = -1;
+    }
 }
 
 void Controller::step()
 {
-	if(mTimerId != -1)
-	{
-		killTimer(mTimerId);
+    if(mTimerId != -1)
+    {
+        killTimer(mTimerId);
 
-		mTimerId = -1;
-	}
+        mTimerId = -1;
+    }
 
-	mCellularAutomaton->nextGen();
+    mCellularAutomaton->nextGen();
 
-	mTimerCount++;
+    mTimerCount++;
 
-	if(!(mTimerCount % mSeasonLength))
-	{
-		writeResults();
-	}
+    if(!(mTimerCount % mSeasonLength))
+    {
+        writeResults();
+    }
 
-	statusBarGeneration->showMessage(QString::number(mTimerCount));
+    statusBarGeneration->showMessage(QString::number(mTimerCount));
 
-	mView->update();
+    mView->update();
 }
 
 void Controller::clear()
@@ -108,171 +109,172 @@ void Controller::clear()
         mTimerId = -1;
     }
 
-	mCellularAutomaton->clear();
+    mCellularAutomaton->clear();
 
-	mView->update();
+    mView->update();
 }
 
 void Controller::initialize()
 {
-	if(mTimerId != -1)
-	{
-		killTimer(mTimerId);
+    if(mTimerId != -1)
+    {
+        killTimer(mTimerId);
 
-		mTimerId = -1;
-	}
+        mTimerId = -1;
+    }
 
-	mCellularAutomaton->initialize();
+    mCellularAutomaton->initialize();
 
-	mTimerCount = 0;
+    mTimerCount = 0;
 
-	initializeResultsFile();
+    initializeResultsFile();
 
-	writeResults();
+    writeResults();
 
-	mView->update();
+    mView->update();
 }
 
 void Controller::showSettings()
 {
-	mSettingsDialog->exec();
+    mSettingsDialog->exec();
 }
 
 void Controller::exportBitmap()
 {
-	QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
+    QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
         QCoreApplication::applicationDirPath() + QDir::separator() +
         "lattice.PNG", tr("PNG (*.PNG);;JPG (*.jpg);; TIFF (*.tiff)"));
 
-	if(!fileName.isEmpty())
-	{
-		mView->latticeImage().save(fileName);
-	}
+    if(!fileName.isEmpty())
+    {
+        mView->latticeImage().save(fileName);
+    }
 }
 
 void Controller::updateSettings()
 {
-    auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+    util::loadSettings(mCellularAutomaton, mCurrentType, mCurrFileName);
+//    auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
 
-    QFile settingsFile;
-    settingsFile.setFileName("settings.xml");
+//    QFile settingsFile;
+//    settingsFile.setFileName("settings.xml");
 
-    if(!settingsFile.open(QIODevice::ReadOnly))
-    {
-        QMessageBox::critical(this, "Error!", "Cannot open file: " +
-                              settingsFile.fileName());
+//    if(!settingsFile.open(QIODevice::ReadOnly))
+//    {
+//        QMessageBox::critical(this, "Error!", "Cannot open file: " +
+//                              settingsFile.fileName());
 
-        exit(1);
-    }
+//        exit(1);
+//    }
 
-    QXmlStreamReader reader(&settingsFile);
+//    QXmlStreamReader reader(&settingsFile);
 
-    while(!reader.atEnd() && !reader.hasError())
-    {
-        reader.readNext();
+//    while(!reader.atEnd() && !reader.hasError())
+//    {
+//        reader.readNext();
 
-        if(reader.isStartElement())
-        {
-            QString elementName = reader.name().toString();
+//        if(reader.isStartElement())
+//        {
+//            QString elementName = reader.name().toString();
 
-            if(elementName == "initialNumberOfPreys")
-            {
-                QString value = reader.readElementText();
+//            if(elementName == "initialNumberOfPreys")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setInitialAlivePreys(value.toFloat());
-            }
-            else if(elementName == "competitionFactor")
-            {
-                QString value = reader.readElementText();
+//                local->setInitialAlivePreys(value.toFloat());
+//            }
+//            else if(elementName == "competitionFactor")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setCompetitionFactor(value.toFloat());
-            }
-            else if(elementName == "preyReproductionRadius")
-            {
-                QString value = reader.readElementText();
+//                local->setCompetitionFactor(value.toFloat());
+//            }
+//            else if(elementName == "preyReproductionRadius")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setPreyReproductionRadius(value.toInt());
-            }
-            else if(elementName == "preyReproductiveCapacity")
-            {
-                QString value = reader.readElementText();
+//                local->setPreyReproductionRadius(value.toInt());
+//            }
+//            else if(elementName == "preyReproductiveCapacity")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setPreyMeanOffspring(value.toInt());
-            }
-            else if(elementName == "fitnessRadius")
-            {
-                QString value = reader.readElementText();
+//                local->setPreyMeanOffspring(value.toInt());
+//            }
+//            else if(elementName == "fitnessRadius")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setFitnessRadius(value.toInt());
-            }
-            else if(elementName == "initialNumberOfPredators")
-            {
-                QString value = reader.readElementText();
+//                local->setFitnessRadius(value.toInt());
+//            }
+//            else if(elementName == "initialNumberOfPredators")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setInitialSwarmSize(value.toInt());
-            }
-            else if(elementName == "predatorCognitiveFactor")
-            {
-                QString value = reader.readElementText();
+//                local->setInitialSwarmSize(value.toInt());
+//            }
+//            else if(elementName == "predatorCognitiveFactor")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setCognitiveFactor(value.toFloat());
-            }
-            else if(elementName == "predatorSocialFactor")
-            {
-                QString value = reader.readElementText();
+//                local->setCognitiveFactor(value.toFloat());
+//            }
+//            else if(elementName == "predatorSocialFactor")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setSocialFactor(value.toFloat());
-            }
-            else if(elementName == "predatorMaximumSpeed")
-            {
-                QString value = reader.readElementText();
+//                local->setSocialFactor(value.toFloat());
+//            }
+//            else if(elementName == "predatorMaximumSpeed")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setMaximumSpeed(value.toInt());
-            }
-            else if(elementName == "predatorReproductiveCapacity")
-            {
-                QString value = reader.readElementText();
+//                local->setMaximumSpeed(value.toInt());
+//            }
+//            else if(elementName == "predatorReproductiveCapacity")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setPredatorMeanOffspring(value.toInt());
-            }
-            else if(elementName == "predatorReproductionRadius")
-            {
-                QString value = reader.readElementText();
+//                local->setPredatorMeanOffspring(value.toInt());
+//            }
+//            else if(elementName == "predatorReproductionRadius")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setPredatorReproductionRadius(value.toInt());
-            }
-            else if(elementName == "predatorSocialRadius")
-            {
-                QString value = reader.readElementText();
+//                local->setPredatorReproductionRadius(value.toInt());
+//            }
+//            else if(elementName == "predatorSocialRadius")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setSocialRadius(value.toInt());
-            }
-            else if(elementName == "initialInertiaWeight")
-            {
-                QString value = reader.readElementText();
+//                local->setSocialRadius(value.toInt());
+//            }
+//            else if(elementName == "initialInertiaWeight")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setInitialInertialWeight(value.toFloat());
-            }
-            else if(elementName == "finalInertiaWeight")
-            {
-                QString value = reader.readElementText();
+//                local->setInitialInertialWeight(value.toFloat());
+//            }
+//            else if(elementName == "finalInertiaWeight")
+//            {
+//                QString value = reader.readElementText();
 
-                local->setFinalInertiaWeight(value.toFloat());
-            }
-            else if(elementName == "resultsFilePath")
-            {
-                mCurrFileName = reader.readElementText();
-            }
-        }
-    }
+//                local->setFinalInertiaWeight(value.toFloat());
+//            }
+//            else if(elementName == "resultsFilePath")
+//            {
+//                mCurrFileName = reader.readElementText();
+//            }
+//        }
+//    }
 
-    if(reader.hasError())
-    {
-        QMessageBox::critical(this, "Error reading settings file",
-                              reader.errorString());
-    }
+//    if(reader.hasError())
+//    {
+//        QMessageBox::critical(this, "Error reading settings file",
+//                              reader.errorString());
+//    }
 
-    settingsFile.close();
+//    settingsFile.close();
 }
 
 void Controller::exportSettings()
@@ -378,13 +380,13 @@ void Controller::initializeSettings()
 
 void Controller::makeConnections()
 {
-	connect(actionPlay, SIGNAL(triggered()), this, SLOT(play()));
-	connect(actionPause, SIGNAL(triggered()), this, SLOT(pause()));
-	connect(actionStep, SIGNAL(triggered()), this, SLOT(step()));
-	connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
-	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
-	connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
-	connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
+    connect(actionPlay, SIGNAL(triggered()), this, SLOT(play()));
+    connect(actionPause, SIGNAL(triggered()), this, SLOT(pause()));
+    connect(actionStep, SIGNAL(triggered()), this, SLOT(step()));
+    connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
+    connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
+    connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
+    connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
     connect(actionImportSettings, SIGNAL(triggered()), this, SLOT(importSettings()));
     connect(actionExportSettings, SIGNAL(triggered()), this, SLOT(exportSettings()));
     connect(actionExit, SIGNAL(triggered()), this, SLOT(close()));
@@ -392,21 +394,21 @@ void Controller::makeConnections()
 
 void Controller::createCa()
 {
-	switch(mCurrentType)
-	{
-	case GLOBAL:
-		mCellularAutomaton = new GlobalCaPso(512, 256);
-		mSeasonLength = 10;
-		break;
+    switch(mCurrentType)
+    {
+    case GLOBAL:
+        mCellularAutomaton = new GlobalCaPso(512, 256);
+        mSeasonLength = 10;
+        break;
 
-	case LOCAL:
-		mCellularAutomaton = new LocalCaPso(512, 256);
-		mSeasonLength = 10;
-		break;
+    case LOCAL:
+        mCellularAutomaton = new LocalCaPso(512, 256);
+        mSeasonLength = 10;
+        break;
 
-	case MOVEMENT:
-		break;
-	}
+    case MOVEMENT:
+        break;
+    }
 }
 
 void Controller::createView()
@@ -416,55 +418,55 @@ void Controller::createView()
                        mCellularAutomaton->height(),
                        this);
 
-	setCentralWidget(mView);
+    setCentralWidget(mView);
 }
 
 void Controller::createSettingsDialog()
 {
-	switch(mCurrentType)
-	{
-	case GLOBAL:
-		{
-			mSettingsDialog = new GlobalSettingsDialog(this);
-			auto p = dynamic_cast<GlobalSettingsDialog*>(mSettingsDialog);
-			connect(p, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
-				this, SLOT(updateSettings(QMap<QString, QVariant>)));
-		}
-		break;
+    switch(mCurrentType)
+    {
+    case GLOBAL:
+        {
+            mSettingsDialog = new GlobalSettingsDialog(this);
+            auto p = dynamic_cast<GlobalSettingsDialog*>(mSettingsDialog);
+            connect(p, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
+                this, SLOT(updateSettings(QMap<QString, QVariant>)));
+        }
+        break;
 
-	case LOCAL:
-		{
+    case LOCAL:
+        {
             mSettingsDialog = new LocalSettingsDialog(this);
-			auto p = dynamic_cast<LocalSettingsDialog*>(mSettingsDialog);
+            auto p = dynamic_cast<LocalSettingsDialog*>(mSettingsDialog);
             connect(p, SIGNAL(settingsChanged()),
                 this, SLOT(updateSettings()));
-		}
-		break;
+        }
+        break;
 
-	case MOVEMENT:
-		break;
-	}
+    case MOVEMENT:
+        break;
+    }
 }
 
 void Controller::initializeResultsFile()
 {
-	mResultsFile.close();
-	mResultsFile.setFileName(mCurrFileName);
-	mResultsFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
-	mResultsStream.seek(0);
+    mResultsFile.close();
+    mResultsFile.setFileName(mCurrFileName);
+    mResultsFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
+    mResultsStream.seek(0);
 }
 
 void Controller::writeResults()
 {
-	switch(mCurrentType)
-	{
-	case LOCAL:
-		{
-			auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+    switch(mCurrentType)
+    {
+    case LOCAL:
+        {
+            auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
             mResultsStream << mTimerCount / mSeasonLength << " " <<
                               local->numberOfPreys() << " " <<
                               local->numberOfPredators() << "\n";
-		}
-		break;
-	}
+        }
+        break;
+    }
 }
