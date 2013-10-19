@@ -12,7 +12,8 @@ HEADERS += \
     controller.h \
     cellularautomaton.h \
     caview.h \
-    catype.h
+    catype.h \
+    util.h
 
 FORMS += \
     localsettingsdialog.ui \
@@ -30,7 +31,8 @@ SOURCES += \
     globalcapso.cpp \
     controller.cpp \
     cellularautomaton.cpp \
-    caview.cpp
+    caview.cpp \
+    util.cpp
 
 # This option should only be used in linux or mingw
 !win32{
