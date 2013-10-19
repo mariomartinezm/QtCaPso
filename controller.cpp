@@ -153,7 +153,10 @@ void Controller::exportBitmap()
 
 void Controller::updateSettings()
 {
-    util::loadSettings(mCellularAutomaton, mCurrentType, mCurrFileName);
+    if(!util::loadSettings(mCellularAutomaton, mCurrentType, mCurrFileName))
+    {
+        QMessageBox::critical(this, "Error!", "The settings file cannot be loaded");
+    }
 }
 
 void Controller::exportSettings()
