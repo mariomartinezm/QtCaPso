@@ -7,14 +7,14 @@
 
 namespace util
 {
-    void loadSettings(CellularAutomaton* ca, CaType type, QString& currFilename)
+    bool loadSettings(CellularAutomaton* ca, CaType type, QString& currFilename)
     {
         QFile settingsFile;
         settingsFile.setFileName("settings.xml");
 
         if(!settingsFile.open(QIODevice::ReadOnly))
         {
-
+            return false;
         }
 
         QXmlStreamReader reader(&settingsFile);
@@ -133,9 +133,11 @@ namespace util
 
         if(reader.hasError())
         {
-
+            return false;
         }
 
         settingsFile.close();
+
+        return true;
     }
 }

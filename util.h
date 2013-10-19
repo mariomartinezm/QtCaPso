@@ -6,7 +6,7 @@
 
 namespace util
 {
-    void loadSettings(CellularAutomaton* ca, CaType type, QString& currFilename);
+    bool loadSettings(CellularAutomaton* ca, CaType type, QString& currFilename);
 }
 
 #endif // UTIL_H
