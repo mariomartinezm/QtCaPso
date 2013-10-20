@@ -144,10 +144,10 @@ namespace util
     }
 
 
-    bool writeSettings(CaType type, float psi0, float alpha, int ry, int ey,
-                       int rc, int z0, float k1, float k2, int maxSpeed, int ez,
-                       int rz, int l, float omegaStart, float omegaEnd,
-                       QString filename)
+    bool writeSettings(QString filename, CaType type, float psi0, float alpha,
+                       int ry, int ey, int rc, int z0, float k1, float k2,
+                       int maxSpeed, int ez, int rz, int l, float omegaStart,
+                       float omegaEnd)
     {
         QFile settingsFile;
         settingsFile.setFileName("settings.xml");
