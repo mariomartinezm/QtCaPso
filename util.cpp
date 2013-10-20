@@ -1,4 +1,6 @@
+#include <QCoreApplication>
 #include <QFile>
+#include <QDir>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include "util.h"
@@ -135,6 +137,61 @@ namespace util
         {
             return false;
         }
+
+        settingsFile.close();
+
+        return true;
+    }
+
+
+    bool writeSettings(CaType type, float psi0, float alpha, int ry, int ey,
+                       int rc, int z0, float k1, float k2, int maxSpeed, int ez,
+                       int rz, int l, float omegaStart, float omegaEnd,
+                       QString filename)
+    {
+        QFile settingsFile;
+        settingsFile.setFileName("settings.xml");
+
+        if(!settingsFile.open(QIODevice::WriteOnly))
+        {
+            return false;
+        }
+
+        QXmlStreamWriter writer(&settingsFile);
+        writer.setAutoFormatting(true);
+        writer.writeStartDocument();
+        writer.writeStartElement("project");
+
+        switch(type)
+        {
+        case LOCAL:
+            writer.writeAttribute("type", "LOCAL");
+            break;
+        case GLOBAL:
+            writer.writeAttribute("type", "GLOBAL");
+            break;
+        case MOVEMENT:
+            writer.writeAttribute("type", "MOVEMENT");
+            break;
+        }
+
+        writer.writeTextElement("initialNumberOfPreys", QString::number(psi0));
+        writer.writeTextElement("competitionFactor", QString::number(alpha));
+        writer.writeTextElement("preyReproductionRadius", QString::number(ry));
+        writer.writeTextElement("preyReproductiveCapacity", QString::number(ey));
+        writer.writeTextElement("fitnessRadius", QString::number(rc));
+        writer.writeTextElement("initialNumberOfPredators", QString::number(z0));
+        writer.writeTextElement("predatorCognitiveFactor", QString::number(k1));
+        writer.writeTextElement("predatorSocialFactor", QString::number(k2));
+        writer.writeTextElement("predatorMaximumSpeed", QString::number(maxSpeed));
+        writer.writeTextElement("predatorReproductiveCapacity", QString::number(ez));
+        writer.writeTextElement("predatorReproductionRadius", QString::number(rz));
+        writer.writeTextElement("predatorSocialRadius", QString::number(l));
+        writer.writeTextElement("initialInertiaWeight", QString::number(omegaStart));
+        writer.writeTextElement("finalInertiaWeight", QString::number(omegaEnd));
+        writer.writeTextElement("resultsFilePath", filename);
+        writer.writeEndElement();
+        writer.writeEndDocument();
 
         settingsFile.close();
 
