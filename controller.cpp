@@ -222,36 +222,8 @@ void Controller::initializeSettings()
 
     if(!QFile::exists("settings.xml"))
     {
-        QFile settingsFile;
-        settingsFile.setFileName("settings.xml");
-        settingsFile.open(QIODevice::WriteOnly);
-
-        QXmlStreamWriter writer(&settingsFile);
-        writer.setAutoFormatting(true);
-        writer.writeStartDocument();
-        writer.writeStartElement("project");
-        writer.writeAttribute("type", "local");
-        writer.writeTextElement("initialNumberOfPreys", "0.3");
-        writer.writeTextElement("competitionFactor", "0.3");
-        writer.writeTextElement("preyReproductionRadius", "2");
-        writer.writeTextElement("preyReproductiveCapacity", "10");
-        writer.writeTextElement("fitnessRadius", "3");
-        writer.writeTextElement("initialNumberOfPredators", "3");
-        writer.writeTextElement("predatorCognitiveFactor", "1.0");
-        writer.writeTextElement("predatorSocialFactor", "2.0");
-        writer.writeTextElement("predatorMaximumSpeed", "10");
-        writer.writeTextElement("predatorReproductiveCapacity", "10");
-        writer.writeTextElement("predatorReproductionRadius", "2");
-        writer.writeTextElement("predatorSocialRadius", "3");
-        writer.writeTextElement("initialInertiaWeight", "0.9");
-        writer.writeTextElement("finalInertiaWeight", "0.2");
-        writer.writeTextElement("resultsFilePath",
-                                QCoreApplication::applicationDirPath() +
-                                QDir::separator() + "results.txt");
-        writer.writeEndElement();
-        writer.writeEndDocument();
-
-        settingsFile.close();
+        util::writeSettings(QCoreApplication::applicationDirPath() +
+                            QDir::separator() + "results.txt");
     }
 
     updateSettings();
