@@ -1,7 +1,5 @@
 #pragma warning(push, 3)
 #include <QFileDialog>
-#include <QXmlStreamWriter>
-#include <QXmlStreamReader>
 #pragma warning(pop)
 #include <QMessageBox>
 #include "controller.h"
