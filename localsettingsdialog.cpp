@@ -159,7 +159,7 @@ void LocalSettingsDialog::showFileDialog()
 
 void LocalSettingsDialog::accept()
 {
-    util::writeSettings(lineEditPath->text(), CaType::LOCAL,
+    if(!util::writeSettings(lineEditPath->text(), CaType::LOCAL,
                         lineEditInitialPreys->text().toFloat(),
                         lineEditCompetenceFactor->text().toFloat(),
                         spinBoxPreyReproductionRadius->value(),
@@ -173,7 +173,10 @@ void LocalSettingsDialog::accept()
                         spinBoxPredatorReproductionRadius->value(),
                         spinBoxSocialRadius->value(),
                         lineEditInitialWeight->text().toFloat(),
-                        lineEditFinalWeight->text().toFloat());
+                        lineEditFinalWeight->text().toFloat()))
+    {
+         QMessageBox::critical(this, "Error!", "Settings cannot be written");
+    }
 
     emit settingsChanged();
 
