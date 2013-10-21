@@ -220,8 +220,11 @@ void Controller::initializeSettings()
 
     if(!QFile::exists("settings.xml"))
     {
-        util::writeSettings(QCoreApplication::applicationDirPath() +
-                            QDir::separator() + "results.txt");
+        if(!util::writeSettings(QCoreApplication::applicationDirPath() +
+                            QDir::separator() + "results.txt"))
+        {
+            QMessageBox::critical(this, "Error!", "Cannot write settings");
+        }
     }
 
     updateSettings();
