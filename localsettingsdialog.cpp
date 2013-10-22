@@ -72,7 +72,7 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
             {
                 QString value = reader.readElementText();
 
-                spinBoxSocialRadius->setValue(value.toInt());
+                spinBoxFitnessRadius->setValue(value.toInt());
             }
             else if(elementName == "initialNumberOfPredators")
             {
