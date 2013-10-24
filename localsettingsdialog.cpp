@@ -5,6 +5,7 @@
 #pragma warning(pop)
 #include <QMessageBox>
 #include "localsettingsdialog.h"
+#include "util.h"
 
 LocalSettingsDialog::LocalSettingsDialog(QWidget *parent)
     : QDialog(parent)
@@ -71,7 +72,7 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
             {
                 QString value = reader.readElementText();
 
-                spinBoxSocialRadius->setValue(value.toInt());
+                spinBoxFitnessRadius->setValue(value.toInt());
             }
             else if(elementName == "initialNumberOfPredators")
             {
@@ -147,48 +148,37 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
 
 void LocalSettingsDialog::showFileDialog()
 {
-	QString path = QFileDialog::getExistingDirectory(this, tr("Select a folder"),
+    QString path = QFileDialog::getExistingDirectory(this, tr("Select a folder"),
         QDir::separator() + QString("home"), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
-	if(!path.isEmpty())
-	{
+    if(!path.isEmpty())
+    {
         lineEditPath->setText(path + QDir::separator() + "results.txt");
-	}
+    }
 }
 
 void LocalSettingsDialog::accept()
 {
-
-    QFile settingsFile;
-    settingsFile.setFileName("settings.xml");
-    settingsFile.open(QIODevice::WriteOnly);
-
-    QXmlStreamWriter writer(&settingsFile);
-    writer.setAutoFormatting(true);
-    writer.writeStartDocument();
-    writer.writeStartElement("project");
-    writer.writeAttribute("type", "local");
-    writer.writeTextElement("initialNumberOfPreys", lineEditInitialPreys->text());
-    writer.writeTextElement("competitionFactor", lineEditCompetenceFactor->text());
-    writer.writeTextElement("preyReproductionRadius", QString::number(spinBoxPreyReproductionRadius->value()));
-    writer.writeTextElement("preyReproductiveCapacity", QString::number(spinBoxPreyReproductiveCapacity->value()));
-    writer.writeTextElement("fitnessRadius", QString::number(spinBoxFitnessRadius->value()));
-    writer.writeTextElement("initialNumberOfPredators", lineEditInitialPredators->text());
-    writer.writeTextElement("predatorCognitiveFactor", lineEditCognitiveFactor->text());
-    writer.writeTextElement("predatorSocialFactor", lineEditSocialFactor->text());
-    writer.writeTextElement("predatorMaximumSpeed", QString::number(spinBoxMaxSpeed->value()));
-    writer.writeTextElement("predatorReproductiveCapacity", QString::number(spinBoxPredatorReproductiveCapacity->value()));
-    writer.writeTextElement("predatorReproductionRadius", QString::number(spinBoxPredatorReproductionRadius->value()));
-    writer.writeTextElement("predatorSocialRadius", QString::number(spinBoxSocialRadius->value()));
-    writer.writeTextElement("initialInertiaWeight", lineEditInitialWeight->text());
-    writer.writeTextElement("finalInertiaWeight", lineEditFinalWeight->text());
-    writer.writeTextElement("resultsFilePath", lineEditPath->text());
-    writer.writeEndElement();
-    writer.writeEndDocument();
-
-    settingsFile.close();
+    if(!util::writeSettings(lineEditPath->text(), CaType::LOCAL,
+                        lineEditInitialPreys->text().toFloat(),
+                        lineEditCompetenceFactor->text().toFloat(),
+                        spinBoxPreyReproductionRadius->value(),
+                        spinBoxPreyReproductiveCapacity->value(),
+                        spinBoxFitnessRadius->value(),
+                        lineEditInitialPredators->text().toInt(),
+                        lineEditCognitiveFactor->text().toFloat(),
+                        lineEditSocialFactor->text().toFloat(),
+                        spinBoxMaxSpeed->value(),
+                        spinBoxPredatorReproductiveCapacity->value(),
+                        spinBoxPredatorReproductionRadius->value(),
+                        spinBoxSocialRadius->value(),
+                        lineEditInitialWeight->text().toFloat(),
+                        lineEditFinalWeight->text().toFloat()))
+    {
+         QMessageBox::critical(this, "Error!", "Settings cannot be written");
+    }
 
     emit settingsChanged();
 
-	QDialog::accept();
+    QDialog::accept();
 }
