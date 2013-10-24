@@ -63,7 +63,6 @@ void BatchDialog::startBatch()
             }
 
             resultsFile.close();
-
         }
 
         delete local;
