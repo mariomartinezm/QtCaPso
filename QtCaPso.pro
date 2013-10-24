@@ -13,7 +13,7 @@ HEADERS += \
     cellularautomaton.h \
     caview.h \
     catype.h \
-    batchdialog.h
+    batchdialog.h \
     util.h
 
 FORMS += \
@@ -34,7 +34,7 @@ SOURCES += \
     controller.cpp \
     cellularautomaton.cpp \
     caview.cpp \
-    batchdialog.cpp
+    batchdialog.cpp \
     util.cpp
 
 # This option should only be used in linux or mingw
