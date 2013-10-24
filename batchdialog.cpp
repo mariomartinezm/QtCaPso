@@ -1,9 +1,11 @@
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 #include "batchdialog.h"
 #include "cellularautomaton.h"
 #include "localcapso.h"
 #include "globalcapso.h"
+#include "util.h"
 
 BatchDialog::BatchDialog(QWidget *parent, CaType type) :
     QDialog(parent), mType(type)
@@ -15,32 +17,59 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
 
 void BatchDialog::startBatch()
 {
+    // Get the size of the lattice from the combo box
+    QString currentItem = comboSize->itemText(comboSize->currentIndex());
+    QStringList size = currentItem.split('x',
+                                         QString::SplitBehavior::SkipEmptyParts,
+                                         Qt::CaseSensitive);
+
+    int width, height;
+    width = size.at(0).toInt();
+    height = size.at(1).toInt();
+
     switch(mType)
     {
     case LOCAL:
     {
-        LocalCaPso local(512, 256);
+        LocalCaPso* local = new LocalCaPso(width, height);
+        QString path;
+
+        util::loadSettings(local, CaType::LOCAL, path);
+
+        // Remove filename from path
+        path.truncate(path.lastIndexOf(QDir::separator()) + 1);
 
         for (int simCount = 0; simCount < spinBoxSimulations->value(); simCount++)
         {
             // Create results file
-            QFile resultsFile("D:\\data_" + QString("%1").arg(simCount) + ".txt");
+            QFile resultsFile(path + lineEditFilenamePrefix->text() + "_" +
+                              QString::number(simCount) + ".txt");
             QTextStream resultsStream(&resultsFile);
-            resultsFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
+            resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |
+                             QIODevice::Truncate);
 
-            local.clear();
+            local->initialize();
 
-            for(int seasonsCount = 0; seasonsCount < spinBoxSeasons->value() * 10; seasonsCount++)
+            for(int genCount = 0; genCount < spinBoxSeasons->value() * 10; genCount++)
             {
-                local.nextGen();
+                if(!(genCount % 10))
+                {
+                    resultsStream << genCount / 10 << " " <<
+                                     local->numberOfPreys() << " " <<
+                                     local->numberOfPredators() << "\n";
+                }
 
-                resultsStream << seasonsCount << "\n";
+                local->nextGen();
             }
 
             resultsFile.close();
+
         }
-    }
+
+        delete local;
+
         break;
+    }
     case GLOBAL:
         break;
     case MOVEMENT:
