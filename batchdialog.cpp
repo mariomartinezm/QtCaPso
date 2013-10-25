@@ -31,6 +31,20 @@ void BatchDialog::showFileDialog()
     }
 }
 
+void BatchDialog::on_lineEditPath_textChanged(QString text)
+{
+    QDir path(text);
+
+    if(!path.exists(text))
+    {
+        buttonStart->setEnabled(false);
+    }
+    else
+    {
+        buttonStart->setEnabled(true);
+    }
+}
+
 void BatchDialog::startBatch()
 {
     // Get the size of the lattice from the combo box

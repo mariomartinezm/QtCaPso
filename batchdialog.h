@@ -14,6 +14,7 @@ public:
 private slots:
     void startBatch();
     void showFileDialog();
+    void on_lineEditPath_textChanged(QString text);
 
 private:
     CaType mType;
