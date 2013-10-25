@@ -1,6 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <QString>
 #include "catype.h"
 #include "cellularautomaton.h"
 
@@ -13,6 +14,8 @@ namespace util
                        int ey=10, int rc=3, int z0=3, float k1=1.0,
                        float k2=2.0, int maxSpeed=10, int ez=10, int rz=2,
                        int l=3, float omegaStart=0.9, float omegaEnd=0.2);
+
+    bool getPathFromDialog(QString& path);
 }
 
 #endif // UTIL_H

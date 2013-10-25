@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <QFileDialog>
 #include <QFile>
 #include <QDir>
 #include <QXmlStreamReader>
@@ -194,6 +195,20 @@ namespace util
         writer.writeEndDocument();
 
         settingsFile.close();
+
+        return true;
+    }
+
+    bool getPathFromDialog(QString& path)
+    {
+        path = QFileDialog::getExistingDirectory(NULL,
+                                                 QObject::tr("Select a folder"),
+                                                 QCoreApplication::applicationDirPath() + QDir::separator(),
+                                                 QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        if(path.isEmpty())
+        {
+            return false;
+        }
 
         return true;
     }
