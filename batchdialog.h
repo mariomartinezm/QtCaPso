@@ -13,6 +13,7 @@ public:
 
 private slots:
     void startBatch();
+    void showFileDialog();
 
 private:
     CaType mType;

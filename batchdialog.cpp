@@ -1,3 +1,4 @@
+#include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
@@ -12,7 +13,22 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
 {
     this->setupUi(this);
 
+    lineEditPath->setText(QCoreApplication::applicationDirPath() + QDir::separator());
+
     connect(buttonStart, SIGNAL(clicked()), this, SLOT(startBatch()));
+    connect(buttonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
+}
+
+void BatchDialog::showFileDialog()
+{
+    QString path = QFileDialog::getExistingDirectory(this,
+                                                     tr("Select a folder"),
+                                                     QCoreApplication::applicationDirPath() + QDir::separator(),
+                                                     QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if(!path.isEmpty())
+    {
+        lineEditPath->setText(path + QDir::separator());
+    }
 }
 
 void BatchDialog::startBatch()
