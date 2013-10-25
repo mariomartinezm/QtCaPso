@@ -50,16 +50,16 @@ void BatchDialog::startBatch()
         LocalCaPso* local = new LocalCaPso(width, height);
         QString path;
 
+        // The path obtained here is ignored
         util::loadSettings(local, CaType::LOCAL, path);
-
-        // Remove filename from path
-        path.truncate(path.lastIndexOf(QDir::separator()) + 1);
 
         for (int simCount = 0; simCount < spinBoxSimulations->value(); simCount++)
         {
             // Create results file
-            QFile resultsFile(path + lineEditFilenamePrefix->text() + "_" +
+            QFile resultsFile(lineEditPath->text() +
+                              lineEditFilenamePrefix->text() + "_" +
                               QString::number(simCount) + ".txt");
+
             QTextStream resultsStream(&resultsFile);
             resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |
                              QIODevice::Truncate);
