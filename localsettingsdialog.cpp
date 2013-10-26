@@ -159,7 +159,7 @@ void LocalSettingsDialog::showFileDialog()
 
 void LocalSettingsDialog::accept()
 {
-    if(!util::writeSettings(lineEditPath->text(), CaType::LOCAL,
+    if(!util::writeSettings(lineEditPath->text(), LOCAL,
                         lineEditInitialPreys->text().toFloat(),
                         lineEditCompetenceFactor->text().toFloat(),
                         spinBoxPreyReproductionRadius->value(),

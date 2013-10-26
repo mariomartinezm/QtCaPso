@@ -47,7 +47,7 @@ void BatchDialog::startBatch()
     // Get the size of the lattice from the combo box
     QString currentItem = comboSize->itemText(comboSize->currentIndex());
     QStringList size = currentItem.split('x',
-                                         QString::SplitBehavior::SkipEmptyParts,
+                                         QString::SkipEmptyParts,
                                          Qt::CaseSensitive);
 
     int width, height;
@@ -62,7 +62,7 @@ void BatchDialog::startBatch()
         QString path;
 
         // The path obtained here is ignored
-        util::loadSettings(local, CaType::LOCAL, path);
+        util::loadSettings(local, LOCAL, path);
 
         for (int simCount = 0; simCount < spinBoxSimulations->value(); simCount++)
         {
