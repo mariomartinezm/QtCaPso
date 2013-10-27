@@ -14,6 +14,9 @@ public:
 private slots:
     void startBatch();
     void on_buttonBrowseSettings_clicked();
+    void on_buttonAdd_clicked();
+    void on_buttonRemove_clicked();
+    void on_buttonClear_clicked();
     void showFileDialog();
     void on_lineEditPath_textChanged(QString text);
 

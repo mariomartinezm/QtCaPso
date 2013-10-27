@@ -32,6 +32,25 @@ void BatchDialog::on_buttonBrowseSettings_clicked()
     }
 }
 
+void BatchDialog::on_buttonAdd_clicked()
+{
+    listWidgetJobs->addItem(lineEditSettingsFile->text());
+}
+
+void BatchDialog::on_buttonRemove_clicked()
+{
+    QListWidgetItem* item;
+
+    item = listWidgetJobs->takeItem(listWidgetJobs->row(listWidgetJobs->currentItem()));
+
+    delete item;
+}
+
+void BatchDialog::on_buttonClear_clicked()
+{
+    listWidgetJobs->clear();
+}
+
 void BatchDialog::showFileDialog()
 {
     QString path;
