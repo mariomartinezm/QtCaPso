@@ -22,6 +22,16 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
     buttonStart->setEnabled(false);
 }
 
+void BatchDialog::on_buttonBrowseSettings_clicked()
+{
+    QString file;
+
+    if(util::getFileFromDialog(file, tr("xml (*.xml)")))
+    {
+        lineEditSettingsFile->setText(file);
+    }
+}
+
 void BatchDialog::showFileDialog()
 {
     QString path;

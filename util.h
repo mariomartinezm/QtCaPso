@@ -16,6 +16,8 @@ namespace util
                        int l=3, float omegaStart=0.9, float omegaEnd=0.2);
 
     bool getPathFromDialog(QString& path);
+
+    bool getFileFromDialog(QString& file, QString filter);
 }
 
 #endif // UTIL_H

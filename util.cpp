@@ -212,4 +212,19 @@ namespace util
 
         return true;
     }
+
+    bool getFileFromDialog(QString& file, QString filter)
+    {
+        QString appDir = QCoreApplication::applicationDirPath() + QDir::separator();
+
+        file = QFileDialog::getOpenFileName(NULL, QObject::tr("Select a file"),
+                                            appDir, filter, 0, 0);
+
+        if(file.isEmpty())
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

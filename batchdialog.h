@@ -13,6 +13,7 @@ public:
 
 private slots:
     void startBatch();
+    void on_buttonBrowseSettings_clicked();
     void showFileDialog();
     void on_lineEditPath_textChanged(QString text);
 
