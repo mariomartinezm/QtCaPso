@@ -14,7 +14,8 @@ HEADERS += \
     caview.h \
     catype.h \
     batchdialog.h \
-    util.h
+    util.h \
+    batchitem.h
 
 FORMS += \
     localsettingsdialog.ui \
@@ -35,7 +36,8 @@ SOURCES += \
     cellularautomaton.cpp \
     caview.cpp \
     batchdialog.cpp \
-    util.cpp
+    util.cpp \
+    batchitem.cpp
 
 # This option should only be used in linux or mingw
 !win32{
