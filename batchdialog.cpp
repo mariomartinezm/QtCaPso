@@ -17,6 +17,7 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
     connect(buttonStart, SIGNAL(clicked()), this, SLOT(startBatch()));
     connect(buttonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 
+    // This two lines must go after the connect statements
     buttonStart->setAutoDefault(false);
     buttonStart->setEnabled(false);
 }
