@@ -6,7 +6,9 @@
 class BatchItem
 {
 public:
-    BatchItem();
+    BatchItem(QString settingsFile, int width, int height,
+              int numberOfSimulations, int numberOfSeasons,
+              QString filenamePrefix, QString resultsPath);
 
     const QString& settingsFile() const;
     void setSettingsFile(QString file);

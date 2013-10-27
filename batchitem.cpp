@@ -1,13 +1,15 @@
 #include "batchitem.h"
 
-BatchItem::BatchItem() :
-    mSettingsFile(""),
-    mWidth(0),
-    mHeight(0),
-    mNumberOfSimulations(0),
-    mNumberOfSeasons(0),
-    mFilenamePrefix(""),
-    mResultsPath("")
+BatchItem::BatchItem(QString settingsFile, int width, int height,
+                     int numberOfSimulations, int numberOfSeasons,
+                     QString filenamePrefix, QString resultsPath) :
+    mSettingsFile(settingsFile),
+    mWidth(width),
+    mHeight(height),
+    mNumberOfSimulations(numberOfSimulations),
+    mNumberOfSeasons(numberOfSeasons),
+    mFilenamePrefix(filenamePrefix),
+    mResultsPath(resultsPath)
 {
 }
 
