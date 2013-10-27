@@ -219,6 +219,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="buttonStart">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Start</string>
        </property>
@@ -249,15 +252,9 @@
   <zorder>lineEditPath</zorder>
   <zorder>buttonBrowse</zorder>
   <zorder>listWidgetJobs</zorder>
-  <zorder>buttonStart</zorder>
-  <zorder>buttonCancel</zorder>
   <zorder>labelSettingsPath</zorder>
   <zorder>lineEditSettingsFile</zorder>
   <zorder>pushButtonBrowseSettings</zorder>
-  <zorder>buttonAdd</zorder>
-  <zorder>buttonRemove</zorder>
-  <zorder>buttonClear</zorder>
-  <zorder>horizontalSpacer_2</zorder>
  </widget>
  <resources/>
  <connections>
