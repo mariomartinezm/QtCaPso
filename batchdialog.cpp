@@ -34,7 +34,12 @@ void BatchDialog::on_buttonBrowseSettings_clicked()
 
 void BatchDialog::on_buttonAdd_clicked()
 {
-    listWidgetJobs->addItem(lineEditSettingsFile->text());
+    if(!lineEditSettingsFile->text().isEmpty())
+    {
+        listWidgetJobs->addItem(lineEditSettingsFile->text());
+
+        buttonStart->setEnabled(true);
+    }
 }
 
 void BatchDialog::on_buttonRemove_clicked()
@@ -44,11 +49,19 @@ void BatchDialog::on_buttonRemove_clicked()
     item = listWidgetJobs->takeItem(listWidgetJobs->row(listWidgetJobs->currentItem()));
 
     delete item;
+
+    // If the QListWidget is empty, disable buttonStart
+    if(listWidgetJobs->count() == 0)
+    {
+        buttonStart->setEnabled(false);
+    }
 }
 
 void BatchDialog::on_buttonClear_clicked()
 {
     listWidgetJobs->clear();
+
+    buttonStart->setEnabled(false);
 }
 
 void BatchDialog::showFileDialog()
