@@ -12,7 +12,8 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
 {
     this->setupUi(this);
 
-    lineEditPath->setText(QCoreApplication::applicationDirPath() + QDir::separator());
+    lineEditPath->setText(QCoreApplication::applicationDirPath() +
+                          QDir::separator());
 
     connect(buttonStart, SIGNAL(clicked()), this, SLOT(startBatch()));
     connect(buttonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
@@ -44,10 +45,10 @@ void BatchDialog::on_buttonAdd_clicked()
 
 void BatchDialog::on_buttonRemove_clicked()
 {
+    // Delete the currently selected item, since Qt does not delete the item
+    // when it is removed, it must be manually deleted
     QListWidgetItem* item;
-
     item = listWidgetJobs->takeItem(listWidgetJobs->row(listWidgetJobs->currentItem()));
-
     delete item;
 
     // If the QListWidget is empty, disable buttonStart
@@ -92,8 +93,7 @@ void BatchDialog::startBatch()
 {
     // Get the size of the lattice from the combo box
     QString currentItem = comboSize->itemText(comboSize->currentIndex());
-    QStringList size = currentItem.split('x',
-                                         QString::SkipEmptyParts,
+    QStringList size = currentItem.split('x', QString::SkipEmptyParts,
                                          Qt::CaseSensitive);
 
     int width, height;
