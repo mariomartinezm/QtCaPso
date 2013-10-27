@@ -28,7 +28,7 @@
     <widget class="QLineEdit" name="lineEditSettingsFile"/>
    </item>
    <item row="0" column="3">
-    <widget class="QPushButton" name="pushButtonBrowseSettings">
+    <widget class="QPushButton" name="buttonBrowseSettings">
      <property name="text">
       <string>Browse...</string>
      </property>
@@ -254,7 +254,7 @@
   <zorder>listWidgetJobs</zorder>
   <zorder>labelSettingsPath</zorder>
   <zorder>lineEditSettingsFile</zorder>
-  <zorder>pushButtonBrowseSettings</zorder>
+  <zorder>buttonBrowseSettings</zorder>
  </widget>
  <resources/>
  <connections>
