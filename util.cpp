@@ -10,10 +10,11 @@
 
 namespace util
 {
-    bool loadSettings(CellularAutomaton* ca, CaType type, QString& currFilename)
+    bool loadSettings(CellularAutomaton* ca, CaType type, QString settingsFilename,
+                      QString& currFilename)
     {
         QFile settingsFile;
-        settingsFile.setFileName("settings.xml");
+        settingsFile.setFileName(settingsFilename);
 
         if(!settingsFile.open(QIODevice::ReadOnly))
         {

@@ -158,7 +158,7 @@ void Controller::exportBitmap()
 
 void Controller::updateSettings()
 {
-    if(!util::loadSettings(mCellularAutomaton, mCurrentType, mCurrFileName))
+    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.xml", mCurrFileName))
     {
         QMessageBox::critical(this, "Error!", "The settings file cannot be loaded");
     }
@@ -242,14 +242,14 @@ void Controller::initializeSettings()
 
 void Controller::makeConnections()
 {
-	connect(actionPlay, SIGNAL(triggered()), this, SLOT(play()));
-	connect(actionPause, SIGNAL(triggered()), this, SLOT(pause()));
-	connect(actionStep, SIGNAL(triggered()), this, SLOT(step()));
-	connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
-	connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
-	connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
+    connect(actionPlay, SIGNAL(triggered()), this, SLOT(play()));
+    connect(actionPause, SIGNAL(triggered()), this, SLOT(pause()));
+    connect(actionStep, SIGNAL(triggered()), this, SLOT(step()));
+    connect(actionClear, SIGNAL(triggered()), this, SLOT(clear()));
+    connect(actionInitialize, SIGNAL(triggered()), this, SLOT(initialize()));
+    connect(actionSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
     connect(actionBatch, SIGNAL(triggered()), this, SLOT(showBatchDialog()));
-	connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
+    connect(actionExportBitmap, SIGNAL(triggered()), this, SLOT(exportBitmap()));
     connect(actionImportSettings, SIGNAL(triggered()), this, SLOT(importSettings()));
     connect(actionExportSettings, SIGNAL(triggered()), this, SLOT(exportSettings()));
     connect(actionExit, SIGNAL(triggered()), this, SLOT(close()));

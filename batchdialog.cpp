@@ -126,7 +126,7 @@ void BatchDialog::startBatch()
             // Dummy variable to call load settings, since the obtained path is
             // ignored
             QString path;
-            util::loadSettings(local, LOCAL, path);
+            util::loadSettings(local, LOCAL, currentItem.settingsFile(), path);
 
             for (int simCount = 0; simCount < currentItem.numberOfSimulations(); simCount++)
             {

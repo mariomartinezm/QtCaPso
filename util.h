@@ -7,7 +7,7 @@
 
 namespace util
 {
-    bool loadSettings(CellularAutomaton* ca, CaType type, QString& currFilename);
+    bool loadSettings(CellularAutomaton* ca, CaType type, QString settingsFilename, QString& currFilename);
 
     bool writeSettings(QString filename="results.txt", CaType type=LOCAL,
                        float psi0=0.3, float alpha=0.3, int ry=2,
