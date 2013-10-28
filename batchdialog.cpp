@@ -112,54 +112,52 @@ void BatchDialog::on_lineEditPath_textChanged(QString text)
 
 void BatchDialog::startBatch()
 {
-    // Get the size of the lattice from the combo box
-    QString currentItem = comboSize->itemText(comboSize->currentIndex());
-    QStringList size = currentItem.split('x', QString::SkipEmptyParts,
-                                         Qt::CaseSensitive);
-
-    int width, height;
-    width = size.at(0).toInt();
-    height = size.at(1).toInt();
-
     switch(mType)
     {
     case LOCAL:
     {
-        LocalCaPso* local = new LocalCaPso(width, height);
-        QString path;
-
-        // The path obtained here is ignored
-        util::loadSettings(local, LOCAL, path);
-
-        for (int simCount = 0; simCount < spinBoxSimulations->value(); simCount++)
+        for (int index = 0; index < batchItems.count(); index++)
         {
-            // Create results file
-            QFile resultsFile(lineEditPath->text() +
-                              lineEditFilenamePrefix->text() + "_" +
-                              QString::number(simCount) + ".txt");
+            const BatchItem& currentItem = batchItems.at(index);
 
-            QTextStream resultsStream(&resultsFile);
-            resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |
-                             QIODevice::Truncate);
+            LocalCaPso* local = new LocalCaPso(currentItem.width(),
+                                               currentItem.height());
 
-            local->initialize();
+            // Dummy variable to call load settings, since the obtained path is
+            // ignored
+            QString path;
+            util::loadSettings(local, LOCAL, path);
 
-            for(int genCount = 0; genCount < spinBoxSeasons->value() * 10; genCount++)
+            for (int simCount = 0; simCount < currentItem.numberOfSimulations(); simCount++)
             {
-                if(!(genCount % 10))
+                // Create results file
+                QFile resultsFile(currentItem.resultsPath() +
+                                  currentItem.filenamePrefix() + "_" +
+                                  QString::number(simCount) + ".txt");
+
+                QTextStream resultsStream(&resultsFile);
+                resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |
+                                 QIODevice::Truncate);
+
+                local->initialize();
+
+                for(int genCount = 0; genCount < currentItem.numberOfSeasons() * 10; genCount++)
                 {
-                    resultsStream << genCount / 10 << " " <<
-                                     local->numberOfPreys() << " " <<
-                                     local->numberOfPredators() << "\n";
+                    if(!(genCount % 10))
+                    {
+                        resultsStream << genCount / 10 << " " <<
+                                         local->numberOfPreys() << " " <<
+                                         local->numberOfPredators() << "\n";
+                    }
+
+                    local->nextGen();
                 }
 
-                local->nextGen();
+                resultsFile.close();
             }
 
-            resultsFile.close();
+            delete local;
         }
-
-        delete local;
 
         break;
     }
