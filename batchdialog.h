@@ -2,8 +2,10 @@
 #define BATCHDIALOG_H
 
 #include <QDialog>
+#include <QList>
 #include "ui_batchdialog.h"
 #include "catype.h"
+#include "batchitem.h"
 
 class BatchDialog : public QDialog, private Ui::BatchDialog
 {
@@ -22,6 +24,7 @@ private slots:
 
 private:
     CaType mType;
+    QList<BatchItem> batchItems;
 };
 
 #endif // BATCHDIALOG_H
