@@ -15,7 +15,6 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
     lineEditPath->setText(QCoreApplication::applicationDirPath() +
                           QDir::separator());
 
-    connect(buttonStart, SIGNAL(clicked()), this, SLOT(startBatch()));
     connect(buttonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 
     // This two lines must go after the connect statements
@@ -110,7 +109,7 @@ void BatchDialog::on_lineEditPath_textChanged(QString text)
     }
 }
 
-void BatchDialog::startBatch()
+void BatchDialog::on_buttonStart_clicked()
 {
     switch(mType)
     {

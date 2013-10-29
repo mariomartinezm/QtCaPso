@@ -14,7 +14,7 @@ public:
     explicit BatchDialog(QWidget *parent = 0, CaType type = LOCAL);
 
 private slots:
-    void startBatch();
+    void on_buttonStart_clicked();
     void on_buttonBrowseSettings_clicked();
     void on_buttonAdd_clicked();
     void on_buttonRemove_clicked();
