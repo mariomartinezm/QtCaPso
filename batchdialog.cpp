@@ -15,8 +15,6 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
     lineEditPath->setText(QCoreApplication::applicationDirPath() +
                           QDir::separator());
 
-    connect(buttonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
-
     // This two lines must go after the connect statements
     buttonStart->setAutoDefault(false);
     buttonStart->setEnabled(false);
@@ -85,7 +83,7 @@ void BatchDialog::on_buttonClear_clicked()
     buttonStart->setEnabled(false);
 }
 
-void BatchDialog::showFileDialog()
+void BatchDialog::on_buttonBrowse_clicked()
 {
     QString path;
 

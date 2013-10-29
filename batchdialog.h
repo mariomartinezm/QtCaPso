@@ -19,7 +19,7 @@ private slots:
     void on_buttonAdd_clicked();
     void on_buttonRemove_clicked();
     void on_buttonClear_clicked();
-    void showFileDialog();
+    void on_buttonBrowse_clicked();
     void on_lineEditPath_textChanged(QString text);
 
 private:
