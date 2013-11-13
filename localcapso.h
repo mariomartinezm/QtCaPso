@@ -60,7 +60,7 @@ private:
 
     // Model parameters
     double mPreyInitialDensity;
-    double mCompetitionFactor;
+    double mPreyCompetitionFactor;
     int mPreyReproductiveCapacity;
     int mPreyReproductionRadius;
     int mPredatorReproductiveCapacity;

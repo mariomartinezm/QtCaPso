@@ -26,7 +26,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mDistReal_0_1(0.0, 1.0),
     // Model paremeters
     mPreyInitialDensity(0.3),
-    mCompetitionFactor(0.3),
+    mPreyCompetitionFactor(0.3),
     mPreyReproductiveCapacity(10),
     mPreyReproductionRadius(2),
     mPredatorReproductiveCapacity(10),
@@ -106,7 +106,7 @@ void LocalCaPso::nextGen()
 
 void LocalCaPso::setCompetitionFactor(float value)
 {
-    mCompetitionFactor = value;
+    mPreyCompetitionFactor = value;
 }
 
 void LocalCaPso::setPreyInitialDensity(float value)
@@ -207,7 +207,7 @@ void LocalCaPso::competitionOfPreys()
             if(checkState(currentAddress, PREY))
             {
                 deathProbability = mTemp[currentAddress] *
-                    mCompetitionFactor / NEIGHBORHOOD_SIZE;
+                    mPreyCompetitionFactor / NEIGHBORHOOD_SIZE;
 
                 if(mDistReal_0_1(mRandom) <= deathProbability)
                 {
