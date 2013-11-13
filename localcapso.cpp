@@ -166,7 +166,7 @@ void LocalCaPso::setMaximumSpeed(int value)
     mPredatorSwarm.setMaxSpeed(value);
 }
 
-void LocalCaPso::setMitrationTime(int value)
+void LocalCaPso::setPredatorMigrationTime(int value)
 {
     mMigrationTime = value;
 }

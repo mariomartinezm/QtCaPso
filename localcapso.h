@@ -29,7 +29,7 @@ public:
     void setCognitiveFactor(float value);
     void setSocialFactor(float value);
     void setMaximumSpeed(int value);
-    void setMitrationTime(int value);
+    void setPredatorMigrationTime(int value);
     void setInitialInertialWeight(float value);
     void setFinalInertiaWeight(float value);
 
