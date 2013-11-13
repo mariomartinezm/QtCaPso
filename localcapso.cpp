@@ -25,7 +25,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     // Real uniform distribution
     mDistReal_0_1(0.0, 1.0),
     // Model paremeters
-    mInitialAlivePercentage(0.3),
+    mPreyInitialDensity(0.3),
     mCompetitionFactor(0.3),
     mPreyReproductiveCapacity(10),
     mPreyReproductionRadius(2),
@@ -68,7 +68,7 @@ void LocalCaPso::initialize()
     {
         for(int col = 0; col < mWidth; col++)
         {
-            if(mDistReal_0_1(mRandom) < mInitialAlivePercentage)
+            if(mDistReal_0_1(mRandom) < mPreyInitialDensity)
             {
                 setState(getAddress(row, col), PREY);
 
@@ -111,7 +111,7 @@ void LocalCaPso::setCompetitionFactor(float value)
 
 void LocalCaPso::setInitialAlivePreys(float value)
 {
-    mInitialAlivePercentage = value;
+    mPreyInitialDensity = value;
 }
 
 void LocalCaPso::setPreyReproductiveCapacity(int value)

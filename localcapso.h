@@ -59,7 +59,7 @@ private:
     void (LocalCaPso::*mNextStage)();
 
     // Model parameters
-    double mInitialAlivePercentage;
+    double mPreyInitialDensity;
     double mCompetitionFactor;
     int mPreyReproductiveCapacity;
     int mPreyReproductionRadius;
