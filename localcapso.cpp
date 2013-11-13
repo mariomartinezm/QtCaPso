@@ -29,7 +29,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mCompetitionFactor(0.3),
     mPreyReproductiveCapacity(10),
     mPreyReproductionRadius(2),
-    mPredatorMeanOffspring(10),
+    mPredatorReproductiveCapacity(10),
     mPredatorReproductionRadius(2),
     mSocialRadius(3),
     mFitnessRadius(3),
@@ -126,7 +126,7 @@ void LocalCaPso::setPreyReproductionRadius(int value)
 
 void LocalCaPso::setPredatorMeanOffspring(int value)
 {
-    mPredatorMeanOffspring = value;
+    mPredatorReproductiveCapacity = value;
 }
 
 void LocalCaPso::setPredatorReproductionRadius(int value)
@@ -405,7 +405,7 @@ void LocalCaPso::reproductionOfPredators()
 
             int birthCount = 0;
 
-            while(birthCount < mPredatorMeanOffspring)
+            while(birthCount < mPredatorReproductiveCapacity)
             {
                 // Obtain an offset
                 int finalRow = randomOffset(mRandom);

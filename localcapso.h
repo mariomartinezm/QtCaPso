@@ -63,7 +63,7 @@ private:
     double mCompetitionFactor;
     int mPreyReproductiveCapacity;
     int mPreyReproductionRadius;
-    int mPredatorMeanOffspring;
+    int mPredatorReproductiveCapacity;
     int mPredatorReproductionRadius;
     int mSocialRadius;
     int mFitnessRadius;
