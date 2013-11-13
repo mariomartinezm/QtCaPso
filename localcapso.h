@@ -9,89 +9,89 @@
 class LocalCaPso : public CellularAutomaton
 {
 public:
-	enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
+    enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
 
-	LocalCaPso(int width, int height);
+    LocalCaPso(int width, int height);
 
-	void initialize();
+    void initialize();
 
-	void nextGen();
+    void nextGen();
 
-	void setInitialAlivePreys(float value);
+    void setInitialAlivePreys(float value);
     void setCompetitionFactor(float value);
-	void setPreyMeanOffspring(int value);
-	void setPreyReproductionRadius(int value);
-	void setPredatorMeanOffspring(int value);
-	void setPredatorReproductionRadius(int value);
-	void setSocialRadius(int value);
-	void setFitnessRadius(int value);
-	void setInitialSwarmSize(int value);
-	void setCognitiveFactor(float value);
-	void setSocialFactor(float value);
-	void setMaximumSpeed(int value);
-	void setMitrationTime(int value);
-	void setInitialInertialWeight(float value);
-	void setFinalInertiaWeight(float value);
+    void setPreyMeanOffspring(int value);
+    void setPreyReproductionRadius(int value);
+    void setPredatorMeanOffspring(int value);
+    void setPredatorReproductionRadius(int value);
+    void setSocialRadius(int value);
+    void setFitnessRadius(int value);
+    void setInitialSwarmSize(int value);
+    void setCognitiveFactor(float value);
+    void setSocialFactor(float value);
+    void setMaximumSpeed(int value);
+    void setMitrationTime(int value);
+    void setInitialInertialWeight(float value);
+    void setFinalInertiaWeight(float value);
 
-	int numberOfPreys() const;
-	int numberOfPredators() const;
+    int numberOfPreys() const;
+    int numberOfPredators() const;
 
-	virtual void clear();
-
-private:
-	LocalCaPso(const LocalCaPso&);
-	LocalCaPso& operator=(const LocalCaPso&);
+    virtual void clear();
 
 private:
-	Swarm mPredatorSwarm;
+    LocalCaPso(const LocalCaPso&);
+    LocalCaPso& operator=(const LocalCaPso&);
 
-	// Containers
-	std::vector<unsigned char> mTemp;
-	std::vector<unsigned char> mPreyDensities;
+private:
+    Swarm mPredatorSwarm;
 
-	int mNumberOfPreys, mNumberOfPredators;
+    // Containers
+    std::vector<unsigned char> mTemp;
+    std::vector<unsigned char> mPreyDensities;
 
-	// Use the c++0x implementation of the Mersenne twister RNG
-	std::mt19937 mRandom;
-	std::uniform_real_distribution<float> mDistReal_0_1;
+    int mNumberOfPreys, mNumberOfPredators;
 
-	// A function pointer that handles transitions
-	void (LocalCaPso::*mNextStage)();
+    // Use the c++0x implementation of the Mersenne twister RNG
+    std::mt19937 mRandom;
+    std::uniform_real_distribution<float> mDistReal_0_1;
 
-	// Model parameters
-	double mInitialAlivePercentage;
+    // A function pointer that handles transitions
+    void (LocalCaPso::*mNextStage)();
+
+    // Model parameters
+    double mInitialAlivePercentage;
     double mCompetitionFactor;
-	int mPreyMeanOffspring;
-	int mPreyReproductionRadius;
-	int mPredatorMeanOffspring;
-	int mPredatorReproductionRadius;
-	int mSocialRadius;
-	int mFitnessRadius;
-	int NEIGHBORHOOD_SIZE;
+    int mPreyReproductiveCapacity;
+    int mPreyReproductionRadius;
+    int mPredatorMeanOffspring;
+    int mPredatorReproductionRadius;
+    int mSocialRadius;
+    int mFitnessRadius;
+    int NEIGHBORHOOD_SIZE;
 
-	// PSO parameters
-	int mInitialSwarmSize;
-	int mMigrationTime;
-	int mMigrationCount;
-	float mInitialInertiaWeight;
-	float mCurrentInertiaWeight;
-	float mFinalInertiaWeight;
-	const float INERTIA_STEP;
+    // PSO parameters
+    int mInitialSwarmSize;
+    int mMigrationTime;
+    int mMigrationCount;
+    float mInitialInertiaWeight;
+    float mCurrentInertiaWeight;
+    float mFinalInertiaWeight;
+    const float INERTIA_STEP;
 
-	// Model stages
+    // Model stages
     void competitionOfPreys();
-	void migration();
-	void reproductionOfPredators();
-	void predatorsDeath();
-	void predation();
-	void reproductionOfPreys();
+    void migration();
+    void reproductionOfPredators();
+    void predatorsDeath();
+    void predation();
+    void reproductionOfPreys();
 
-	// Misc methods
-	void notifyNeighbors(const int& row, const int& col,
-						 const bool& death_birth);
-	bool checkState(int address, State state);
-	void setState(int address, State state);
-	void clearState(int address, State state);
+    // Misc methods
+    void notifyNeighbors(const int& row, const int& col,
+                         const bool& death_birth);
+    bool checkState(int address, State state);
+    void setState(int address, State state);
+    void clearState(int address, State state);
 };
 
 #endif // CAPSO_H

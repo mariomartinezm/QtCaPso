@@ -27,7 +27,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     // Model paremeters
     mInitialAlivePercentage(0.3),
     mCompetitionFactor(0.3),
-    mPreyMeanOffspring(10),
+    mPreyReproductiveCapacity(10),
     mPreyReproductionRadius(2),
     mPredatorMeanOffspring(10),
     mPredatorReproductionRadius(2),
@@ -116,7 +116,7 @@ void LocalCaPso::setInitialAlivePreys(float value)
 
 void LocalCaPso::setPreyMeanOffspring(int value)
 {
-    mPreyMeanOffspring = value;
+    mPreyReproductiveCapacity = value;
 }
 
 void LocalCaPso::setPreyReproductionRadius(int value)
@@ -540,7 +540,7 @@ void LocalCaPso::reproductionOfPreys()
             {
                 birthCount = 0;
 
-                while(birthCount < mPreyMeanOffspring)
+                while(birthCount < mPreyReproductiveCapacity)
                 {
                     // Obtain an offset
                     finalRow = randomOffset(mRandom);
