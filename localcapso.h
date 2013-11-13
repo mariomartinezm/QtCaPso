@@ -65,7 +65,7 @@ private:
     int mPreyReproductionRadius;
     int mPredatorReproductiveCapacity;
     int mPredatorReproductionRadius;
-    int mSocialRadius;
+    int mPredatorSocialRadius;
     int mFitnessRadius;
     int NEIGHBORHOOD_SIZE;
 

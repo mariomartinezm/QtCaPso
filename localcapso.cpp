@@ -31,7 +31,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPreyReproductionRadius(2),
     mPredatorReproductiveCapacity(10),
     mPredatorReproductionRadius(2),
-    mSocialRadius(3),
+    mPredatorSocialRadius(3),
     mFitnessRadius(3),
     NEIGHBORHOOD_SIZE((2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1),
     // Pso parameters
@@ -136,7 +136,7 @@ void LocalCaPso::setPredatorReproductionRadius(int value)
 
 void LocalCaPso::setSocialRadius(int value)
 {
-    mSocialRadius = value;
+    mPredatorSocialRadius = value;
 }
 
 void LocalCaPso::setFitnessRadius(int value)
@@ -272,9 +272,9 @@ void LocalCaPso::migration()
             clearState(bestAddress, PREDATOR);
 
             // Get the best position among the neighbors of the predator
-            for(int nRow = pRow - mSocialRadius; nRow <= pRow + mSocialRadius; nRow++)
+            for(int nRow = pRow - mPredatorSocialRadius; nRow <= pRow + mPredatorSocialRadius; nRow++)
             {
-                for(int nCol = pCol - mSocialRadius; nCol <= pCol + mSocialRadius; nCol++)
+                for(int nCol = pCol - mPredatorSocialRadius; nCol <= pCol + mPredatorSocialRadius; nCol++)
                 {
                     if(nRow == pRow && nCol == pCol)
                     {
