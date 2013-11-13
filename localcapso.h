@@ -19,7 +19,7 @@ public:
 
     void setInitialAlivePreys(float value);
     void setCompetitionFactor(float value);
-    void setPreyMeanOffspring(int value);
+    void setPreyReproductiveCapacity(int value);
     void setPreyReproductionRadius(int value);
     void setPredatorMeanOffspring(int value);
     void setPredatorReproductionRadius(int value);

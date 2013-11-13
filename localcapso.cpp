@@ -114,7 +114,7 @@ void LocalCaPso::setInitialAlivePreys(float value)
     mInitialAlivePercentage = value;
 }
 
-void LocalCaPso::setPreyMeanOffspring(int value)
+void LocalCaPso::setPreyReproductiveCapacity(int value)
 {
     mPreyReproductiveCapacity = value;
 }

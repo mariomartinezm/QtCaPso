@@ -59,7 +59,7 @@ namespace util
                     {
                         QString value = reader.readElementText();
 
-                        local->setPreyMeanOffspring(value.toInt());
+                        local->setPreyReproductiveCapacity(value.toInt());
                     }
                     else if(elementName == "fitnessRadius")
                     {
