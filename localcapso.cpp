@@ -36,12 +36,12 @@ LocalCaPso::LocalCaPso(int width, int height)
     NEIGHBORHOOD_SIZE((2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1),
     // Pso parameters
     mInitialSwarmSize(3),
-    mMigrationTime(5),
+    mPredatorMigrationTime(5),
     mMigrationCount(0),
     mInitialInertiaWeight(0.9f),
     mCurrentInertiaWeight(mInitialInertiaWeight),
     mFinalInertiaWeight(0.2f),
-    INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight)  / mMigrationTime)
+    INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight)  / mPredatorMigrationTime)
 {
     initialize();
 }
@@ -168,7 +168,7 @@ void LocalCaPso::setMaximumSpeed(int value)
 
 void LocalCaPso::setPredatorMigrationTime(int value)
 {
-    mMigrationTime = value;
+    mPredatorMigrationTime = value;
 }
 
 void LocalCaPso::setInitialInertialWeight(float value)
@@ -376,7 +376,7 @@ void LocalCaPso::migration()
 
     // If migration has ended, point to the next stage and reset the inertia
     // weight and migration count
-    if(mMigrationCount == mMigrationTime)
+    if(mMigrationCount == mPredatorMigrationTime)
     {
         mNextStage = &LocalCaPso::reproductionOfPredators;
         mMigrationCount = 0;
