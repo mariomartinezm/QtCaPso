@@ -104,7 +104,7 @@ void LocalCaPso::nextGen()
     (this->*mNextStage)();
 }
 
-void LocalCaPso::setCompetitionFactor(float value)
+void LocalCaPso::setPreyCompetitionFactor(float value)
 {
     mPreyCompetitionFactor = value;
 }

@@ -47,7 +47,7 @@ namespace util
                     {
                         QString value = reader.readElementText();
 
-                        local->setCompetitionFactor(value.toFloat());
+                        local->setPreyCompetitionFactor(value.toFloat());
                     }
                     else if(elementName == "preyReproductionRadius")
                     {
