@@ -21,7 +21,7 @@ public:
     void setCompetitionFactor(float value);
     void setPreyReproductiveCapacity(int value);
     void setPreyReproductionRadius(int value);
-    void setPredatorMeanOffspring(int value);
+    void setPredatorReproductiveCapacity(int value);
     void setPredatorReproductionRadius(int value);
     void setSocialRadius(int value);
     void setFitnessRadius(int value);

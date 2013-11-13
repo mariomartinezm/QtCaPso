@@ -124,7 +124,7 @@ void LocalCaPso::setPreyReproductionRadius(int value)
     mPreyReproductionRadius = value;
 }
 
-void LocalCaPso::setPredatorMeanOffspring(int value)
+void LocalCaPso::setPredatorReproductiveCapacity(int value)
 {
     mPredatorReproductiveCapacity = value;
 }
