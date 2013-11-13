@@ -72,7 +72,7 @@ private:
     // PSO parameters
     int mInitialSwarmSize;
     int mPredatorMigrationTime;
-    int mMigrationCount;
+    int mPredatorMigrationCount;
     float mInitialInertiaWeight;
     float mCurrentInertiaWeight;
     float mFinalInertiaWeight;

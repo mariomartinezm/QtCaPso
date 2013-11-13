@@ -37,7 +37,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     // Pso parameters
     mInitialSwarmSize(3),
     mPredatorMigrationTime(5),
-    mMigrationCount(0),
+    mPredatorMigrationCount(0),
     mInitialInertiaWeight(0.9f),
     mCurrentInertiaWeight(mInitialInertiaWeight),
     mFinalInertiaWeight(0.2f),
@@ -80,7 +80,7 @@ void LocalCaPso::initialize()
     }
 
     // Reset the migration counter
-    mMigrationCount = 0;
+    mPredatorMigrationCount = 0;
 
     mNextStage = &LocalCaPso::competitionOfPreys;
 }
@@ -372,14 +372,14 @@ void LocalCaPso::migration()
 
     // Decrease the inertia weight and increase the migration counter
     mCurrentInertiaWeight -= INERTIA_STEP;
-    mMigrationCount++;
+    mPredatorMigrationCount++;
 
     // If migration has ended, point to the next stage and reset the inertia
     // weight and migration count
-    if(mMigrationCount == mPredatorMigrationTime)
+    if(mPredatorMigrationCount == mPredatorMigrationTime)
     {
         mNextStage = &LocalCaPso::reproductionOfPredators;
-        mMigrationCount = 0;
+        mPredatorMigrationCount = 0;
         mCurrentInertiaWeight = mInitialInertiaWeight;
     }
 }
