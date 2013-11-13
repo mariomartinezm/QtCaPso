@@ -109,7 +109,7 @@ void LocalCaPso::setCompetitionFactor(float value)
     mCompetitionFactor = value;
 }
 
-void LocalCaPso::setInitialAlivePreys(float value)
+void LocalCaPso::setPreyInitialDensity(float value)
 {
     mPreyInitialDensity = value;
 }

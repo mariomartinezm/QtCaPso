@@ -41,7 +41,7 @@ namespace util
                     {
                         QString value = reader.readElementText();
 
-                        local->setInitialAlivePreys(value.toFloat());
+                        local->setPreyInitialDensity(value.toFloat());
                     }
                     else if(elementName == "competitionFactor")
                     {

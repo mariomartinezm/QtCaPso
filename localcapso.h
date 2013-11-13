@@ -17,7 +17,7 @@ public:
 
     void nextGen();
 
-    void setInitialAlivePreys(float value);
+    void setPreyInitialDensity(float value);
     void setCompetitionFactor(float value);
     void setPreyReproductiveCapacity(int value);
     void setPreyReproductionRadius(int value);
