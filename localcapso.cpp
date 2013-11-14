@@ -483,7 +483,7 @@ void LocalCaPso::reproductionOfPredators()
 
     int numberOfBirths = mNumberOfPredators - initialNumberOfPredators;
 
-    mPredatorBirthRate = numberOfBirths / mLattice.size();
+    mPredatorBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
 
     mNextStage = &LocalCaPso::predatorsDeath;
 }
@@ -621,7 +621,7 @@ void LocalCaPso::reproductionOfPreys()
 
     int numberOfBirths = mNumberOfPreys - initialNumberOfPreys;
 
-    mPreyBirthRate = numberOfBirths / mLattice.size();
+    mPreyBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
 
     mNextStage = &LocalCaPso::competitionOfPreys;
 }
