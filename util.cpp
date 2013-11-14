@@ -107,7 +107,7 @@ namespace util
                     {
                         QString value = reader.readElementText();
 
-                        local->setSocialRadius(value.toInt());
+                        local->setPredatorSocialRadius(value.toInt());
                     }
                     else if(elementName == "initialInertiaWeight")
                     {

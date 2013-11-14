@@ -134,7 +134,7 @@ void LocalCaPso::setPredatorReproductionRadius(int value)
     mPredatorReproductionRadius = value;
 }
 
-void LocalCaPso::setSocialRadius(int value)
+void LocalCaPso::setPredatorSocialRadius(int value)
 {
     mPredatorSocialRadius = value;
 }

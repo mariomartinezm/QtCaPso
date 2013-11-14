@@ -23,7 +23,7 @@ public:
     void setPreyReproductionRadius(int value);
     void setPredatorReproductiveCapacity(int value);
     void setPredatorReproductionRadius(int value);
-    void setSocialRadius(int value);
+    void setPredatorSocialRadius(int value);
     void setFitnessRadius(int value);
     void setInitialSwarmSize(int value);
     void setCognitiveFactor(float value);
