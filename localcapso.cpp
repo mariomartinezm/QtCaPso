@@ -41,7 +41,8 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPredatorInitialInertiaWeight(0.9f),
     mPredatorCurrentInertiaWeight(mPredatorInitialInertiaWeight),
     mPredatorFinalInertiaWeight(0.2f),
-    INERTIA_STEP((mPredatorInitialInertiaWeight - mPredatorFinalInertiaWeight)  / mPredatorMigrationTime)
+    INERTIA_STEP((mPredatorInitialInertiaWeight - mPredatorFinalInertiaWeight) /
+                 mPredatorMigrationTime)
 {
     initialize();
 }
@@ -53,7 +54,8 @@ void LocalCaPso::initialize()
     // Create and render predators
     mPredatorSwarm.initialize(mPredatorInitialSwarmSize, mWidth, mHeight, mRandom);
 
-    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(),
+             [this](weak_ptr<Particle> wp)
     {
         if(auto p = wp.lock())
         {
@@ -90,7 +92,8 @@ void LocalCaPso::clear()
     CellularAutomaton::clear();
 
     // Reset the densities
-    std::transform(mPreyDensities.begin(), mPreyDensities.end(), mPreyDensities.begin(), [](unsigned char)
+    std::transform(mPreyDensities.begin(), mPreyDensities.end(),
+                   mPreyDensities.begin(), [](unsigned char)
     {
         return 0;
     });
@@ -256,7 +259,8 @@ void LocalCaPso::migration()
 
     copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(),
+             [&, this](weak_ptr<Particle> wp)
     {
         if(auto p = wp.lock())
         {
