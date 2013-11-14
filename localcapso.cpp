@@ -38,10 +38,10 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPredatorInitialSwarmSize(3),
     mPredatorMigrationTime(5),
     mPredatorMigrationCount(0),
-    mInitialInertiaWeight(0.9f),
-    mCurrentInertiaWeight(mInitialInertiaWeight),
-    mFinalInertiaWeight(0.2f),
-    INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight)  / mPredatorMigrationTime)
+    mPredatorInitialInertiaWeight(0.9f),
+    mPredatorCurrentInertiaWeight(mPredatorInitialInertiaWeight),
+    mPredatorFinalInertiaWeight(0.2f),
+    INERTIA_STEP((mPredatorInitialInertiaWeight - mPredatorFinalInertiaWeight)  / mPredatorMigrationTime)
 {
     initialize();
 }
@@ -173,12 +173,12 @@ void LocalCaPso::setPredatorMigrationTime(int value)
 
 void LocalCaPso::setInitialInertialWeight(float value)
 {
-    mInitialInertiaWeight = value;
+    mPredatorInitialInertiaWeight = value;
 }
 
 void LocalCaPso::setFinalInertiaWeight(float value)
 {
-    mFinalInertiaWeight = value;
+    mPredatorFinalInertiaWeight = value;
 }
 
 int LocalCaPso::numberOfPreys() const
@@ -319,11 +319,11 @@ void LocalCaPso::migration()
             validateVector(socialVelRow, socialVelCol);
 
             // Get the new velocity
-            int velRow = (int)(mCurrentInertiaWeight * currentVelRow +
+            int velRow = (int)(mPredatorCurrentInertiaWeight * currentVelRow +
                 mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelRow +
                 mPredatorSwarm.socialFactor() * r2 * socialVelRow);
 
-            int velCol = (int)(mCurrentInertiaWeight * currentVelCol +
+            int velCol = (int)(mPredatorCurrentInertiaWeight * currentVelCol +
                 mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelCol +
                 mPredatorSwarm.socialFactor() * r2 * socialVelCol);
 
@@ -371,7 +371,7 @@ void LocalCaPso::migration()
     });
 
     // Decrease the inertia weight and increase the migration counter
-    mCurrentInertiaWeight -= INERTIA_STEP;
+    mPredatorCurrentInertiaWeight -= INERTIA_STEP;
     mPredatorMigrationCount++;
 
     // If migration has ended, point to the next stage and reset the inertia
@@ -380,7 +380,7 @@ void LocalCaPso::migration()
     {
         mNextStage = &LocalCaPso::reproductionOfPredators;
         mPredatorMigrationCount = 0;
-        mCurrentInertiaWeight = mInitialInertiaWeight;
+        mPredatorCurrentInertiaWeight = mPredatorInitialInertiaWeight;
     }
 }
 

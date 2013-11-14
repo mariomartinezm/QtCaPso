@@ -73,9 +73,9 @@ private:
     int mPredatorInitialSwarmSize;
     int mPredatorMigrationTime;
     int mPredatorMigrationCount;
-    float mInitialInertiaWeight;
-    float mCurrentInertiaWeight;
-    float mFinalInertiaWeight;
+    float mPredatorInitialInertiaWeight;
+    float mPredatorCurrentInertiaWeight;
+    float mPredatorFinalInertiaWeight;
     const float INERTIA_STEP;
 
     // Model stages
