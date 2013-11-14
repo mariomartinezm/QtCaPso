@@ -77,7 +77,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEditCompetenceFactor">
+           <widget class="QLineEdit" name="lineEditCompetitionFactor">
             <property name="text">
              <string>0.0</string>
             </property>
@@ -87,9 +87,9 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="labelCompetenceFactor">
+           <widget class="QLabel" name="labelCompetitionFactor">
             <property name="text">
-             <string>Competence factor:</string>
+             <string>Competition factor:</string>
             </property>
            </widget>
           </item>
@@ -383,7 +383,7 @@
  </widget>
  <tabstops>
   <tabstop>lineEditInitialPreys</tabstop>
-  <tabstop>lineEditCompetenceFactor</tabstop>
+  <tabstop>lineEditCompetitionFactor</tabstop>
   <tabstop>spinBoxPreyReproductiveCapacity</tabstop>
   <tabstop>spinBoxPreyReproductionRadius</tabstop>
   <tabstop>spinBoxFitnessRadius</tabstop>

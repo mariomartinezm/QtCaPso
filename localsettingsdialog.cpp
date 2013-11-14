@@ -54,7 +54,7 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
             {
                 QString value = reader.readElementText();
 
-                lineEditCompetenceFactor->setText(value);
+                lineEditCompetitionFactor->setText(value);
             }
             else if(elementName == "preyReproductionRadius")
             {
@@ -161,7 +161,7 @@ void LocalSettingsDialog::accept()
 {
     if(!util::writeSettings(lineEditPath->text(), LOCAL,
                         lineEditInitialPreys->text().toFloat(),
-                        lineEditCompetenceFactor->text().toFloat(),
+                        lineEditCompetitionFactor->text().toFloat(),
                         spinBoxPreyReproductionRadius->value(),
                         spinBoxPreyReproductiveCapacity->value(),
                         spinBoxFitnessRadius->value(),

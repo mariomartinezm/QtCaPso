@@ -59,14 +59,14 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="labelCompetenceFactor">
+             <widget class="QLabel" name="labelCompetitionFactor">
               <property name="text">
-               <string>Competence factor:</string>
+               <string>Competition factor:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="lineEditCompetenceFactor">
+             <widget class="QLineEdit" name="lineEditCompetitionFactor">
               <property name="text">
                <string>0.30</string>
               </property>
@@ -228,14 +228,14 @@
              </widget>
             </item>
             <item row="6" column="0">
-             <widget class="QLabel" name="labelCompetenceRadius">
+             <widget class="QLabel" name="labelCompetitionRadius">
               <property name="text">
-               <string>Competence radius:</string>
+               <string>Competition radius:</string>
               </property>
              </widget>
             </item>
             <item row="6" column="1">
-             <widget class="QSpinBox" name="spinBoxCompetenceRadius">
+             <widget class="QSpinBox" name="spinBoxCompetitionRadius">
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -311,7 +311,16 @@
        <property name="spacing">
         <number>6</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
