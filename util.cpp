@@ -71,7 +71,7 @@ namespace util
                     {
                         QString value = reader.readElementText();
 
-                        local->setInitialSwarmSize(value.toInt());
+                        local->setPredatorInitialSwarmSize(value.toInt());
                     }
                     else if(elementName == "predatorCognitiveFactor")
                     {

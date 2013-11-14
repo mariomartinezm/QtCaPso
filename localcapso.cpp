@@ -146,7 +146,7 @@ void LocalCaPso::setFitnessRadius(int value)
     NEIGHBORHOOD_SIZE = (2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1;
 }
 
-void LocalCaPso::setInitialSwarmSize(int value)
+void LocalCaPso::setPredatorInitialSwarmSize(int value)
 {
     mPredatorInitialSwarmSize = value;
 }
