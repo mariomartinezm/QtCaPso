@@ -26,12 +26,12 @@ public:
     void setPredatorSocialRadius(int value);
     void setFitnessRadius(int value);
     void setPredatorInitialSwarmSize(int value);
-    void setCognitiveFactor(float value);
-    void setSocialFactor(float value);
-    void setMaximumSpeed(int value);
+    void setPredatorCognitiveFactor(float value);
+    void setPredatorSocialFactor(float value);
+    void setPredatorMaximumSpeed(int value);
     void setPredatorMigrationTime(int value);
-    void setInitialInertialWeight(float value);
-    void setFinalInertiaWeight(float value);
+    void setPredatorInitialInertiaWeight(float value);
+    void setPredatorFinalInertiaWeight(float value);
 
     int numberOfPreys() const;
     int numberOfPredators() const;

@@ -151,17 +151,17 @@ void LocalCaPso::setPredatorInitialSwarmSize(int value)
     mPredatorInitialSwarmSize = value;
 }
 
-void LocalCaPso::setCognitiveFactor(float value)
+void LocalCaPso::setPredatorCognitiveFactor(float value)
 {
     mPredatorSwarm.setCognitiveFactor(value);
 }
 
-void LocalCaPso::setSocialFactor(float value)
+void LocalCaPso::setPredatorSocialFactor(float value)
 {
     mPredatorSwarm.setSocialFactor(value);
 }
 
-void LocalCaPso::setMaximumSpeed(int value)
+void LocalCaPso::setPredatorMaximumSpeed(int value)
 {
     mPredatorSwarm.setMaxSpeed(value);
 }
@@ -171,12 +171,12 @@ void LocalCaPso::setPredatorMigrationTime(int value)
     mPredatorMigrationTime = value;
 }
 
-void LocalCaPso::setInitialInertialWeight(float value)
+void LocalCaPso::setPredatorInitialInertiaWeight(float value)
 {
     mPredatorInitialInertiaWeight = value;
 }
 
-void LocalCaPso::setFinalInertiaWeight(float value)
+void LocalCaPso::setPredatorFinalInertiaWeight(float value)
 {
     mPredatorFinalInertiaWeight = value;
 }

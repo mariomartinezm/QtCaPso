@@ -77,19 +77,19 @@ namespace util
                     {
                         QString value = reader.readElementText();
 
-                        local->setCognitiveFactor(value.toFloat());
+                        local->setPredatorCognitiveFactor(value.toFloat());
                     }
                     else if(elementName == "predatorSocialFactor")
                     {
                         QString value = reader.readElementText();
 
-                        local->setSocialFactor(value.toFloat());
+                        local->setPredatorSocialFactor(value.toFloat());
                     }
                     else if(elementName == "predatorMaximumSpeed")
                     {
                         QString value = reader.readElementText();
 
-                        local->setMaximumSpeed(value.toInt());
+                        local->setPredatorMaximumSpeed(value.toInt());
                     }
                     else if(elementName == "predatorReproductiveCapacity")
                     {
@@ -113,13 +113,13 @@ namespace util
                     {
                         QString value = reader.readElementText();
 
-                        local->setInitialInertialWeight(value.toFloat());
+                        local->setPredatorInitialInertiaWeight(value.toFloat());
                     }
                     else if(elementName == "finalInertiaWeight")
                     {
                         QString value = reader.readElementText();
 
-                        local->setFinalInertiaWeight(value.toFloat());
+                        local->setPredatorFinalInertiaWeight(value.toFloat());
                     }
                     else if(elementName == "resultsFilePath")
                     {
