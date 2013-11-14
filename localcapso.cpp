@@ -35,7 +35,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mFitnessRadius(3),
     NEIGHBORHOOD_SIZE((2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1),
     // Pso parameters
-    mInitialSwarmSize(3),
+    mPredatorInitialSwarmSize(3),
     mPredatorMigrationTime(5),
     mPredatorMigrationCount(0),
     mInitialInertiaWeight(0.9f),
@@ -51,7 +51,7 @@ void LocalCaPso::initialize()
     clear();
 
     // Create and render predators
-    mPredatorSwarm.initialize(mInitialSwarmSize, mWidth, mHeight, mRandom);
+    mPredatorSwarm.initialize(mPredatorInitialSwarmSize, mWidth, mHeight, mRandom);
 
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
     {
@@ -148,7 +148,7 @@ void LocalCaPso::setFitnessRadius(int value)
 
 void LocalCaPso::setInitialSwarmSize(int value)
 {
-    mInitialSwarmSize = value;
+    mPredatorInitialSwarmSize = value;
 }
 
 void LocalCaPso::setCognitiveFactor(float value)

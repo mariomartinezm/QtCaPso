@@ -70,7 +70,7 @@ private:
     int NEIGHBORHOOD_SIZE;
 
     // PSO parameters
-    int mInitialSwarmSize;
+    int mPredatorInitialSwarmSize;
     int mPredatorMigrationTime;
     int mPredatorMigrationCount;
     float mInitialInertiaWeight;
