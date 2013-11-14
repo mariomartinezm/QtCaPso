@@ -412,6 +412,8 @@ void LocalCaPso::reproductionOfPredators()
 
     list<shared_ptr<Particle>> newParticles;
 
+    int initialNumberOfPredators = mNumberOfPredators;
+
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
     {
         if(auto p = wp.lock())
@@ -478,6 +480,10 @@ void LocalCaPso::reproductionOfPredators()
     });
 
     mPredatorSwarm.add(newParticles);
+
+    int numberOfBirths = mNumberOfPredators - initialNumberOfPredators;
+
+    mPredatorBirthRate = numberOfBirths / mLattice.size();
 
     mNextStage = &LocalCaPso::predatorsDeath;
 }
