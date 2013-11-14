@@ -552,7 +552,7 @@ void LocalCaPso::reproductionOfPreys()
 #endif
 
     int finalRow, finalCol, neighbourAddress;
-    int birthCount;
+    int birthCount, initialNumberOfPreys = mNumberOfPreys;
 
     for(int row = 0; row < mHeight; row++)
     {
@@ -618,6 +618,10 @@ void LocalCaPso::reproductionOfPreys()
             }
         }
     }
+
+    int numberOfBirths = mNumberOfPreys - initialNumberOfPreys;
+
+    mPreyBirthRate = numberOfBirths / mLattice.size();
 
     mNextStage = &LocalCaPso::competitionOfPreys;
 }
