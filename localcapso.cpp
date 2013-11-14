@@ -21,6 +21,8 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPreyDensities(width * height),
     mNumberOfPreys(0),
     mNumberOfPredators(0),
+    mPreyBirthRate(0.0f),
+    mPredatorBirthRate(0.0f),
     mRandom(static_cast<unsigned int>(time(NULL))),
     // Real uniform distribution
     mDistReal_0_1(0.0, 1.0),
@@ -192,6 +194,16 @@ int LocalCaPso::numberOfPreys() const
 int LocalCaPso::numberOfPredators() const
 {
     return mNumberOfPredators;
+}
+
+float LocalCaPso::preyBirthRate() const
+{
+    return mPreyBirthRate;
+}
+
+float LocalCaPso::predatorBirthRate() const
+{
+    return mPredatorBirthRate;
 }
 
 void LocalCaPso::competitionOfPreys()

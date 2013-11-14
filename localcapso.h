@@ -35,6 +35,8 @@ public:
 
     int numberOfPreys() const;
     int numberOfPredators() const;
+    float preyBirthRate() const;
+    float predatorBirthRate() const;
 
     virtual void clear();
 
@@ -50,6 +52,7 @@ private:
     std::vector<unsigned char> mPreyDensities;
 
     int mNumberOfPreys, mNumberOfPredators;
+    float mPreyBirthRate, mPredatorBirthRate;
 
     // Use the c++0x implementation of the Mersenne twister RNG
     std::mt19937 mRandom;
