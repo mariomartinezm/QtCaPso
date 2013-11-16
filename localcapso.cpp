@@ -23,6 +23,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mNumberOfPredators(0),
     mPreyBirthRate(0.0f),
     mPredatorBirthRate(0.0f),
+    mCurrentStage(COMPETITION),
     mRandom(static_cast<unsigned int>(time(NULL))),
     // Real uniform distribution
     mDistReal_0_1(0.0, 1.0),
@@ -87,6 +88,7 @@ void LocalCaPso::initialize()
     mPredatorMigrationCount = 0;
 
     mNextStage = &LocalCaPso::competitionOfPreys;
+    mCurrentStage = COMPETITION;
 }
 
 void LocalCaPso::clear()
@@ -206,6 +208,11 @@ float LocalCaPso::predatorBirthRate() const
     return mPredatorBirthRate;
 }
 
+int LocalCaPso::currentStage() const
+{
+    return mCurrentStage;
+}
+
 void LocalCaPso::competitionOfPreys()
 {
     std::copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
@@ -238,6 +245,7 @@ void LocalCaPso::competitionOfPreys()
     }
 
     mNextStage = &LocalCaPso::migration;
+    mCurrentStage = MIGRATION;
 }
 
 void LocalCaPso::migration()
@@ -395,6 +403,7 @@ void LocalCaPso::migration()
     if(mPredatorMigrationCount == mPredatorMigrationTime)
     {
         mNextStage = &LocalCaPso::reproductionOfPredators;
+        mCurrentStage = REPRODUCTION_OF_PREDATORS;
         mPredatorMigrationCount = 0;
         mPredatorCurrentInertiaWeight = mPredatorInitialInertiaWeight;
     }
@@ -486,6 +495,7 @@ void LocalCaPso::reproductionOfPredators()
     mPredatorBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
 
     mNextStage = &LocalCaPso::predatorsDeath;
+    mCurrentStage = DEATH_OF_PREDATORS;
 }
 
 void LocalCaPso::predatorsDeath()
@@ -513,6 +523,7 @@ void LocalCaPso::predatorsDeath()
     }
 
     mNextStage = &LocalCaPso::predation;
+    mCurrentStage = DEATH_OF_PREYS;
 }
 
 void LocalCaPso::predation()
@@ -539,6 +550,7 @@ void LocalCaPso::predation()
     });
 
     mNextStage = &LocalCaPso::reproductionOfPreys;
+    mCurrentStage = REPRODUCTION_OF_PREYS;
 }
 
 void LocalCaPso::reproductionOfPreys()
@@ -624,6 +636,7 @@ void LocalCaPso::reproductionOfPreys()
     mPreyBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
 
     mNextStage = &LocalCaPso::competitionOfPreys;
+    mCurrentStage = COMPETITION;
 }
 
 void LocalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
