@@ -16,25 +16,25 @@
 
 class Controller : public QMainWindow, private Ui::ControllerClass
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	Controller(QWidget *parent = 0, Qt::WFlags flags = 0);
-	~Controller();
+    Controller(QWidget *parent = 0, Qt::WFlags flags = 0);
+    ~Controller();
 
 protected:
-	// put events here
-	void timerEvent(QTimerEvent*);
+    // put events here
+    void timerEvent(QTimerEvent*);
 
 private slots:
-	void play();
-	void pause();
-	void step();
-	void clear();
-	void initialize();
-	void showSettings();
+    void play();
+    void pause();
+    void step();
+    void clear();
+    void initialize();
+    void showSettings();
     void showBatchDialog();
-	void exportBitmap();
+    void exportBitmap();
     void updateSettings();
     void importSettings();
     void exportSettings();
@@ -42,25 +42,27 @@ private slots:
 private:
     void createCa();
     void initializeSettings();
-	void makeConnections();
-	void createView();
-	void createSettingsDialog();
-	void initializeResultsFile();
-	void writeResults();
+    void makeConnections();
+    void createView();
+    void createSettingsDialog();
+    void initializeResultsFile();
+    void writeResults();
 
-	CaType mCurrentType;
-	CellularAutomaton* mCellularAutomaton;
-	CaView* mView;
-	QDialog* mSettingsDialog;
+    CaType mCurrentType;
+    CellularAutomaton* mCellularAutomaton;
+    CaView* mView;
+    QDialog* mSettingsDialog;
 
-	// Support for a results file
-	QString mCurrFileName;
-	QFile mResultsFile;
-	QTextStream mResultsStream;
+    // Support for a results file
+    QString mCurrFileName;
+    QFile mResultsFile;
+    QTextStream mResultsStream;
 
-	int mTimerId;
-	int mTimerCount;
+    int mTimerId;
+    int mTimerCount;
     int mSeasonLength;
+    int mPreyCountBeforeReproduction;
+    int mPredatorCountBeforeReproduction;
 };
 
 #endif // CONTROLLER_H

@@ -104,6 +104,8 @@ void LocalCaPso::clear()
 
     mNumberOfPreys = 0;
     mNumberOfPredators = 0;
+    mPreyBirthRate = 0;
+    mPredatorBirthRate = 0;
 }
 
 void LocalCaPso::nextGen()

@@ -18,7 +18,9 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
     mResultsStream(&mResultsFile),
     mTimerId(-1),
     mTimerCount(0),
-    mSeasonLength(10)
+    mSeasonLength(10),
+    mPreyCountBeforeReproduction(0),
+    mPredatorCountBeforeReproduction(0)
 {
     this->setupUi(this);
 
@@ -42,6 +44,21 @@ Controller::~Controller()
 
 void Controller::timerEvent(QTimerEvent*)
 {
+    if(mCurrentType == LOCAL)
+    {
+        auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+
+        if(local->currentStage() == 2)
+        {
+            mPredatorCountBeforeReproduction = local->numberOfPredators();
+        }
+
+        if(local->currentStage() == 5)
+        {
+            mPreyCountBeforeReproduction = local->numberOfPreys();
+        }
+    }
+
     mCellularAutomaton->nextGen();
 
     mTimerCount++;
@@ -85,6 +102,21 @@ void Controller::step()
         mTimerId = -1;
     }
 
+    if(mCurrentType == LOCAL)
+    {
+        auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+
+        if(local->currentStage() == 2)
+        {
+            mPredatorCountBeforeReproduction = local->numberOfPredators();
+        }
+
+        if(local->currentStage() == 5)
+        {
+            mPreyCountBeforeReproduction = local->numberOfPreys();
+        }
+    }
+
     mCellularAutomaton->nextGen();
 
     mTimerCount++;
@@ -123,6 +155,9 @@ void Controller::initialize()
     }
 
     mCellularAutomaton->initialize();
+
+    mPreyCountBeforeReproduction = 0;
+    mPredatorCountBeforeReproduction = 0;
 
     mTimerCount = 0;
 
@@ -328,7 +363,11 @@ void Controller::writeResults()
             auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
             mResultsStream << mTimerCount / mSeasonLength << " " <<
                               local->numberOfPreys() << " " <<
-                              local->numberOfPredators() << "\n";
+                              local->numberOfPredators() << " " <<
+                              mPreyCountBeforeReproduction << " " <<
+                              local->preyBirthRate() << " " <<
+                              mPredatorCountBeforeReproduction << " " <<
+                              local->predatorBirthRate() << "\n";
         }
         break;
     }
