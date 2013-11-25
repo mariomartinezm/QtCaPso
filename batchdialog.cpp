@@ -137,13 +137,30 @@ void BatchDialog::on_buttonStart_clicked()
 
                 local->initialize();
 
+                int preyCountBeforeReproduction = 0;
+                int predatorCountBeforeReproduction = 0;
+
                 for(int genCount = 0; genCount < currentItem.numberOfSeasons() * 10; genCount++)
                 {
+                    if(local->currentStage() == 2)
+                    {
+                        predatorCountBeforeReproduction = local->numberOfPredators();
+                    }
+
+                    if(local->currentStage() == 5)
+                    {
+                        preyCountBeforeReproduction = local->numberOfPreys();
+                    }
+
                     if(!(genCount % 10))
                     {
                         resultsStream << genCount / 10 << " " <<
                                          local->numberOfPreys() << " " <<
-                                         local->numberOfPredators() << "\n";
+                                         local->numberOfPredators() << " " <<
+                                         preyCountBeforeReproduction << " " <<
+                                         local->preyBirthRate() << " " <<
+                                         predatorCountBeforeReproduction << " " <<
+                                         local->predatorBirthRate() << "\n";
                     }
 
                     local->nextGen();
