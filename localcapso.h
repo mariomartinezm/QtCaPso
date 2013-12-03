@@ -39,6 +39,8 @@ public:
     int numberOfPredators() const;
     float preyBirthRate() const;
     float predatorBirthRate() const;
+    float preyDeathRate() const;
+    float predatorDeathRate() const;
     int currentStage() const;
 
     virtual void clear();
@@ -56,6 +58,7 @@ private:
 
     int mNumberOfPreys, mNumberOfPredators;
     float mPreyBirthRate, mPredatorBirthRate;
+    float mPreyDeathRate, mPredatorDeathRate;
     int mCurrentStage;
 
     // Use the c++0x implementation of the Mersenne twister RNG

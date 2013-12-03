@@ -23,6 +23,8 @@ LocalCaPso::LocalCaPso(int width, int height)
     mNumberOfPredators(0),
     mPreyBirthRate(0.0f),
     mPredatorBirthRate(0.0f),
+    mPreyDeathRate(0.0f),
+    mPredatorDeathRate(0.0f),
     mCurrentStage(COMPETITION),
     mRandom(static_cast<unsigned int>(time(NULL))),
     // Real uniform distribution
@@ -208,6 +210,16 @@ float LocalCaPso::preyBirthRate() const
 float LocalCaPso::predatorBirthRate() const
 {
     return mPredatorBirthRate;
+}
+
+float LocalCaPso::preyDeathRate() const
+{
+    return mPreyDeathRate;
+}
+
+float LocalCaPso::predatorDeathRate() const
+{
+    return mPredatorDeathRate;
 }
 
 int LocalCaPso::currentStage() const
@@ -504,6 +516,8 @@ void LocalCaPso::predatorsDeath()
 {
     int currentAddress;
 
+    int initialNumberOfPredators = mNumberOfPredators;
+
     for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
     {
         currentAddress = getAddress((*it)->position().row(), (*it)->position().col());
@@ -524,12 +538,18 @@ void LocalCaPso::predatorsDeath()
         }
     }
 
+    int numberOfDeaths = initialNumberOfPredators - mNumberOfPredators;
+
+    mPredatorDeathRate = static_cast<float>(numberOfDeaths) / mLattice.size();
+
     mNextStage = &LocalCaPso::predation;
     mCurrentStage = DEATH_OF_PREYS;
 }
 
 void LocalCaPso::predation()
 {
+    int initialNumberOfPreys = mNumberOfPreys;
+
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
     {
         if(auto p = wp.lock())
@@ -550,6 +570,10 @@ void LocalCaPso::predation()
             }
         }
     });
+
+    int numberOfDeaths = initialNumberOfPreys - mNumberOfPreys;
+
+    mPreyDeathRate = static_cast<float>(numberOfDeaths) / mLattice.size();
 
     mNextStage = &LocalCaPso::reproductionOfPreys;
     mCurrentStage = REPRODUCTION_OF_PREYS;
