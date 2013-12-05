@@ -63,6 +63,9 @@ private:
     int mSeasonLength;
     int mPreyCountBeforeReproduction;
     int mPredatorCountBeforeReproduction;
+    int mPredatorCountBeforePreyDeath;
+    int mPreyCountBeforePredatorDeath;
+    int mPredatorCountBeforeDeath;
 };
 
 #endif // CONTROLLER_H

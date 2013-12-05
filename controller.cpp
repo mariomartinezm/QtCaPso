@@ -20,7 +20,10 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
     mTimerCount(0),
     mSeasonLength(10),
     mPreyCountBeforeReproduction(0),
-    mPredatorCountBeforeReproduction(0)
+    mPredatorCountBeforeReproduction(0),
+    mPreyCountBeforePredatorDeath(0),
+    mPredatorCountBeforeDeath(0),
+    mPredatorCountBeforePreyDeath(0)
 {
     this->setupUi(this);
 
@@ -48,14 +51,21 @@ void Controller::timerEvent(QTimerEvent*)
     {
         auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
 
-        if(local->currentStage() == 2)
+        switch(local->currentStage())
         {
+        case 2:
             mPredatorCountBeforeReproduction = local->numberOfPredators();
-        }
-
-        if(local->currentStage() == 5)
-        {
+            break;
+        case 3:
+            mPreyCountBeforePredatorDeath = local->numberOfPreys();
+            mPredatorCountBeforeDeath = local->numberOfPredators();
+            break;
+        case 4:
+            mPredatorCountBeforePreyDeath = local->numberOfPredators();
+            break;
+        case 5:
             mPreyCountBeforeReproduction = local->numberOfPreys();
+            break;
         }
     }
 
@@ -106,14 +116,21 @@ void Controller::step()
     {
         auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
 
-        if(local->currentStage() == 2)
+        switch(local->currentStage())
         {
+        case 2:
             mPredatorCountBeforeReproduction = local->numberOfPredators();
-        }
-
-        if(local->currentStage() == 5)
-        {
+            break;
+        case 3:
+            mPreyCountBeforePredatorDeath = local->numberOfPreys();
+            mPredatorCountBeforeDeath = local->numberOfPredators();
+            break;
+        case 4:
+            mPredatorCountBeforePreyDeath = local->numberOfPredators();
+            break;
+        case 5:
             mPreyCountBeforeReproduction = local->numberOfPreys();
+            break;
         }
     }
 
@@ -367,7 +384,12 @@ void Controller::writeResults()
                               mPreyCountBeforeReproduction << " " <<
                               local->preyBirthRate() << " " <<
                               mPredatorCountBeforeReproduction << " " <<
-                              local->predatorBirthRate() << "\n";
+                              local->predatorBirthRate() << " " <<
+                              mPreyCountBeforePredatorDeath << " " <<
+                              mPredatorCountBeforeDeath << " " <<
+                              local->predatorDeathRate() << " " <<
+                              mPredatorCountBeforePreyDeath << " " <<
+                              local->preyDeathRate() << "\n";
         }
         break;
     }
