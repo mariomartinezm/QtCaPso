@@ -175,6 +175,9 @@ void Controller::initialize()
 
     mPreyCountBeforeReproduction = 0;
     mPredatorCountBeforeReproduction = 0;
+    mPreyCountBeforePredatorDeath = 0;
+    mPredatorCountBeforeDeath = 0;
+    mPredatorCountBeforePreyDeath = 0;
 
     mTimerCount = 0;
 
