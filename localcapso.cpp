@@ -25,6 +25,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPredatorBirthRate(0.0f),
     mPreyDeathRate(0.0f),
     mPredatorDeathRate(0.0f),
+    mPredatorDeathProbability(0.0f),
     mCurrentStage(COMPETITION),
     mRandom(static_cast<unsigned int>(time(NULL))),
     // Real uniform distribution
@@ -108,6 +109,9 @@ void LocalCaPso::clear()
     mNumberOfPredators = 0;
     mPreyBirthRate = 0;
     mPredatorBirthRate = 0;
+    mPreyDeathRate = 0;
+    mPredatorDeathRate = 0;
+    mPredatorDeathProbability = 0;
 }
 
 void LocalCaPso::nextGen()
@@ -220,6 +224,11 @@ float LocalCaPso::preyDeathRate() const
 float LocalCaPso::predatorDeathRate() const
 {
     return mPredatorDeathRate;
+}
+
+float LocalCaPso::predatorDeathProbability() const
+{
+    return mPredatorDeathProbability;
 }
 
 int LocalCaPso::currentStage() const
@@ -541,6 +550,8 @@ void LocalCaPso::predatorsDeath()
     int numberOfDeaths = initialNumberOfPredators - mNumberOfPredators;
 
     mPredatorDeathRate = static_cast<float>(numberOfDeaths) / mLattice.size();
+    mPredatorDeathProbability = static_cast<float>(numberOfDeaths) /
+            initialNumberOfPredators;
 
     mNextStage = &LocalCaPso::predation;
     mCurrentStage = DEATH_OF_PREYS;
