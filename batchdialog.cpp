@@ -139,17 +139,27 @@ void BatchDialog::on_buttonStart_clicked()
 
                 int preyCountBeforeReproduction = 0;
                 int predatorCountBeforeReproduction = 0;
+                int preyCountBeforePredatorDeath = 0;
+                int predatorCountBeforeDeath = 0;
+                int predatorCountBeforePreyDeath = 0;
 
                 for(int genCount = 0; genCount < currentItem.numberOfSeasons() * 10; genCount++)
                 {
-                    if(local->currentStage() == 2)
+                    switch(local->currentStage())
                     {
+                    case 2:
                         predatorCountBeforeReproduction = local->numberOfPredators();
-                    }
-
-                    if(local->currentStage() == 5)
-                    {
+                        break;
+                    case 3:
+                        preyCountBeforePredatorDeath = local->numberOfPreys();
+                        predatorCountBeforeDeath = local->numberOfPredators();
+                        break;
+                    case 4:
+                        predatorCountBeforePreyDeath = local->numberOfPredators();
+                        break;
+                    case 5:
                         preyCountBeforeReproduction = local->numberOfPreys();
+                        break;
                     }
 
                     if(!(genCount % 10))
@@ -160,7 +170,13 @@ void BatchDialog::on_buttonStart_clicked()
                                          preyCountBeforeReproduction << " " <<
                                          local->preyBirthRate() << " " <<
                                          predatorCountBeforeReproduction << " " <<
-                                         local->predatorBirthRate() << "\n";
+                                         local->predatorBirthRate() << " " <<
+                                         preyCountBeforePredatorDeath << " " <<
+                                         predatorCountBeforeDeath << " " <<
+                                         local->predatorDeathRate() << " " <<
+                                         local->predatorDeathProbability() << " " <<
+                                         predatorCountBeforePreyDeath << " " <<
+                                         local->preyDeathRate() << "\n";
                     }
 
                     local->nextGen();
