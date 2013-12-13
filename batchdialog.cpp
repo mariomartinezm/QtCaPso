@@ -176,7 +176,8 @@ void BatchDialog::on_buttonStart_clicked()
                                          local->predatorDeathRate() << " " <<
                                          local->predatorDeathProbability() << " " <<
                                          predatorCountBeforePreyDeath << " " <<
-                                         local->preyDeathRate() << "\n";
+                                         local->preyDeathRate() << " " <<
+                                         local->preyDeathProbability() << "\n";
                     }
 
                     local->nextGen();
