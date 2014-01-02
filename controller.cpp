@@ -390,10 +390,8 @@ void Controller::writeResults()
                               local->predatorBirthRate() << " " <<
                               mPreyCountBeforePredatorDeath << " " <<
                               mPredatorCountBeforeDeath << " " <<
-                              local->predatorDeathRate() << " " <<
                               local->predatorDeathProbability() << " " <<
                               mPredatorCountBeforePreyDeath << " " <<
-                              local->preyDeathRate() << " " <<
                               local->preyDeathProbability() << "\n";
         }
         break;

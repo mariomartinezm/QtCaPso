@@ -39,8 +39,6 @@ public:
     int numberOfPredators() const;
     float preyBirthRate() const;
     float predatorBirthRate() const;
-    float preyDeathRate() const;
-    float predatorDeathRate() const;
     float preyDeathProbability() const;
     float predatorDeathProbability() const;
     int currentStage() const;
@@ -60,7 +58,6 @@ private:
 
     int mNumberOfPreys, mNumberOfPredators;
     float mPreyBirthRate, mPredatorBirthRate;
-    float mPreyDeathRate, mPredatorDeathRate;
     float mPreyDeathProbability, mPredatorDeathProbability;
     int mCurrentStage;
 

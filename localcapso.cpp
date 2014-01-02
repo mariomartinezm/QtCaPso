@@ -23,8 +23,6 @@ LocalCaPso::LocalCaPso(int width, int height)
     mNumberOfPredators(0),
     mPreyBirthRate(0.0f),
     mPredatorBirthRate(0.0f),
-    mPreyDeathRate(0.0f),
-    mPredatorDeathRate(0.0f),
     mPreyDeathProbability(0.0f),
     mPredatorDeathProbability(0.0f),
     mCurrentStage(COMPETITION),
@@ -110,8 +108,6 @@ void LocalCaPso::clear()
     mNumberOfPredators = 0;
     mPreyBirthRate = 0;
     mPredatorBirthRate = 0;
-    mPreyDeathRate = 0;
-    mPredatorDeathRate = 0;
     mPreyDeathProbability = 0;
     mPredatorDeathProbability = 0;
 }
@@ -216,16 +212,6 @@ float LocalCaPso::preyBirthRate() const
 float LocalCaPso::predatorBirthRate() const
 {
     return mPredatorBirthRate;
-}
-
-float LocalCaPso::preyDeathRate() const
-{
-    return mPreyDeathRate;
-}
-
-float LocalCaPso::predatorDeathRate() const
-{
-    return mPredatorDeathRate;
 }
 
 float LocalCaPso::preyDeathProbability() const
@@ -556,7 +542,6 @@ void LocalCaPso::predatorsDeath()
 
     int numberOfDeaths = initialNumberOfPredators - mNumberOfPredators;
 
-    mPredatorDeathRate = static_cast<float>(numberOfDeaths) / mLattice.size();
     mPredatorDeathProbability = static_cast<float>(numberOfDeaths) /
             initialNumberOfPredators;
 
@@ -591,7 +576,6 @@ void LocalCaPso::predation()
 
     int numberOfDeaths = initialNumberOfPreys - mNumberOfPreys;
 
-    mPreyDeathRate = static_cast<float>(numberOfDeaths) / mLattice.size();
     mPreyDeathProbability = static_cast<float>(numberOfDeaths) /
             initialNumberOfPreys;
 
