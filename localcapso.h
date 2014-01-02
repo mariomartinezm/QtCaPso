@@ -10,6 +10,8 @@ class LocalCaPso : public CellularAutomaton
 {
 public:
     enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
+    enum Stage { COMPETITION, MIGRATION, REPRODUCTION_OF_PREDATORS,
+                 DEATH_OF_PREDATORS, DEATH_OF_PREYS, REPRODUCTION_OF_PREYS };
 
     LocalCaPso(int width, int height);
 
@@ -35,6 +37,11 @@ public:
 
     int numberOfPreys() const;
     int numberOfPredators() const;
+    float preyBirthRate() const;
+    float predatorBirthRate() const;
+    float preyDeathProbability() const;
+    float predatorDeathProbability() const;
+    int currentStage() const;
 
     virtual void clear();
 
@@ -50,6 +57,9 @@ private:
     std::vector<unsigned char> mPreyDensities;
 
     int mNumberOfPreys, mNumberOfPredators;
+    float mPreyBirthRate, mPredatorBirthRate;
+    float mPreyDeathProbability, mPredatorDeathProbability;
+    int mCurrentStage;
 
     // Use the c++0x implementation of the Mersenne twister RNG
     std::mt19937 mRandom;

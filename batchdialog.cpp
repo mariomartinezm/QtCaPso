@@ -137,13 +137,42 @@ void BatchDialog::on_buttonStart_clicked()
 
                 local->initialize();
 
+                int preyCountBeforeReproduction = 0;
+                int predatorCountBeforeReproduction = 0;
+                int preyCountBeforePredatorDeath = 0;
+                int predatorCountBeforePreyDeath = 0;
+
                 for(int genCount = 0; genCount < currentItem.numberOfSeasons() * 10; genCount++)
                 {
+                    switch(local->currentStage())
+                    {
+                    case 2:
+                        predatorCountBeforeReproduction = local->numberOfPredators();
+                        break;
+                    case 3:
+                        preyCountBeforePredatorDeath = local->numberOfPreys();
+                        break;
+                    case 4:
+                        predatorCountBeforePreyDeath = local->numberOfPredators();
+                        break;
+                    case 5:
+                        preyCountBeforeReproduction = local->numberOfPreys();
+                        break;
+                    }
+
                     if(!(genCount % 10))
                     {
                         resultsStream << genCount / 10 << " " <<
                                          local->numberOfPreys() << " " <<
-                                         local->numberOfPredators() << "\n";
+                                         local->numberOfPredators() << " " <<
+                                         preyCountBeforeReproduction << " " <<
+                                         local->preyBirthRate() << " " <<
+                                         predatorCountBeforeReproduction << " " <<
+                                         local->predatorBirthRate() << " " <<
+                                         preyCountBeforePredatorDeath << " " <<
+                                         local->predatorDeathProbability() << " " <<
+                                         predatorCountBeforePreyDeath << " " <<
+                                         local->preyDeathProbability() << "\n";
                     }
 
                     local->nextGen();

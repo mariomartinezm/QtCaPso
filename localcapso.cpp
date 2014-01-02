@@ -21,6 +21,11 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPreyDensities(width * height),
     mNumberOfPreys(0),
     mNumberOfPredators(0),
+    mPreyBirthRate(0.0f),
+    mPredatorBirthRate(0.0f),
+    mPreyDeathProbability(0.0f),
+    mPredatorDeathProbability(0.0f),
+    mCurrentStage(COMPETITION),
     mRandom(static_cast<unsigned int>(time(NULL))),
     // Real uniform distribution
     mDistReal_0_1(0.0, 1.0),
@@ -85,6 +90,7 @@ void LocalCaPso::initialize()
     mPredatorMigrationCount = 0;
 
     mNextStage = &LocalCaPso::competitionOfPreys;
+    mCurrentStage = COMPETITION;
 }
 
 void LocalCaPso::clear()
@@ -100,6 +106,10 @@ void LocalCaPso::clear()
 
     mNumberOfPreys = 0;
     mNumberOfPredators = 0;
+    mPreyBirthRate = 0;
+    mPredatorBirthRate = 0;
+    mPreyDeathProbability = 0;
+    mPredatorDeathProbability = 0;
 }
 
 void LocalCaPso::nextGen()
@@ -194,6 +204,31 @@ int LocalCaPso::numberOfPredators() const
     return mNumberOfPredators;
 }
 
+float LocalCaPso::preyBirthRate() const
+{
+    return mPreyBirthRate;
+}
+
+float LocalCaPso::predatorBirthRate() const
+{
+    return mPredatorBirthRate;
+}
+
+float LocalCaPso::preyDeathProbability() const
+{
+    return mPreyDeathProbability;
+}
+
+float LocalCaPso::predatorDeathProbability() const
+{
+    return mPredatorDeathProbability;
+}
+
+int LocalCaPso::currentStage() const
+{
+    return mCurrentStage;
+}
+
 void LocalCaPso::competitionOfPreys()
 {
     std::copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
@@ -226,6 +261,7 @@ void LocalCaPso::competitionOfPreys()
     }
 
     mNextStage = &LocalCaPso::migration;
+    mCurrentStage = MIGRATION;
 }
 
 void LocalCaPso::migration()
@@ -383,6 +419,7 @@ void LocalCaPso::migration()
     if(mPredatorMigrationCount == mPredatorMigrationTime)
     {
         mNextStage = &LocalCaPso::reproductionOfPredators;
+        mCurrentStage = REPRODUCTION_OF_PREDATORS;
         mPredatorMigrationCount = 0;
         mPredatorCurrentInertiaWeight = mPredatorInitialInertiaWeight;
     }
@@ -399,6 +436,8 @@ void LocalCaPso::reproductionOfPredators()
 #endif
 
     list<shared_ptr<Particle>> newParticles;
+
+    int initialNumberOfPredators = mNumberOfPredators;
 
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
     {
@@ -467,12 +506,19 @@ void LocalCaPso::reproductionOfPredators()
 
     mPredatorSwarm.add(newParticles);
 
+    int numberOfBirths = mNumberOfPredators - initialNumberOfPredators;
+
+    mPredatorBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
+
     mNextStage = &LocalCaPso::predatorsDeath;
+    mCurrentStage = DEATH_OF_PREDATORS;
 }
 
 void LocalCaPso::predatorsDeath()
 {
     int currentAddress;
+
+    int initialNumberOfPredators = mNumberOfPredators;
 
     for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
     {
@@ -494,11 +540,19 @@ void LocalCaPso::predatorsDeath()
         }
     }
 
+    int numberOfDeaths = initialNumberOfPredators - mNumberOfPredators;
+
+    mPredatorDeathProbability = static_cast<float>(numberOfDeaths) /
+            initialNumberOfPredators;
+
     mNextStage = &LocalCaPso::predation;
+    mCurrentStage = DEATH_OF_PREYS;
 }
 
 void LocalCaPso::predation()
 {
+    int initialNumberOfPreys = mNumberOfPreys;
+
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
     {
         if(auto p = wp.lock())
@@ -520,7 +574,13 @@ void LocalCaPso::predation()
         }
     });
 
+    int numberOfDeaths = initialNumberOfPreys - mNumberOfPreys;
+
+    mPreyDeathProbability = static_cast<float>(numberOfDeaths) /
+            initialNumberOfPreys;
+
     mNextStage = &LocalCaPso::reproductionOfPreys;
+    mCurrentStage = REPRODUCTION_OF_PREYS;
 }
 
 void LocalCaPso::reproductionOfPreys()
@@ -534,7 +594,7 @@ void LocalCaPso::reproductionOfPreys()
 #endif
 
     int finalRow, finalCol, neighbourAddress;
-    int birthCount;
+    int birthCount, initialNumberOfPreys = mNumberOfPreys;
 
     for(int row = 0; row < mHeight; row++)
     {
@@ -601,7 +661,12 @@ void LocalCaPso::reproductionOfPreys()
         }
     }
 
+    int numberOfBirths = mNumberOfPreys - initialNumberOfPreys;
+
+    mPreyBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
+
     mNextStage = &LocalCaPso::competitionOfPreys;
+    mCurrentStage = COMPETITION;
 }
 
 void LocalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)

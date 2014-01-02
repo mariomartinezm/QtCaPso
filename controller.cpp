@@ -18,7 +18,11 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
     mResultsStream(&mResultsFile),
     mTimerId(-1),
     mTimerCount(0),
-    mSeasonLength(10)
+    mSeasonLength(10),
+    mPreyCountBeforeReproduction(0),
+    mPredatorCountBeforeReproduction(0),
+    mPreyCountBeforePredatorDeath(0),
+    mPredatorCountBeforePreyDeath(0)
 {
     this->setupUi(this);
 
@@ -42,6 +46,27 @@ Controller::~Controller()
 
 void Controller::timerEvent(QTimerEvent*)
 {
+    if(mCurrentType == LOCAL)
+    {
+        auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+
+        switch(local->currentStage())
+        {
+        case 2:
+            mPredatorCountBeforeReproduction = local->numberOfPredators();
+            break;
+        case 3:
+            mPreyCountBeforePredatorDeath = local->numberOfPreys();
+            break;
+        case 4:
+            mPredatorCountBeforePreyDeath = local->numberOfPredators();
+            break;
+        case 5:
+            mPreyCountBeforeReproduction = local->numberOfPreys();
+            break;
+        }
+    }
+
     mCellularAutomaton->nextGen();
 
     mTimerCount++;
@@ -85,6 +110,27 @@ void Controller::step()
         mTimerId = -1;
     }
 
+    if(mCurrentType == LOCAL)
+    {
+        auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+
+        switch(local->currentStage())
+        {
+        case 2:
+            mPredatorCountBeforeReproduction = local->numberOfPredators();
+            break;
+        case 3:
+            mPreyCountBeforePredatorDeath = local->numberOfPreys();
+            break;
+        case 4:
+            mPredatorCountBeforePreyDeath = local->numberOfPredators();
+            break;
+        case 5:
+            mPreyCountBeforeReproduction = local->numberOfPreys();
+            break;
+        }
+    }
+
     mCellularAutomaton->nextGen();
 
     mTimerCount++;
@@ -123,6 +169,11 @@ void Controller::initialize()
     }
 
     mCellularAutomaton->initialize();
+
+    mPreyCountBeforeReproduction = 0;
+    mPredatorCountBeforeReproduction = 0;
+    mPreyCountBeforePredatorDeath = 0;
+    mPredatorCountBeforePreyDeath = 0;
 
     mTimerCount = 0;
 
@@ -328,7 +379,15 @@ void Controller::writeResults()
             auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
             mResultsStream << mTimerCount / mSeasonLength << " " <<
                               local->numberOfPreys() << " " <<
-                              local->numberOfPredators() << "\n";
+                              local->numberOfPredators() << " " <<
+                              mPreyCountBeforeReproduction << " " <<
+                              local->preyBirthRate() << " " <<
+                              mPredatorCountBeforeReproduction << " " <<
+                              local->predatorBirthRate() << " " <<
+                              mPreyCountBeforePredatorDeath << " " <<
+                              local->predatorDeathProbability() << " " <<
+                              mPredatorCountBeforePreyDeath << " " <<
+                              local->preyDeathProbability() << "\n";
         }
         break;
     }
