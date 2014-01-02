@@ -140,7 +140,6 @@ void BatchDialog::on_buttonStart_clicked()
                 int preyCountBeforeReproduction = 0;
                 int predatorCountBeforeReproduction = 0;
                 int preyCountBeforePredatorDeath = 0;
-                int predatorCountBeforeDeath = 0;
                 int predatorCountBeforePreyDeath = 0;
 
                 for(int genCount = 0; genCount < currentItem.numberOfSeasons() * 10; genCount++)
@@ -152,7 +151,6 @@ void BatchDialog::on_buttonStart_clicked()
                         break;
                     case 3:
                         preyCountBeforePredatorDeath = local->numberOfPreys();
-                        predatorCountBeforeDeath = local->numberOfPredators();
                         break;
                     case 4:
                         predatorCountBeforePreyDeath = local->numberOfPredators();
@@ -172,7 +170,6 @@ void BatchDialog::on_buttonStart_clicked()
                                          predatorCountBeforeReproduction << " " <<
                                          local->predatorBirthRate() << " " <<
                                          preyCountBeforePredatorDeath << " " <<
-                                         predatorCountBeforeDeath << " " <<
                                          local->predatorDeathProbability() << " " <<
                                          predatorCountBeforePreyDeath << " " <<
                                          local->preyDeathProbability() << "\n";

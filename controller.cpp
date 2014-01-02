@@ -22,7 +22,6 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
     mPreyCountBeforeReproduction(0),
     mPredatorCountBeforeReproduction(0),
     mPreyCountBeforePredatorDeath(0),
-    mPredatorCountBeforeDeath(0),
     mPredatorCountBeforePreyDeath(0)
 {
     this->setupUi(this);
@@ -58,7 +57,6 @@ void Controller::timerEvent(QTimerEvent*)
             break;
         case 3:
             mPreyCountBeforePredatorDeath = local->numberOfPreys();
-            mPredatorCountBeforeDeath = local->numberOfPredators();
             break;
         case 4:
             mPredatorCountBeforePreyDeath = local->numberOfPredators();
@@ -123,7 +121,6 @@ void Controller::step()
             break;
         case 3:
             mPreyCountBeforePredatorDeath = local->numberOfPreys();
-            mPredatorCountBeforeDeath = local->numberOfPredators();
             break;
         case 4:
             mPredatorCountBeforePreyDeath = local->numberOfPredators();
@@ -176,7 +173,6 @@ void Controller::initialize()
     mPreyCountBeforeReproduction = 0;
     mPredatorCountBeforeReproduction = 0;
     mPreyCountBeforePredatorDeath = 0;
-    mPredatorCountBeforeDeath = 0;
     mPredatorCountBeforePreyDeath = 0;
 
     mTimerCount = 0;
@@ -389,7 +385,6 @@ void Controller::writeResults()
                               mPredatorCountBeforeReproduction << " " <<
                               local->predatorBirthRate() << " " <<
                               mPreyCountBeforePredatorDeath << " " <<
-                              mPredatorCountBeforeDeath << " " <<
                               local->predatorDeathProbability() << " " <<
                               mPredatorCountBeforePreyDeath << " " <<
                               local->preyDeathProbability() << "\n";
