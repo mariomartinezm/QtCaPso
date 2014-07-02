@@ -40,6 +40,6 @@ SOURCES += \
     batchitem.cpp
 
 # This option should only be used in linux or mingw
-!win32{
+!win32 | win32-g++{
     QMAKE_CXXFLAGS += -std=c++11
 }
