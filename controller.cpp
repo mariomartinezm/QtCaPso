@@ -311,12 +311,12 @@ void Controller::createCa()
     switch(mCurrentType)
     {
     case GLOBAL:
-        mCellularAutomaton = new GlobalCaPso(512, 256);
+        mCellularAutomaton = new GlobalCaPso(512, 512);
         mSeasonLength = 10;
         break;
 
     case LOCAL:
-        mCellularAutomaton = new LocalCaPso(512, 256);
+        mCellularAutomaton = new LocalCaPso(512, 512);
         mSeasonLength = 10;
         break;
 
