@@ -10,7 +10,10 @@
 class Swarm
 {
 public:
-    Swarm(float cognitiveFactor, float socialFactor, int maxSpeed);
+    Swarm(const std::vector<unsigned char>& lattice,
+          const std::vector<unsigned char>& densities,
+          int maxSpeed, float cognitiveFactor, float socialFactor,
+          int socialRadius, int width, int height, int particleState);
 
     ~Swarm();
 
@@ -27,6 +30,8 @@ public:
     std::list<std::shared_ptr<Particle>>::iterator end();
 
     void initialize(int size, int width, int height, std::mt19937& random);
+    void nextGen();
+
     void add(std::list<std::shared_ptr<Particle>>& newParticles);
 
 #if defined(Q_OS_LINUX)
@@ -44,10 +49,17 @@ public:
 
 private:
     std::list<std::shared_ptr<Particle>> mParticles;
+
+    const std::vector<unsigned char>& mLattice;
+    const std::vector<unsigned char>& mDensities;
+    int mMaxSpeed;
     float mCognitiveFactor;
     float mSocialFactor;
-    int mMaxSpeed;
     float mInertiaWeight;
+    int mSocialRadius;
+    int mWidth;
+    int mHeight;
+    int mParticleState;
 };
 
 #endif // SWARM_H
