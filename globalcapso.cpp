@@ -15,40 +15,40 @@ using std::transform;
 using std::uniform_int_distribution;
 
 GlobalCaPso::GlobalCaPso(int width, int height)
-	: CellularAutomaton(width, height),
-	mPredatorSwarm(1.0, 2.0, 10),
-	// Containers
-	mTemp(width * height),
-	mPreyDensities(width * height),
-	mNumberOfPreys(0),
-	mNumberOfPredators(0),
-	mRandom(static_cast<unsigned int>(time(NULL))),
-	// Real uniform distribution
-	mDistReal_0_1(0.0, 1.0),
-	// Model Parameters
-	mInitialPreyPercentage(0.5),
+    : CellularAutomaton(width, height),
+    mPredatorSwarm(1.0, 2.0, 10),
+    // Containers
+    mTemp(width * height),
+    mPreyDensities(width * height),
+    mNumberOfPreys(0),
+    mNumberOfPredators(0),
+    mRandom(static_cast<unsigned int>(time(NULL))),
+    // Real uniform distribution
+    mDistReal_0_1(0.0, 1.0),
+    // Model Parameters
+    mInitialPreyPercentage(0.5),
     mCompetitionFactor(0.3),
     mCompetitionRadius(5),
-	mPreyMeanOffspring(2),
-	mPreyReproductionRadius(1),
-	mPredatorMeanOffspring(5),
-	mPredatorReproductionRadius(3),
+    mPreyMeanOffspring(2),
+    mPreyReproductionRadius(1),
+    mPredatorMeanOffspring(5),
+    mPredatorReproductionRadius(3),
     NEIGHBORHOOD_SIZE((2 * mCompetitionRadius + 1)*(2 * mCompetitionRadius + 1) - 1),
-	// Pso Parameters
-	mInitialSwarmSize(3),
-	mMigrationTime(5),
-	mMigrationCount(0),
-	mInitialInertiaWeight(0.9f),
-	mCurrentInertiaWeight(mInitialInertiaWeight),
-	mFinalInertiaWeight(0.2f),
-	INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight) / mMigrationTime)
+    // Pso Parameters
+    mInitialSwarmSize(3),
+    mMigrationTime(5),
+    mMigrationCount(0),
+    mInitialInertiaWeight(0.9f),
+    mCurrentInertiaWeight(mInitialInertiaWeight),
+    mFinalInertiaWeight(0.2f),
+    INERTIA_STEP((mInitialInertiaWeight - mFinalInertiaWeight) / mMigrationTime)
 {
-	initialize();
+    initialize();
 }
 
 void GlobalCaPso::setInitialPreyPercentage(float value)
 {
-	mInitialPreyPercentage = value;
+    mInitialPreyPercentage = value;
 }
 
 void GlobalCaPso::setCompetitionFactor(float value)
@@ -60,643 +60,643 @@ void GlobalCaPso::setCompetitionRadius(int value)
 {
     mCompetitionRadius = value;
 
-	NEIGHBORHOOD_SIZE = (2 * value + 1)*(2 * value + 1) - 1;
+    NEIGHBORHOOD_SIZE = (2 * value + 1)*(2 * value + 1) - 1;
 }
 
 void GlobalCaPso::setPreyMeanOffspring(int value)
 {
-	mPreyMeanOffspring = value;
+    mPreyMeanOffspring = value;
 }
 
 void GlobalCaPso::setPreyReproductionRadius(int value)
 {
-	mPreyReproductionRadius = value;
+    mPreyReproductionRadius = value;
 }
 
 void GlobalCaPso::setPredatorMeanOffspring(int value)
 {
-	mPredatorMeanOffspring = value;
+    mPredatorMeanOffspring = value;
 }
 
 void GlobalCaPso::setPredatorReproductionRadius(int value)
 {
-	mPredatorReproductionRadius = value;
+    mPredatorReproductionRadius = value;
 }
 
 void GlobalCaPso::setInitialSwarmSize(int value)
 {
-	mInitialSwarmSize = value;
+    mInitialSwarmSize = value;
 }
 
 void GlobalCaPso::setCognitiveFactor(float value)
 {
-	mPredatorSwarm.setCognitiveFactor(value);
+    mPredatorSwarm.setCognitiveFactor(value);
 }
 
 void GlobalCaPso::setSocialFactor(float value)
 {
-	mPredatorSwarm.setSocialFactor(value);
+    mPredatorSwarm.setSocialFactor(value);
 }
 
 void GlobalCaPso::setMaximumSpeed(int value)
 {
-	mPredatorSwarm.setMaxSpeed(value);
+    mPredatorSwarm.setMaxSpeed(value);
 }
 
 void GlobalCaPso::setMitrationTime(int value)
 {
-	mMigrationTime = value;
+    mMigrationTime = value;
 }
 
 void GlobalCaPso::setInitialInertialWeight(float value)
 {
-	mInitialInertiaWeight = value;
+    mInitialInertiaWeight = value;
 }
 
 void GlobalCaPso::setFinalInertiaWeight(float value)
 {
-	mFinalInertiaWeight = value;
+    mFinalInertiaWeight = value;
 }
 
 int GlobalCaPso::numberOfPreys() const
 {
-	return mNumberOfPreys;
+    return mNumberOfPreys;
 }
 
 int GlobalCaPso::numberOfPredators() const
 {
-	return mNumberOfPredators;
+    return mNumberOfPredators;
 }
 
 void GlobalCaPso::initialize()
 {
-	clear();
+    clear();
 
-	// Create and render predators
-	mPredatorSwarm.initialize(mInitialSwarmSize, mWidth, mHeight, mRandom);
+    // Create and render predators
+    mPredatorSwarm.initialize(mInitialSwarmSize, mWidth, mHeight, mRandom);
 
-	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
-	{
-		if(auto p = wp.lock())
-		{
-			setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+    {
+        if(auto p = wp.lock())
+        {
+            setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
 
-			mNumberOfPredators++;
-		}
-	});
+            mNumberOfPredators++;
+        }
+    });
 
-	// Randomly create preys
-	for(int row = 0; row < mHeight; row++)
-	{
-		for(int col = 0; col < mWidth; col++)
-		{
-			if(mDistReal_0_1(mRandom) < mInitialPreyPercentage)
-			{
-				setState(getAddress(row, col), PREY);
+    // Randomly create preys
+    for(int row = 0; row < mHeight; row++)
+    {
+        for(int col = 0; col < mWidth; col++)
+        {
+            if(mDistReal_0_1(mRandom) < mInitialPreyPercentage)
+            {
+                setState(getAddress(row, col), PREY);
 
-				notifyNeighbors(row, col, false);
+                notifyNeighbors(row, col, false);
 
-				mNumberOfPreys++;
-			}
-		}
-	}
+                mNumberOfPreys++;
+            }
+        }
+    }
 
-	// Obtain the starting best position known by the swarm
-	auto it = mPredatorSwarm.begin();
-	mBestPosition.setRow((*it)->bestPosition().row());
-	mBestPosition.setCol((*it)->bestPosition().col());
+    // Obtain the starting best position known by the swarm
+    auto it = mPredatorSwarm.begin();
+    mBestPosition.setRow((*it)->bestPosition().row());
+    mBestPosition.setCol((*it)->bestPosition().col());
 
-	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
-	{
-		if(auto p = wp.lock())
-		{
-			int pRow = p->position().row();
-			int pCol = p->position().col();
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+    {
+        if(auto p = wp.lock())
+        {
+            int pRow = p->position().row();
+            int pCol = p->position().col();
 
-			if(mPreyDensities[getAddress(pRow, pCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
-			{
-				mBestPosition.setRow(pRow);
-				mBestPosition.setCol(pCol);
-			}
-		}
-	});
+            if(mPreyDensities[getAddress(pRow, pCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
+            {
+                mBestPosition.setRow(pRow);
+                mBestPosition.setCol(pCol);
+            }
+        }
+    });
 
-	// Render the best position
-	setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+    // Render the best position
+    setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
 
-	// Reset the migration counter
-	mMigrationCount = 0;
+    // Reset the migration counter
+    mMigrationCount = 0;
 
     mNextStage = &GlobalCaPso::competitionOfPreys;
 }
 
 void GlobalCaPso::clear()
 {
-	CellularAutomaton::clear();
+    CellularAutomaton::clear();
 
-	// Reset the densities
-	transform(mPreyDensities.begin(), mPreyDensities.end(), mPreyDensities.begin(), [](unsigned char)
-	{
-		return 0;
-	});
+    // Reset the densities
+    transform(mPreyDensities.begin(), mPreyDensities.end(), mPreyDensities.begin(), [](unsigned char)
+    {
+        return 0;
+    });
 
-	mNumberOfPreys = 0;
-	mNumberOfPredators = 0;
+    mNumberOfPreys = 0;
+    mNumberOfPredators = 0;
 }
 
 void GlobalCaPso::nextGen()
 {
-	(this->*mNextStage)();
+    (this->*mNextStage)();
 }
 
 void GlobalCaPso::competitionOfPreys()
 {
-	copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
+    copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
 
-	int currentAddress;
-	double deathProbability;
+    int currentAddress;
+    double deathProbability;
 
-	for(int row = 0; row < mHeight; row++)
-	{
-		for(int col = 0; col < mWidth; col++)
-		{
-			currentAddress = getAddress(row, col);
+    for(int row = 0; row < mHeight; row++)
+    {
+        for(int col = 0; col < mWidth; col++)
+        {
+            currentAddress = getAddress(row, col);
 
-			if(checkState(currentAddress, PREY))
-			{
-				deathProbability = mTemp[currentAddress] *
+            if(checkState(currentAddress, PREY))
+            {
+                deathProbability = mTemp[currentAddress] *
                         mCompetitionFactor / NEIGHBORHOOD_SIZE;
 
-				if(mDistReal_0_1(mRandom) <= deathProbability)
-				{
-					// Only kill the prey
-					clearState(currentAddress, PREY);
+                if(mDistReal_0_1(mRandom) <= deathProbability)
+                {
+                    // Only kill the prey
+                    clearState(currentAddress, PREY);
 
-					notifyNeighbors(row, col, true);
+                    notifyNeighbors(row, col, true);
 
-					mNumberOfPreys--;
-				}
-			}
-		}
-	}
+                    mNumberOfPreys--;
+                }
+            }
+        }
+    }
 
-	mNextStage = &GlobalCaPso::migration;
+    mNextStage = &GlobalCaPso::migration;
 }
 
 void GlobalCaPso::migration()
 {
-	auto validateVector = [this] (int& row, int& col)
-	{
-		if(abs(row) > mHeight / 2)
-		{
-			if(row < 0)
-			{
-				row = row + mHeight;
-			}
-			else
-			{
-				row = row - mHeight;
-			}
-		}
+    auto validateVector = [this] (int& row, int& col)
+    {
+        if(abs(row) > mHeight / 2)
+        {
+            if(row < 0)
+            {
+                row = row + mHeight;
+            }
+            else
+            {
+                row = row - mHeight;
+            }
+        }
 
-		if(abs(col) > mWidth / 2)
-		{
-			if(col < 0)
-			{
-				col = col + mWidth;
-			}
-			else
-			{
-				col = col - mWidth;
-			}
-		}
-	};
+        if(abs(col) > mWidth / 2)
+        {
+            if(col < 0)
+            {
+                col = col + mWidth;
+            }
+            else
+            {
+                col = col - mWidth;
+            }
+        }
+    };
 
-	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
-	{
-		if(auto p = wp.lock())
-		{
-			int pRow = p->position().row();
-			int pCol = p->position().col();
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
+    {
+        if(auto p = wp.lock())
+        {
+            int pRow = p->position().row();
+            int pCol = p->position().col();
 
-			// Clear the previous cell
-			clearState(getAddress(pRow, pCol), PREDATOR);
+            // Clear the previous cell
+            clearState(getAddress(pRow, pCol), PREDATOR);
 
-			double r1 = mDistReal_0_1(mRandom);
-			double r2 = mDistReal_0_1(mRandom);
+            double r1 = mDistReal_0_1(mRandom);
+            double r2 = mDistReal_0_1(mRandom);
 
-			int currentVelRow = p->velocity().row();
-			int currentVelCol = p->velocity().col();
+            int currentVelRow = p->velocity().row();
+            int currentVelCol = p->velocity().col();
 
-			validateVector(currentVelRow, currentVelCol);
+            validateVector(currentVelRow, currentVelCol);
 
-			int cognitiveVelRow = p->bestPosition().row() - pRow;
-			int cognitiveVelCol = p->bestPosition().col() - pCol;
+            int cognitiveVelRow = p->bestPosition().row() - pRow;
+            int cognitiveVelCol = p->bestPosition().col() - pCol;
 
-			validateVector(cognitiveVelRow, cognitiveVelCol);
+            validateVector(cognitiveVelRow, cognitiveVelCol);
 
-			int globalVelRow = mBestPosition.row() - pRow;
-			int globalVelCol = mBestPosition.col() - pCol;
+            int globalVelRow = mBestPosition.row() - pRow;
+            int globalVelCol = mBestPosition.col() - pCol;
 
-			validateVector(globalVelRow, globalVelCol);
+            validateVector(globalVelRow, globalVelCol);
 
-			int velRow = (int)(mCurrentInertiaWeight * currentVelRow + 
-				mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelRow + 
-				mPredatorSwarm.socialFactor() * r2 * globalVelRow);
-			int velCol = (int)(mCurrentInertiaWeight * currentVelCol + 
-				mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelCol + 
-				mPredatorSwarm.socialFactor() * r2 * globalVelCol);
+            int velRow = (int)(mCurrentInertiaWeight * currentVelRow +
+                mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelRow +
+                mPredatorSwarm.socialFactor() * r2 * globalVelRow);
+            int velCol = (int)(mCurrentInertiaWeight * currentVelCol +
+                mPredatorSwarm.cognitiveFactor() * r1 * cognitiveVelCol +
+                mPredatorSwarm.socialFactor() * r2 * globalVelCol);
 
-			// Adjust speed
-			double speed = sqrt((double)(velRow * velRow + velCol * velCol));
+            // Adjust speed
+            double speed = sqrt((double)(velRow * velRow + velCol * velCol));
 
-			while(speed > mPredatorSwarm.maxSpeed())
-			{
-				velRow *= (int)(0.9);
-				velCol *= (int)(0.9);
+            while(speed > mPredatorSwarm.maxSpeed())
+            {
+                velRow *= (int)(0.9);
+                velCol *= (int)(0.9);
 
-				speed = sqrt((double)(velRow * velRow + velCol * velCol));
-			}
+                speed = sqrt((double)(velRow * velRow + velCol * velCol));
+            }
 
-			// Move the particle
-			int posRow = pRow + velRow;
-			int posCol = pCol + velCol;
+            // Move the particle
+            int posRow = pRow + velRow;
+            int posCol = pCol + velCol;
 
-			// Adjust the position
-			posRow = (mHeight + posRow) % mHeight;
-			posCol = (mWidth + posCol) % mWidth;
+            // Adjust the position
+            posRow = (mHeight + posRow) % mHeight;
+            posCol = (mWidth + posCol) % mWidth;
 
-			p->setPosition(posRow, posCol);
-			p->setVelocity(velRow, velCol);
+            p->setPosition(posRow, posCol);
+            p->setVelocity(velRow, velCol);
 
-			// Render the particle at its new position
-			setState(getAddress(posRow, posCol), PREDATOR);
+            // Render the particle at its new position
+            setState(getAddress(posRow, posCol), PREDATOR);
 
-			// If necessary, update the particle's best know position
-			if(mPreyDensities[getAddress(pRow, pCol)] < mPreyDensities[getAddress(posRow, posCol)])
-			{
-				p->setBestPosition(posRow, posCol);
-			}
-		}
-	});
+            // If necessary, update the particle's best know position
+            if(mPreyDensities[getAddress(pRow, pCol)] < mPreyDensities[getAddress(posRow, posCol)])
+            {
+                p->setBestPosition(posRow, posCol);
+            }
+        }
+    });
 
-	// Decrease the inertia weight and increase the migration counter
-	mCurrentInertiaWeight -= INERTIA_STEP;
-	mMigrationCount++;
+    // Decrease the inertia weight and increase the migration counter
+    mCurrentInertiaWeight -= INERTIA_STEP;
+    mMigrationCount++;
 
-	// If migration has ended, point to the next stage and reset the inertia
-	// weight and migration count
-	if(mMigrationCount == mMigrationTime)
-	{
-		mNextStage = &GlobalCaPso::reproductionOfPredators;
-		mMigrationCount = 0;
-		mCurrentInertiaWeight = mInitialInertiaWeight;
-	}
+    // If migration has ended, point to the next stage and reset the inertia
+    // weight and migration count
+    if(mMigrationCount == mMigrationTime)
+    {
+        mNextStage = &GlobalCaPso::reproductionOfPredators;
+        mMigrationCount = 0;
+        mCurrentInertiaWeight = mInitialInertiaWeight;
+    }
 }
 
 void GlobalCaPso::reproductionOfPredators()
 {
-	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+    copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
 #if defined(Q_OS_LINUX)
-	uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius, mPredatorReproductionRadius);
+    uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius, mPredatorReproductionRadius);
 #else
-	uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
+    uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
 #endif
 
-	list<shared_ptr<Particle>> newParticles;
+    list<shared_ptr<Particle>> newParticles;
 
-	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
-	{
-		if(auto p = wp.lock())
-		{
-			int pRow = p->position().row();
-			int pCol = p->position().col();
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
+    {
+        if(auto p = wp.lock())
+        {
+            int pRow = p->position().row();
+            int pCol = p->position().col();
 
-			int birthCount = 0;
+            int birthCount = 0;
 
-			while(birthCount < mPredatorMeanOffspring)
-			{
-				// Obtain an offset
-				int finalRow = randomOffset(mRandom);
-				int finalCol = randomOffset(mRandom);
+            while(birthCount < mPredatorMeanOffspring)
+            {
+                // Obtain an offset
+                int finalRow = randomOffset(mRandom);
+                int finalCol = randomOffset(mRandom);
 
-				if(finalRow == 0 && finalCol == 0)
-				{
-					continue;
-				}
+                if(finalRow == 0 && finalCol == 0)
+                {
+                    continue;
+                }
 
-				// Get relative coordinates
-				finalRow += pRow;
-				finalCol += pCol;
+                // Get relative coordinates
+                finalRow += pRow;
+                finalCol += pCol;
 
-				// Get final coordinates
-				if (finalRow < 0 && finalCol < 0)
-				{
-					finalRow = mHeight + finalRow % mHeight;
-					finalCol = mWidth + finalCol % mWidth;
-				}
-				else if (finalRow < 0 && finalCol >= 0)
-				{
-					finalRow = mHeight + finalRow % mHeight;
-					finalCol = finalCol % mWidth;
-				}
-				else if (finalRow >= 0 && finalCol < 0)
-				{
-					finalRow = finalRow % mHeight;
-					finalCol = mWidth + finalCol % mWidth;
-				}
-				else
-				{
-					finalRow = finalRow % mHeight;
-					finalCol = finalCol % mWidth;
-				}
+                // Get final coordinates
+                if (finalRow < 0 && finalCol < 0)
+                {
+                    finalRow = mHeight + finalRow % mHeight;
+                    finalCol = mWidth + finalCol % mWidth;
+                }
+                else if (finalRow < 0 && finalCol >= 0)
+                {
+                    finalRow = mHeight + finalRow % mHeight;
+                    finalCol = finalCol % mWidth;
+                }
+                else if (finalRow >= 0 && finalCol < 0)
+                {
+                    finalRow = finalRow % mHeight;
+                    finalCol = mWidth + finalCol % mWidth;
+                }
+                else
+                {
+                    finalRow = finalRow % mHeight;
+                    finalCol = finalCol % mWidth;
+                }
 
-				if(!checkState(getAddress(finalRow, finalCol), PREDATOR))
-				{
-					// Create a new particle
-					auto particle = make_shared<Particle>();
-					particle->setPosition(finalRow, finalCol);
-					particle->setBestPosition(p->bestPosition().row(), p->bestPosition().col());
+                if(!checkState(getAddress(finalRow, finalCol), PREDATOR))
+                {
+                    // Create a new particle
+                    auto particle = make_shared<Particle>();
+                    particle->setPosition(finalRow, finalCol);
+                    particle->setBestPosition(p->bestPosition().row(), p->bestPosition().col());
 
-					setState(getAddress(finalRow, finalCol), PREDATOR);
+                    setState(getAddress(finalRow, finalCol), PREDATOR);
 
-					newParticles.push_back(particle);
+                    newParticles.push_back(particle);
 
-					mNumberOfPredators++;
-				}
+                    mNumberOfPredators++;
+                }
 
-				birthCount++;
-			}
-		}
-	});
+                birthCount++;
+            }
+        }
+    });
 
-	mPredatorSwarm.add(newParticles);
+    mPredatorSwarm.add(newParticles);
 
-	mNextStage = &GlobalCaPso::predatorsDeath;
+    mNextStage = &GlobalCaPso::predatorsDeath;
 }
 
 void GlobalCaPso::predatorsDeath()
 {
-	int currentAddress;
+    int currentAddress;
 
-	for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
-	{
-		currentAddress = getAddress((*it)->position().row(), (*it)->position().col());
+    for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
+    {
+        currentAddress = getAddress((*it)->position().row(), (*it)->position().col());
 
-		if(!checkState(currentAddress, PREY))
-		{
-			clearState(currentAddress, PREDATOR);
-			it = mPredatorSwarm.erase(it);
-			mNumberOfPredators--;
-		}
-		else
-		{
-			++it;
-		}
-	}
+        if(!checkState(currentAddress, PREY))
+        {
+            clearState(currentAddress, PREDATOR);
+            it = mPredatorSwarm.erase(it);
+            mNumberOfPredators--;
+        }
+        else
+        {
+            ++it;
+        }
+    }
 
-	mNextStage = &GlobalCaPso::predation;
+    mNextStage = &GlobalCaPso::predation;
 }
 
 void GlobalCaPso::predation()
 {
-	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
-	{
-		if(auto p = wp.lock())
-		{
-			int pRow = p->position().row();
-			int pCol = p->position().col();
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+    {
+        if(auto p = wp.lock())
+        {
+            int pRow = p->position().row();
+            int pCol = p->position().col();
 
-			int currentAddress = getAddress(pRow, pCol);
+            int currentAddress = getAddress(pRow, pCol);
 
-			// Kill the prey in the current cell
-			if(checkState(currentAddress, PREY))
-			{
-				clearState(currentAddress, PREY);
+            // Kill the prey in the current cell
+            if(checkState(currentAddress, PREY))
+            {
+                clearState(currentAddress, PREY);
 
-				notifyNeighbors(pRow, pCol, true);
+                notifyNeighbors(pRow, pCol, true);
 
-				mNumberOfPreys--;
-			}
-		}
-	});
+                mNumberOfPreys--;
+            }
+        }
+    });
 
-	if(!mPredatorSwarm.empty())
-	{
-		// After feeding the current best position becomes invalidated, obtain a new one,
-		// but first delete the original.
-		clearState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+    if(!mPredatorSwarm.empty())
+    {
+        // After feeding the current best position becomes invalidated, obtain a new one,
+        // but first delete the original.
+        clearState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
 
-		auto it = mPredatorSwarm.begin();
-		mBestPosition.setRow((*it)->bestPosition().row());
-		mBestPosition.setCol((*it)->bestPosition().col());
+        auto it = mPredatorSwarm.begin();
+        mBestPosition.setRow((*it)->bestPosition().row());
+        mBestPosition.setCol((*it)->bestPosition().col());
 
-		for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
-		{
-			if(auto p = wp.lock())
-			{
-				int pBestRow = p->bestPosition().row();
-				int pBestCol = p->bestPosition().col();
+        for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+        {
+            if(auto p = wp.lock())
+            {
+                int pBestRow = p->bestPosition().row();
+                int pBestCol = p->bestPosition().col();
 
-				if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
-				{
-					mBestPosition.setRow(pBestRow);
-					mBestPosition.setCol(pBestCol);
-				}
-			}
-		});
+                if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
+                {
+                    mBestPosition.setRow(pBestRow);
+                    mBestPosition.setCol(pBestCol);
+                }
+            }
+        });
 
-		// Render the best position
-		setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
-	}
+        // Render the best position
+        setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+    }
 
-	mNextStage = &GlobalCaPso::reproductionOfPreys;
+    mNextStage = &GlobalCaPso::reproductionOfPreys;
 }
 
 void GlobalCaPso::predation2()
 {
-	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+    copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-	for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
-	{
-		if(auto p = wp.lock())
-		{
-			int pRow = p->position().row();
-			int pCol = p->position().col();
+    for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+    {
+        if(auto p = wp.lock())
+        {
+            int pRow = p->position().row();
+            int pCol = p->position().col();
 
-			for(int nRow = pRow - 1; nRow <= pRow + 1; nRow++)
-			{
-				for(int nCol = pCol - 1; nCol <= pCol + 1; nCol++)
-				{
-					int finalRow = (mHeight + nRow) % mHeight;
-					int finalCol = (mWidth + nCol) % mWidth;
+            for(int nRow = pRow - 1; nRow <= pRow + 1; nRow++)
+            {
+                for(int nCol = pCol - 1; nCol <= pCol + 1; nCol++)
+                {
+                    int finalRow = (mHeight + nRow) % mHeight;
+                    int finalCol = (mWidth + nCol) % mWidth;
 
-					int neighbourAddress = getAddress(finalRow, finalCol);
+                    int neighbourAddress = getAddress(finalRow, finalCol);
 
-					if(checkState(neighbourAddress, PREY))
-					{
-						// Kill the prey
-						clearState(neighbourAddress, PREY);
+                    if(checkState(neighbourAddress, PREY))
+                    {
+                        // Kill the prey
+                        clearState(neighbourAddress, PREY);
 
-						notifyNeighbors(finalRow, finalCol, true);
+                        notifyNeighbors(finalRow, finalCol, true);
 
-						mNumberOfPreys--;
-					}
-				}
-			}
-		}
-	});
+                        mNumberOfPreys--;
+                    }
+                }
+            }
+        }
+    });
 
-	if(!mPredatorSwarm.empty())
-	{
-		// After feeding the current best position becomes invalidated, obtain a new one,
-		// but first delete the original.
-		clearState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+    if(!mPredatorSwarm.empty())
+    {
+        // After feeding the current best position becomes invalidated, obtain a new one,
+        // but first delete the original.
+        clearState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
 
-		auto it = mPredatorSwarm.begin();
-		mBestPosition.setRow((*it)->bestPosition().row());
-		mBestPosition.setCol((*it)->bestPosition().col());
+        auto it = mPredatorSwarm.begin();
+        mBestPosition.setRow((*it)->bestPosition().row());
+        mBestPosition.setCol((*it)->bestPosition().col());
 
-		for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
-		{
-			if(auto p = wp.lock())
-			{
-				int pBestRow = p->bestPosition().row();
-				int pBestCol = p->bestPosition().col();
+        for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
+        {
+            if(auto p = wp.lock())
+            {
+                int pBestRow = p->bestPosition().row();
+                int pBestCol = p->bestPosition().col();
 
-				if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
-				{
-					mBestPosition.setRow(pBestRow);
-					mBestPosition.setCol(pBestCol);
-				}
-			}
-		});
+                if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
+                {
+                    mBestPosition.setRow(pBestRow);
+                    mBestPosition.setCol(pBestCol);
+                }
+            }
+        });
 
-		// Render the best position
-		setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
-	}
+        // Render the best position
+        setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+    }
 
-	mNextStage = &GlobalCaPso::reproductionOfPreys;
+    mNextStage = &GlobalCaPso::reproductionOfPreys;
 }
 
 void GlobalCaPso::reproductionOfPreys()
 {
-	copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+    copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
 #if defined(Q_OS_LINUX)
-	uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius, mPreyReproductionRadius);
+    uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius, mPreyReproductionRadius);
 #else
-	uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius - 1, mPreyReproductionRadius);
+    uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius - 1, mPreyReproductionRadius);
 #endif
 
-	int finalRow, finalCol, neighbourAddress;
-	int birthCount;
+    int finalRow, finalCol, neighbourAddress;
+    int birthCount;
 
-	for(int row = 0; row < mHeight; row++)
-	{
-		for(int col = 0; col < mWidth; col++)
-		{
-			if(mTemp[getAddress(row, col)] & PREY)
-			{
-				birthCount = 0;
+    for(int row = 0; row < mHeight; row++)
+    {
+        for(int col = 0; col < mWidth; col++)
+        {
+            if(mTemp[getAddress(row, col)] & PREY)
+            {
+                birthCount = 0;
 
-				while(birthCount < mPreyMeanOffspring)
-				{
-					// Obtain an offset
-					finalRow = randomOffset(mRandom);
-					finalCol = randomOffset(mRandom);
+                while(birthCount < mPreyMeanOffspring)
+                {
+                    // Obtain an offset
+                    finalRow = randomOffset(mRandom);
+                    finalCol = randomOffset(mRandom);
 
-					if(finalRow == 0 && finalCol == 0)
-					{
-						continue;
-					}
+                    if(finalRow == 0 && finalCol == 0)
+                    {
+                        continue;
+                    }
 
-					// Get relative coordinates
-					finalRow += row;
-					finalCol += col;
+                    // Get relative coordinates
+                    finalRow += row;
+                    finalCol += col;
 
-					// Get final coordinates
-					if (finalRow < 0 && finalCol < 0)
-					{
-						finalRow = mHeight + finalRow % mHeight;
-						finalCol = mWidth + finalCol % mWidth;
-					}
-					else if (finalRow < 0 && finalCol >= 0)
-					{
-						finalRow = mHeight + finalRow % mHeight;
-						finalCol = finalCol % mWidth;
-					}
-					else if (finalRow >= 0 && finalCol < 0)
-					{
-						finalRow = finalRow % mHeight;
-						finalCol = mWidth + finalCol % mWidth;
-					}
-					else
-					{
-						finalRow = finalRow % mHeight;
-						finalCol = finalCol % mWidth;
-					}
+                    // Get final coordinates
+                    if (finalRow < 0 && finalCol < 0)
+                    {
+                        finalRow = mHeight + finalRow % mHeight;
+                        finalCol = mWidth + finalCol % mWidth;
+                    }
+                    else if (finalRow < 0 && finalCol >= 0)
+                    {
+                        finalRow = mHeight + finalRow % mHeight;
+                        finalCol = finalCol % mWidth;
+                    }
+                    else if (finalRow >= 0 && finalCol < 0)
+                    {
+                        finalRow = finalRow % mHeight;
+                        finalCol = mWidth + finalCol % mWidth;
+                    }
+                    else
+                    {
+                        finalRow = finalRow % mHeight;
+                        finalCol = finalCol % mWidth;
+                    }
 
-					neighbourAddress = getAddress(finalRow, finalCol);
+                    neighbourAddress = getAddress(finalRow, finalCol);
 
-					if(!checkState(neighbourAddress, PREY))
-					{
-						setState(neighbourAddress, PREY);
+                    if(!checkState(neighbourAddress, PREY))
+                    {
+                        setState(neighbourAddress, PREY);
 
-						notifyNeighbors(finalRow, finalCol, false);
+                        notifyNeighbors(finalRow, finalCol, false);
 
-						mNumberOfPreys++;
-					}
+                        mNumberOfPreys++;
+                    }
 
-					birthCount++;
-				}
-			}
-		}
-	}
+                    birthCount++;
+                }
+            }
+        }
+    }
 
     mNextStage = &GlobalCaPso::competitionOfPreys;
 }
 
 void GlobalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
 {
-	int finalRow, finalCol;
+    int finalRow, finalCol;
 
     for(int nRow = row - mCompetitionRadius; nRow <= row + mCompetitionRadius; nRow++)
-	{
+    {
         for(int nCol = col - mCompetitionRadius; nCol <= col + mCompetitionRadius; nCol++)
-		{
-			if(nRow == row && nCol == col)
-			{
-				continue;
-			}
+        {
+            if(nRow == row && nCol == col)
+            {
+                continue;
+            }
 
-			finalRow = (mHeight + nRow) % mHeight;
-			finalCol = (mWidth + nCol) % mWidth;
+            finalRow = (mHeight + nRow) % mHeight;
+            finalCol = (mWidth + nCol) % mWidth;
 
-			if(death)
-			{
-				mPreyDensities[getAddress(finalRow, finalCol)]--;
-			}
-			else
-			{
-				mPreyDensities[getAddress(finalRow, finalCol)]++;
-			}
-		}
-	}
+            if(death)
+            {
+                mPreyDensities[getAddress(finalRow, finalCol)]--;
+            }
+            else
+            {
+                mPreyDensities[getAddress(finalRow, finalCol)]++;
+            }
+        }
+    }
 }
 
 bool GlobalCaPso::checkState(int address, State state)
 {
-	return mLattice[address] & state;
+    return mLattice[address] & state;
 }
 
 void GlobalCaPso::setState(int address, State state)
 {
-	mLattice[address] |= state;
+    mLattice[address] |= state;
 }
 
 void GlobalCaPso::clearState(int address, State state)
 {
-	mLattice[address] &= ~state;
+    mLattice[address] &= ~state;
 }
