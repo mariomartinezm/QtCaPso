@@ -16,7 +16,7 @@ using std::uniform_int_distribution;
 
 GlobalCaPso::GlobalCaPso(int width, int height)
     : CellularAutomaton(width, height),
-    mPredatorSwarm(1.0, 2.0, 10),
+    mPredatorSwarm(mLattice, mPreyDensities, 10, 1.0f, 2.0f, 3, width, height, PREDATOR),
     // Containers
     mTemp(width * height),
     mPreyDensities(width * height),
