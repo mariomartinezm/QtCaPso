@@ -6,6 +6,7 @@
 #include <memory>
 #include <QtGlobal>
 #include "particle.h"
+#include "util.h"
 
 class Swarm
 {
@@ -29,7 +30,7 @@ public:
     std::list<std::shared_ptr<Particle>>::iterator begin();
     std::list<std::shared_ptr<Particle>>::iterator end();
 
-    void initialize(int size, int width, int height, std::mt19937& random);
+    void initialize(int size, int width, int height, util::Random &random);
     void nextGen();
 
     void add(std::list<std::shared_ptr<Particle>>& newParticles);

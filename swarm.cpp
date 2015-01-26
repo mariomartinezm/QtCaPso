@@ -38,18 +38,15 @@ list<shared_ptr<Particle>>::iterator Swarm::end()
     return mParticles.end();
 }
 
-void Swarm::initialize(int size, int width, int height, std::mt19937& random)
+void Swarm::initialize(int size, int width, int height, util::Random &random)
 {
     mParticles.clear();
-
-    std::uniform_int_distribution<int> randomRow(0, height - 1);
-    std::uniform_int_distribution<int> randomCol(0, width - 1);
 
     for(int i = 0; i < size; i++)
     {
         auto particle = make_shared<Particle>();
-        particle->setPosition(randomRow(random), randomCol(random));
-        particle->setBestPosition(randomRow(random), randomCol(random));
+        particle->setPosition(random.GetRandomInt(0, height - 1), random.GetRandomInt(0, width - 1));
+        particle->setBestPosition(random.GetRandomInt(0, height - 1), random.GetRandomInt(0, width - 1));
         mParticles.push_back(particle);
     }
 }
