@@ -5,6 +5,7 @@
 #include <list>
 #include "cellularautomaton.h"
 #include "swarm.h"
+#include "util.h"
 
 class LocalCaPso : public CellularAutomaton
 {
@@ -61,9 +62,7 @@ private:
     float mPreyDeathProbability, mPredatorDeathProbability;
     int mCurrentStage;
 
-    // Use the c++0x implementation of the Mersenne twister RNG
-    std::mt19937 mRandom;
-    std::uniform_real_distribution<float> mDistReal_0_1;
+    util::Random mRandom;
 
     // A function pointer that handles transitions
     void (LocalCaPso::*mNextStage)();

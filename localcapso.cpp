@@ -26,9 +26,6 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPreyDeathProbability(0.0f),
     mPredatorDeathProbability(0.0f),
     mCurrentStage(COMPETITION),
-    mRandom(static_cast<unsigned int>(time(NULL))),
-    // Real uniform distribution
-    mDistReal_0_1(0.0, 1.0),
     // Model paremeters
     mPreyInitialDensity(0.3),
     mPreyCompetitionFactor(0.3),
@@ -75,7 +72,7 @@ void LocalCaPso::initialize()
     {
         for(int col = 0; col < mWidth; col++)
         {
-            if(mDistReal_0_1(mRandom) < mPreyInitialDensity)
+            if(mRandom.GetRandomFloat() < mPreyInitialDensity)
             {
                 setState(getAddress(row, col), PREY);
 
@@ -247,7 +244,7 @@ void LocalCaPso::competitionOfPreys()
                 deathProbability = mTemp[currentAddress] *
                     mPreyCompetitionFactor / NEIGHBORHOOD_SIZE;
 
-                if(mDistReal_0_1(mRandom) <= deathProbability)
+                if(mRandom.GetRandomFloat() <= deathProbability)
                 {
                     // Only kill the prey
                     clearState(currentAddress, PREY);
@@ -340,8 +337,8 @@ void LocalCaPso::migration()
                 }
             }
 
-            float r1 = mDistReal_0_1(mRandom);
-            float r2 = mDistReal_0_1(mRandom);
+            float r1 = mRandom.GetRandomFloat();
+            float r2 = mRandom.GetRandomFloat();
 
             int currentVelRow = p->velocity().row();
             int currentVelCol = p->velocity().col();
@@ -429,12 +426,6 @@ void LocalCaPso::reproductionOfPredators()
 {
     std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-#if defined(Q_OS_LINUX)
-    std::uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius, mPredatorReproductionRadius);
-#else
-    std::uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
-#endif
-
     list<shared_ptr<Particle>> newParticles;
 
     int initialNumberOfPredators = mNumberOfPredators;
@@ -451,8 +442,8 @@ void LocalCaPso::reproductionOfPredators()
             while(birthCount < mPredatorReproductiveCapacity)
             {
                 // Obtain an offset
-                int finalRow = randomOffset(mRandom);
-                int finalCol = randomOffset(mRandom);
+                int finalRow = mRandom.GetRandomInt(-mPredatorReproductionRadius, mPredatorReproductionRadius);
+                int finalCol = mRandom.GetRandomInt(-mPredatorReproductionRadius, mPredatorReproductionRadius);
 
                 if(finalRow == 0 && finalCol == 0)
                 {
@@ -587,12 +578,6 @@ void LocalCaPso::reproductionOfPreys()
 {
     std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-#if defined(Q_OS_LINUX)
-    std::uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius, mPreyReproductionRadius);
-#else
-    std::uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius - 1, mPreyReproductionRadius);
-#endif
-
     int finalRow, finalCol, neighbourAddress;
     int birthCount, initialNumberOfPreys = mNumberOfPreys;
 
@@ -607,8 +592,8 @@ void LocalCaPso::reproductionOfPreys()
                 while(birthCount < mPreyReproductiveCapacity)
                 {
                     // Obtain an offset
-                    finalRow = randomOffset(mRandom);
-                    finalCol = randomOffset(mRandom);
+                    finalRow = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
+                    finalCol = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
 
                     if(finalRow == 0 && finalCol == 0)
                     {
