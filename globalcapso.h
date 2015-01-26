@@ -5,6 +5,7 @@
 #include <list>
 #include "cellularautomaton.h"
 #include "swarm.h"
+#include "util.h"
 
 class GlobalCaPso : public CellularAutomaton
 {
@@ -48,9 +49,7 @@ private:
 
     int mNumberOfPreys, mNumberOfPredators;
 
-    // Use the c++0x implementation of the Mersenne twister RNG
-    std::mt19937 mRandom;
-    std::uniform_real_distribution<float> mDistReal_0_1;
+    util::Random mRandom;
 
     // A function pointer that handles transitions
     void (GlobalCaPso::*mNextStage)();

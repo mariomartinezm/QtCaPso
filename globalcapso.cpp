@@ -22,9 +22,6 @@ GlobalCaPso::GlobalCaPso(int width, int height)
     mPreyDensities(width * height),
     mNumberOfPreys(0),
     mNumberOfPredators(0),
-    mRandom(static_cast<unsigned int>(time(NULL))),
-    // Real uniform distribution
-    mDistReal_0_1(0.0, 1.0),
     // Model Parameters
     mInitialPreyPercentage(0.5),
     mCompetitionFactor(0.3),
@@ -150,7 +147,7 @@ void GlobalCaPso::initialize()
     {
         for(int col = 0; col < mWidth; col++)
         {
-            if(mDistReal_0_1(mRandom) < mInitialPreyPercentage)
+            if(mRandom.GetRandomFloat() < mInitialPreyPercentage)
             {
                 setState(getAddress(row, col), PREY);
 
@@ -227,7 +224,7 @@ void GlobalCaPso::competitionOfPreys()
                 deathProbability = mTemp[currentAddress] *
                         mCompetitionFactor / NEIGHBORHOOD_SIZE;
 
-                if(mDistReal_0_1(mRandom) <= deathProbability)
+                if(mRandom.GetRandomFloat() <= deathProbability)
                 {
                     // Only kill the prey
                     clearState(currentAddress, PREY);
@@ -282,8 +279,8 @@ void GlobalCaPso::migration()
             // Clear the previous cell
             clearState(getAddress(pRow, pCol), PREDATOR);
 
-            double r1 = mDistReal_0_1(mRandom);
-            double r2 = mDistReal_0_1(mRandom);
+            double r1 = mRandom.GetRandomFloat();
+            double r2 = mRandom.GetRandomFloat();
 
             int currentVelRow = p->velocity().row();
             int currentVelCol = p->velocity().col();
@@ -358,12 +355,6 @@ void GlobalCaPso::reproductionOfPredators()
 {
     copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-#if defined(Q_OS_LINUX)
-    uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius, mPredatorReproductionRadius);
-#else
-    uniform_int_distribution<int> randomOffset(-mPredatorReproductionRadius - 1, mPredatorReproductionRadius);
-#endif
-
     list<shared_ptr<Particle>> newParticles;
 
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [&, this](weak_ptr<Particle> wp)
@@ -378,8 +369,8 @@ void GlobalCaPso::reproductionOfPredators()
             while(birthCount < mPredatorMeanOffspring)
             {
                 // Obtain an offset
-                int finalRow = randomOffset(mRandom);
-                int finalCol = randomOffset(mRandom);
+                int finalRow = mRandom.GetRandomInt(-mPredatorReproductionRadius, mPredatorReproductionRadius);
+                int finalCol = mRandom.GetRandomInt(-mPredatorReproductionRadius, mPredatorReproductionRadius);
 
                 if(finalRow == 0 && finalCol == 0)
                 {
@@ -584,12 +575,6 @@ void GlobalCaPso::reproductionOfPreys()
 {
     copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-#if defined(Q_OS_LINUX)
-    uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius, mPreyReproductionRadius);
-#else
-    uniform_int_distribution<int> randomOffset(-mPreyReproductionRadius - 1, mPreyReproductionRadius);
-#endif
-
     int finalRow, finalCol, neighbourAddress;
     int birthCount;
 
@@ -604,8 +589,8 @@ void GlobalCaPso::reproductionOfPreys()
                 while(birthCount < mPreyMeanOffspring)
                 {
                     // Obtain an offset
-                    finalRow = randomOffset(mRandom);
-                    finalCol = randomOffset(mRandom);
+                    finalRow = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
+                    finalCol = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
 
                     if(finalRow == 0 && finalCol == 0)
                     {
