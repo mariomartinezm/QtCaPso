@@ -2,6 +2,7 @@
 #define UTIL_H
 
 #include <QString>
+#include <random>
 #include "catype.h"
 #include "cellularautomaton.h"
 
@@ -18,6 +19,19 @@ namespace util
     bool getPathFromDialog(QString& path);
 
     bool getFileFromDialog(QString& file, QString filter);
+
+    class Random
+    {
+    public:
+        Random();
+        float GetRandomFloat();
+        int GetRandomInt(int min, int max);
+
+    private:
+        // Use the c++0x implementation of the Mersenne twister RNG
+        std::mt19937 mRNG;
+        std::uniform_real_distribution<float> mRealDistribution;
+    };
 }
 
 #endif // UTIL_H
