@@ -35,10 +35,7 @@ public:
 
     void add(std::list<std::shared_ptr<Particle>>& newParticles);
 
-#if defined(Q_OS_LINUX)
-    std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
-        std::allocator<std::shared_ptr<Particle>>>::iterator it);
-#elif defined(__MINGW32__)
+#if defined(Q_OS_LINUX) || defined(__MINGW32__)
     std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
         std::allocator<std::shared_ptr<Particle>>>::iterator it);
 #else
