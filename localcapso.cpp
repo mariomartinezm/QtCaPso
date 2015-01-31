@@ -34,7 +34,6 @@ LocalCaPso::LocalCaPso(int width, int height)
     mPreyReproductionRadius(2),
     mPredatorReproductiveCapacity(10),
     mPredatorReproductionRadius(2),
-    mPredatorSocialRadius(3),
     mFitnessRadius(3),
     NEIGHBORHOOD_SIZE((2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1),
     // Pso parameters
@@ -146,7 +145,7 @@ void LocalCaPso::setPredatorReproductionRadius(int value)
 
 void LocalCaPso::setPredatorSocialRadius(int value)
 {
-    mPredatorSocialRadius = value;
+    mPredatorSwarm.setSocialRadius(value);
 }
 
 void LocalCaPso::setFitnessRadius(int value)

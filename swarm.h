@@ -29,6 +29,7 @@ public:
     void setSocialFactor(float factor) { mSocialFactor = factor; }
     void setInertiaWeight(float inertiaWeight) { mInertiaWeight = inertiaWeight; }
     void setMaxSpeed(int speed) { mMaxSpeed = speed; }
+    void setSocialRadius(int radius) { mSocialRadius = radius; }
 
     std::list<std::shared_ptr<Particle>>::iterator begin();
     std::list<std::shared_ptr<Particle>>::iterator end();
