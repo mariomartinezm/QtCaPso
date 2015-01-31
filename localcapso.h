@@ -51,11 +51,11 @@ private:
     LocalCaPso& operator=(const LocalCaPso&);
 
 private:
-    Swarm mPredatorSwarm;
-
     // Containers
-    std::vector<unsigned char> mTemp;
     std::vector<unsigned char> mPreyDensities;
+    std::vector<unsigned char> mTemp;
+
+    Swarm mPredatorSwarm;
 
     int mNumberOfPreys, mNumberOfPredators;
     float mPreyBirthRate, mPredatorBirthRate;
@@ -83,7 +83,6 @@ private:
     int mPredatorMigrationTime;
     int mPredatorMigrationCount;
     float mPredatorInitialInertiaWeight;
-    float mPredatorCurrentInertiaWeight;
     float mPredatorFinalInertiaWeight;
     const float INERTIA_STEP;
 

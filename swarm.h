@@ -11,26 +11,29 @@
 class Swarm
 {
 public:
-    Swarm(const std::vector<unsigned char>& lattice,
-          const std::vector<unsigned char>& densities,
-          int maxSpeed, float cognitiveFactor, float socialFactor,
-          int socialRadius, int width, int height, int particleState);
+    Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
+          int maxSpeed, int socialRadius,
+          std::vector<unsigned char>& lattice,
+          std::vector<unsigned char>& densities,
+          std::vector<unsigned char> &temp,
+          int width, int height, int particleState, util::Random& random);
 
     ~Swarm();
 
     float cognitiveFactor() const { return mCognitiveFactor; }
     float socialFactor() const { return mSocialFactor; }
-    int maxSpeed() const { return mMaxSpeed; }
     float inertiaWeight() const { return mInertiaWeight; }
+    int maxSpeed() const { return mMaxSpeed; }
 
     void setCognitiveFactor(float factor) { mCognitiveFactor = factor; }
     void setSocialFactor(float factor) { mSocialFactor = factor; }
+    void setInertiaWeight(float inertiaWeight) { mInertiaWeight = inertiaWeight; }
     void setMaxSpeed(int speed) { mMaxSpeed = speed; }
 
     std::list<std::shared_ptr<Particle>>::iterator begin();
     std::list<std::shared_ptr<Particle>>::iterator end();
 
-    void initialize(int size, int width, int height, util::Random &random);
+    void initialize(int size);
     void nextGen();
 
     void add(std::list<std::shared_ptr<Particle>>& newParticles);
@@ -48,16 +51,20 @@ public:
 private:
     std::list<std::shared_ptr<Particle>> mParticles;
 
-    const std::vector<unsigned char>& mLattice;
-    const std::vector<unsigned char>& mDensities;
-    int mMaxSpeed;
     float mCognitiveFactor;
     float mSocialFactor;
     float mInertiaWeight;
+    int mMaxSpeed;
     int mSocialRadius;
+
+    std::vector<unsigned char>& mLattice;
+    std::vector<unsigned char>& mDensities;
+    std::vector<unsigned char>& mTemp;
+
     int mWidth;
     int mHeight;
     int mParticleState;
+    util::Random& mRandom;
 };
 
 #endif // SWARM_H
