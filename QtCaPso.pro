@@ -1,43 +1,13 @@
-RESOURCES += \
-    controller.qrc
+include(Models/Models.pri)
+include(View/View.pri)
+include(Controller/Controller.pri)
 
 HEADERS += \
-    swarm.h \
-    particle.h \
-    localsettingsdialog.h \
-    localcapso.h \
-    latticepoint.h \
-    globalsettingsdialog.h \
-    globalcapso.h \
-    controller.h \
-    cellularautomaton.h \
-    caview.h \
-    catype.h \
-    batchdialog.h \
     util.h \
-    batchitem.h
-
-FORMS += \
-    localsettingsdialog.ui \
-    globalsettingsdialog.ui \
-    controller.ui \
-    batchdialog.ui
 
 SOURCES += \
-    swarm.cpp \
-    particle.cpp \
     main.cpp \
-    localsettingsdialog.cpp \
-    localcapso.cpp \
-    latticepoint.cpp \
-    globalsettingsdialog.cpp \
-    globalcapso.cpp \
-    controller.cpp \
-    cellularautomaton.cpp \
-    caview.cpp \
-    batchdialog.cpp \
     util.cpp \
-    batchitem.cpp
 
 # This option should only be used in linux or mingw
 !win32 | win32-g++{
