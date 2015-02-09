@@ -5,6 +5,7 @@
 #include <list>
 #include "cellularautomaton.h"
 #include "swarm.h"
+#include "util.h"
 
 class LocalCaPso : public CellularAutomaton
 {
@@ -50,20 +51,18 @@ private:
     LocalCaPso& operator=(const LocalCaPso&);
 
 private:
-    Swarm mPredatorSwarm;
-
     // Containers
-    std::vector<unsigned char> mTemp;
     std::vector<unsigned char> mPreyDensities;
+    std::vector<unsigned char> mTemp;
+
+    Swarm mPredatorSwarm;
 
     int mNumberOfPreys, mNumberOfPredators;
     float mPreyBirthRate, mPredatorBirthRate;
     float mPreyDeathProbability, mPredatorDeathProbability;
     int mCurrentStage;
 
-    // Use the c++0x implementation of the Mersenne twister RNG
-    std::mt19937 mRandom;
-    std::uniform_real_distribution<float> mDistReal_0_1;
+    RandomNumber mRandom;
 
     // A function pointer that handles transitions
     void (LocalCaPso::*mNextStage)();
@@ -75,7 +74,6 @@ private:
     int mPreyReproductionRadius;
     int mPredatorReproductiveCapacity;
     int mPredatorReproductionRadius;
-    int mPredatorSocialRadius;
     int mFitnessRadius;
     int NEIGHBORHOOD_SIZE;
 
@@ -84,7 +82,6 @@ private:
     int mPredatorMigrationTime;
     int mPredatorMigrationCount;
     float mPredatorInitialInertiaWeight;
-    float mPredatorCurrentInertiaWeight;
     float mPredatorFinalInertiaWeight;
     const float INERTIA_STEP;
 
