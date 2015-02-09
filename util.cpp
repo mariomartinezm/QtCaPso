@@ -1,4 +1,3 @@
-#include <ctime>
 #include <QCoreApplication>
 #include <QFileDialog>
 #include <QFile>
@@ -228,22 +227,5 @@ namespace util
         }
 
         return true;
-    }
-
-    Random::Random()
-        : mRNG(static_cast<unsigned int>(time(NULL))),
-          mRealDistribution(0.0, 1.0)
-    {
-
-    }
-
-    float Random::GetRandomFloat()
-    {
-        return mRealDistribution(mRNG);
-    }
-
-    int Random::GetRandomInt(int min, int max)
-    {
-        return std::uniform_int_distribution<int>{min, max}(mRNG);
     }
 }

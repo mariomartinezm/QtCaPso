@@ -6,7 +6,7 @@
 #include <memory>
 #include <QtGlobal>
 #include "particle.h"
-#include "util.h"
+#include "randomnumber.h"
 
 class Swarm
 {
@@ -16,7 +16,7 @@ public:
           std::vector<unsigned char>& lattice,
           std::vector<unsigned char>& densities,
           std::vector<unsigned char> &temp,
-          int width, int height, int particleState, util::Random& random);
+          int width, int height, int particleState, RandomNumber& random);
 
     ~Swarm();
 
@@ -65,7 +65,7 @@ private:
     int mWidth;
     int mHeight;
     int mParticleState;
-    util::Random& mRandom;
+    RandomNumber& mRandom;
 };
 
 #endif // SWARM_H

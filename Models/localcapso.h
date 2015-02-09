@@ -62,7 +62,7 @@ private:
     float mPreyDeathProbability, mPredatorDeathProbability;
     int mCurrentStage;
 
-    util::Random mRandom;
+    RandomNumber mRandom;
 
     // A function pointer that handles transitions
     void (LocalCaPso::*mNextStage)();

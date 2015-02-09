@@ -8,6 +8,7 @@ HEADERS += \
     Models/particle.h \
     Models/latticepoint.h \
     Models/catype.h \
+    $$PWD/randomnumber.h
 
 SOURCES += \
     Models/cellularautomaton.cpp \
@@ -16,3 +17,4 @@ SOURCES += \
     Models/swarm.cpp \
     Models/particle.cpp \
     Models/latticepoint.cpp \
+    $$PWD/randomnumber.cpp

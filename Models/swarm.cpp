@@ -13,7 +13,7 @@ Swarm::Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
              std::vector<unsigned char> &lattice,
              std::vector<unsigned char> &densities,
              std::vector<unsigned char> &temp,
-             int width, int height, int particleState, util::Random &random)
+             int width, int height, int particleState, RandomNumber &random)
     : mCognitiveFactor(cognitiveFactor),
       mSocialFactor(socialFactor),
       mInertiaWeight(inertiaWeight),

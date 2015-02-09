@@ -49,7 +49,7 @@ private:
 
     int mNumberOfPreys, mNumberOfPredators;
 
-    util::Random mRandom;
+    RandomNumber mRandom;
 
     // A function pointer that handles transitions
     void (GlobalCaPso::*mNextStage)();
