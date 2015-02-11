@@ -1,3 +1,6 @@
+#include <QProgressDialog>
+#include <QtConcurrentMap>
+#include <QFutureWatcher>
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
@@ -106,89 +109,104 @@ void BatchDialog::on_lineEditPath_textChanged(QString text)
     }
 }
 
-void BatchDialog::on_buttonStart_clicked()
+void BatchDialog::processItem(BatchItem& batchItem)
 {
-    switch(mType)
+    LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
+
+    // Dummy variable to call load settings, since the obtained path is
+    // ignored
+    QString path;
+    util::loadSettings(localCaPso, LOCAL, batchItem.settingsFile(), path);
+
+    for (int simCount = 0; simCount < batchItem.numberOfSimulations(); simCount++)
     {
-    case LOCAL:
-    {
-        for (int index = 0; index < batchItems.count(); index++)
+        // Create results file
+        QFile resultsFile(batchItem.resultsPath() +
+                          batchItem.filenamePrefix() + "_" +
+                          QString::number(simCount) + ".txt");
+
+        QTextStream resultsStream(&resultsFile);
+        resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |
+                         QIODevice::Truncate);
+
+        localCaPso->initialize();
+
+        int preyCountBeforeReproduction = 0;
+        int predatorCountBeforeReproduction = 0;
+        int preyCountBeforePredatorDeath = 0;
+        int predatorCountBeforePreyDeath = 0;
+
+        for(int genCount = 0; genCount < batchItem.numberOfSeasons() * 10; genCount++)
         {
-            const BatchItem& currentItem = batchItems.at(index);
-
-            LocalCaPso* local = new LocalCaPso(currentItem.width(),
-                                               currentItem.height());
-
-            // Dummy variable to call load settings, since the obtained path is
-            // ignored
-            QString path;
-            util::loadSettings(local, LOCAL, currentItem.settingsFile(), path);
-
-            for (int simCount = 0; simCount < currentItem.numberOfSimulations(); simCount++)
+            switch(localCaPso->currentStage())
             {
-                // Create results file
-                QFile resultsFile(currentItem.resultsPath() +
-                                  currentItem.filenamePrefix() + "_" +
-                                  QString::number(simCount) + ".txt");
-
-                QTextStream resultsStream(&resultsFile);
-                resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |
-                                 QIODevice::Truncate);
-
-                local->initialize();
-
-                int preyCountBeforeReproduction = 0;
-                int predatorCountBeforeReproduction = 0;
-                int preyCountBeforePredatorDeath = 0;
-                int predatorCountBeforePreyDeath = 0;
-
-                for(int genCount = 0; genCount < currentItem.numberOfSeasons() * 10; genCount++)
-                {
-                    switch(local->currentStage())
-                    {
-                    case 2:
-                        predatorCountBeforeReproduction = local->numberOfPredators();
-                        break;
-                    case 3:
-                        preyCountBeforePredatorDeath = local->numberOfPreys();
-                        break;
-                    case 4:
-                        predatorCountBeforePreyDeath = local->numberOfPredators();
-                        break;
-                    case 5:
-                        preyCountBeforeReproduction = local->numberOfPreys();
-                        break;
-                    }
-
-                    if(!(genCount % 10))
-                    {
-                        resultsStream << genCount / 10 << " " <<
-                                         local->numberOfPreys() << " " <<
-                                         local->numberOfPredators() << " " <<
-                                         preyCountBeforeReproduction << " " <<
-                                         local->preyBirthRate() << " " <<
-                                         predatorCountBeforeReproduction << " " <<
-                                         local->predatorBirthRate() << " " <<
-                                         preyCountBeforePredatorDeath << " " <<
-                                         local->predatorDeathProbability() << " " <<
-                                         predatorCountBeforePreyDeath << " " <<
-                                         local->preyDeathProbability() << "\n";
-                    }
-
-                    local->nextGen();
-                }
-
-                resultsFile.close();
+            case 2:
+                predatorCountBeforeReproduction = localCaPso->numberOfPredators();
+                break;
+            case 3:
+                preyCountBeforePredatorDeath = localCaPso->numberOfPreys();
+                break;
+            case 4:
+                predatorCountBeforePreyDeath = localCaPso->numberOfPredators();
+                break;
+            case 5:
+                preyCountBeforeReproduction = localCaPso->numberOfPreys();
+                break;
             }
 
-            delete local;
+            if(!(genCount % 10))
+            {
+                resultsStream << genCount / 10 << " " <<
+                                 localCaPso->numberOfPreys() << " " <<
+                                 localCaPso->numberOfPredators() << " " <<
+                                 preyCountBeforeReproduction << " " <<
+                                 localCaPso->preyBirthRate() << " " <<
+                                 predatorCountBeforeReproduction << " " <<
+                                 localCaPso->predatorBirthRate() << " " <<
+                                 preyCountBeforePredatorDeath << " " <<
+                                 localCaPso->predatorDeathProbability() << " " <<
+                                 predatorCountBeforePreyDeath << " " <<
+                                 localCaPso->preyDeathProbability() << "\n";
+            }
+
+            localCaPso->nextGen();
         }
 
-        break;
+        resultsFile.close();
     }
-    case GLOBAL:
-        break;
-    case MOVEMENT:
-        break;
-    }
+
+    delete localCaPso;
+}
+
+void BatchDialog::on_buttonStart_clicked()
+{
+    QProgressDialog progressDialog;
+    progressDialog.setLabelText("Processing jobs. Please wait.");
+
+    QFutureWatcher<void> futureWatcher;
+    connect(&futureWatcher, SIGNAL(finished()),
+            &progressDialog, SLOT(reset()));
+    connect(&futureWatcher, SIGNAL(progressRangeChanged(int,int)),
+            &progressDialog, SLOT(setRange(int,int)));
+    connect(&futureWatcher, SIGNAL(progressValueChanged(int)),
+            &progressDialog, SLOT(setValue(int)));
+    connect(&progressDialog, SIGNAL(canceled()),
+            &futureWatcher, SLOT(cancel()));
+
+    // Start the computation. To be able to use a member function in the call to
+    // map(), an instance to the containing class is needed, i.e., the 'this'
+    // pointer. A lambda is used hwere to provide such pointer.
+    futureWatcher.setFuture(QtConcurrent::map(batchItems, [this](BatchItem& batchItem)
+    {
+        processItem(batchItem);
+    }));
+
+
+    // Display the dialog and start the event loop
+    progressDialog.exec();
+
+    futureWatcher.waitForFinished();
+
+    // Query the future to check if was canceled
+    qDebug() << "Canceled?" << futureWatcher.future().isCanceled();
 }

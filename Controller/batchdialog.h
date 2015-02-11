@@ -23,6 +23,9 @@ private slots:
     void on_lineEditPath_textChanged(QString text);
 
 private:
+    void processItem(BatchItem& batchItem);
+
+private:
     CaType mType;
     QList<BatchItem> batchItems;
 };
