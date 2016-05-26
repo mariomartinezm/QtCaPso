@@ -21,8 +21,8 @@ Controller::Controller(QWidget *parent, Qt::WindowFlags flags)
     mSeasonLength(10),
     mPreyCountBeforeReproduction(0),
     mPredatorCountBeforeReproduction(0),
-    mPreyCountBeforePredatorDeath(0),
-    mPredatorCountBeforePreyDeath(0)
+    mPredatorCountBeforePreyDeath(0),
+    mPreyCountBeforePredatorDeath(0)
 {
     this->setupUi(this);
 
@@ -389,6 +389,12 @@ void Controller::writeResults()
                               mPredatorCountBeforePreyDeath << " " <<
                               local->preyDeathProbability() << "\n";
         }
+        break;
+
+    case GLOBAL:
+        break;
+
+    case MOVEMENT:
         break;
     }
 }
