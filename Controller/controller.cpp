@@ -10,7 +10,7 @@
 #include "globalcapso.h"
 #include "util.h"
 
-Controller::Controller(QWidget *parent, Qt::WFlags flags)
+Controller::Controller(QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags),
     mCurrentType(LOCAL),
     mCurrFileName("results.txt"),
