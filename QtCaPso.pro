@@ -2,6 +2,8 @@ include(Models/Models.pri)
 include(View/View.pri)
 include(Controller/Controller.pri)
 
+QT += widgets
+
 HEADERS += \
     util.h \
 
