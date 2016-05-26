@@ -40,7 +40,7 @@ void Particle::setVelocity(int row, int col)
     mVelocity.setCol(col);
 }
 
-const unsigned int Particle::timeSinceLastMeal() const
+unsigned int Particle::timeSinceLastMeal() const
 {
 	return mTimeSinceLastMeal;
 }

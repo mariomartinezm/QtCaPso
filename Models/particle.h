@@ -17,7 +17,7 @@ public:
     const LatticePoint& velocity() const;
     void setVelocity(int row, int col);
 
-	const unsigned int timeSinceLastMeal() const;
+    unsigned int timeSinceLastMeal() const;
 	void increaseTimeSinceLastMeal();
 	void resetTimeSinceLastMeal();
 
