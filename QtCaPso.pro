@@ -3,6 +3,7 @@ include(View/View.pri)
 include(Controller/Controller.pri)
 
 QT += widgets
+QT += concurrent
 
 HEADERS += \
     util.h \
