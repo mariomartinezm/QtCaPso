@@ -19,31 +19,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mTemp(width * height),
     mPredatorSwarm(1.0f, 2.0f, 0.9f, 10, 3,
                    mLattice, mPreyDensities, mTemp,
-                   width, height, PREDATOR, mRandom),
-    mNumberOfPreys(0),
-    mNumberOfPredators(0),
-    mPreyBirthRate(0.0f),
-    mPredatorBirthRate(0.0f),
-    mPreyDeathProbability(0.0f),
-    mPredatorDeathProbability(0.0f),
-    mCurrentStage(COMPETITION),
-    // Model paremeters
-    mPreyInitialDensity(0.3),
-    mPreyCompetitionFactor(0.3),
-    mPreyReproductiveCapacity(10),
-    mPreyReproductionRadius(2),
-    mPredatorReproductiveCapacity(10),
-    mPredatorReproductionRadius(2),
-    mFitnessRadius(3),
-    NEIGHBORHOOD_SIZE((2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1),
-    // Pso parameters
-    mPredatorInitialSwarmSize(3),
-    mPredatorMigrationTime(5),
-    mPredatorMigrationCount(0),
-    mPredatorInitialInertiaWeight(0.9f),
-    mPredatorFinalInertiaWeight(0.2f),
-    INERTIA_STEP((mPredatorInitialInertiaWeight - mPredatorFinalInertiaWeight) /
-                 mPredatorMigrationTime)
+                   width, height, PREDATOR, mRandom)
 {
     initialize();
 }

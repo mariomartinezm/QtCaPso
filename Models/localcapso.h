@@ -70,10 +70,14 @@ private:
 
     Swarm mPredatorSwarm;
 
-    int mNumberOfPreys, mNumberOfPredators;
-    float mPreyBirthRate, mPredatorBirthRate;
-    float mPreyDeathProbability, mPredatorDeathProbability;
-    int mCurrentStage;
+    // Metrics
+    int mNumberOfPreys              { 0 };
+    int mNumberOfPredators          { 0 };
+    float mPreyBirthRate            { 0.0f };
+    float mPredatorBirthRate        { 0.0f };
+    float mPreyDeathProbability     { 0.0f };
+    float mPredatorDeathProbability { 0.0f };
+    int mCurrentStage               { COMPETITION };
 
     RandomNumber mRandom;
 
@@ -81,22 +85,23 @@ private:
     void (LocalCaPso::*mNextStage)();
 
     // Model parameters
-    double mPreyInitialDensity;
-    double mPreyCompetitionFactor;
-    int mPreyReproductiveCapacity;
-    int mPreyReproductionRadius;
-    int mPredatorReproductiveCapacity;
-    int mPredatorReproductionRadius;
-    int mFitnessRadius;
-    int NEIGHBORHOOD_SIZE;
+    double mPreyInitialDensity        { 0.0 };
+    double mPreyCompetitionFactor     { 0.3 };
+    int mPreyReproductiveCapacity     { 10 };
+    int mPreyReproductionRadius       { 2 };
+    int mPredatorReproductiveCapacity { 10 };
+    int mPredatorReproductionRadius   { 2 };
+    int mFitnessRadius                { 3 };
+    int NEIGHBORHOOD_SIZE             { (2 * mFitnessRadius + 1) * (2 * mFitnessRadius + 1) - 1 };
 
     // PSO parameters
-    int mPredatorInitialSwarmSize;
-    int mPredatorMigrationTime;
-    int mPredatorMigrationCount;
-    float mPredatorInitialInertiaWeight;
-    float mPredatorFinalInertiaWeight;
-    const float INERTIA_STEP;
+    int mPredatorInitialSwarmSize       { 3 };
+    int mPredatorMigrationTime          { 5 };
+    int mPredatorMigrationCount         { 0 };
+    float mPredatorInitialInertiaWeight { 0.9f };
+    float mPredatorFinalInertiaWeight   { 0.2f };
+    const float INERTIA_STEP            { (mPredatorInitialInertiaWeight - mPredatorFinalInertiaWeight) /
+                                            mPredatorMigrationTime };
 };
 
 #endif // CAPSO_H
