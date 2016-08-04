@@ -15,6 +15,4 @@ SOURCES += \
     Models/localcapso.cpp \
     Models/globalcapso.cpp \
     Models/swarm.cpp \
-    Models/particle.cpp \
-    Models/latticepoint.cpp \
     $$PWD/randomnumber.cpp

@@ -36,7 +36,7 @@ void LocalCaPso::initialize()
     {
         if(auto p = wp.lock())
         {
-            setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
+            setState(getAddress(p->position.row, p->position.col), PREDATOR);
 
             mNumberOfPredators++;
         }
@@ -269,8 +269,8 @@ void LocalCaPso::reproductionOfPredators()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             int birthCount = 0;
 
@@ -315,8 +315,10 @@ void LocalCaPso::reproductionOfPredators()
                 {
                     // Create a new particle
                     auto particle = make_shared<Particle>();
-                    particle->setPosition(finalRow, finalCol);
-                    particle->setBestPosition(p->bestPosition().row(), p->bestPosition().col());
+                    particle->position.row = finalRow;
+                    particle->position.col = finalCol;
+                    particle->bestPosition.row = p->bestPosition.row;
+                    particle->bestPosition.col = p->bestPosition.col;
 
                     setState(getAddress(finalRow, finalCol), PREDATOR);
 
@@ -348,7 +350,7 @@ void LocalCaPso::predatorsDeath()
 
     for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
     {
-        currentAddress = getAddress((*it)->position().row(), (*it)->position().col());
+        currentAddress = getAddress((*it)->position.row, (*it)->position.col);
 
         if(!checkState(currentAddress, PREY))
         {
@@ -383,8 +385,8 @@ void LocalCaPso::predation()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             int currentAddress = getAddress(pRow, pCol);
 

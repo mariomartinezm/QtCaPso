@@ -3,29 +3,12 @@
 
 #include "latticepoint.h"
 
-class Particle
+struct Particle
 {
-public:
-    Particle();
-
-	const LatticePoint& position() const;
-    void setPosition(int row, int col);
-
-    const LatticePoint& bestPosition() const;
-    void setBestPosition(int row, int col);
-
-    const LatticePoint& velocity() const;
-    void setVelocity(int row, int col);
-
-    unsigned int timeSinceLastMeal() const;
-	void increaseTimeSinceLastMeal();
-	void resetTimeSinceLastMeal();
-
-private:
-    LatticePoint mPosition;
-    LatticePoint mBestPosition;
-    LatticePoint mVelocity;
-	unsigned int mTimeSinceLastMeal;
+    LatticePoint position;
+    LatticePoint bestPosition;
+    LatticePoint velocity;
+    unsigned int timeSinceLastMeal;
 };
 
 #endif // PARTICLE_H

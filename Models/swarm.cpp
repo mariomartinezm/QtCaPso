@@ -52,10 +52,11 @@ void Swarm::initialize(int size)
     for(int i = 0; i < size; i++)
     {
         auto particle = make_shared<Particle>();
-        particle->setPosition(mRandom.GetRandomInt(0, mHeight - 1),
-                              mRandom.GetRandomInt(0, mWidth - 1));
-        particle->setBestPosition(mRandom.GetRandomInt(0, mHeight - 1),
-                                  mRandom.GetRandomInt(0, mWidth - 1));
+        particle->position.row = mRandom.GetRandomInt(0, mHeight - 1);
+        particle->position.col = mRandom.GetRandomInt(0, mWidth - 1);
+        particle->bestPosition.row = mRandom.GetRandomInt(0, mHeight - 1);
+        particle->bestPosition.col = mRandom.GetRandomInt(0, mWidth - 1);
+        particle->timeSinceLastMeal = 0;
 
         mParticles.push_back(particle);
     }
@@ -97,8 +98,8 @@ void Swarm::nextGen()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             int bestRow = pRow;
             int bestCol = pCol;
@@ -145,13 +146,13 @@ void Swarm::nextGen()
             float r1 = mRandom.GetRandomFloat();
             float r2 = mRandom.GetRandomFloat();
 
-            int currentVelRow = p->velocity().row();
-            int currentVelCol = p->velocity().col();
+            int currentVelRow = p->velocity.row;
+            int currentVelCol = p->velocity.col;
 
             validateVector(currentVelRow, currentVelCol);
 
-            int cognitiveVelRow = p->bestPosition().row() - pRow;
-            int cognitiveVelCol = p->bestPosition().col() - pCol;
+            int cognitiveVelRow = p->bestPosition.row - pRow;
+            int cognitiveVelCol = p->bestPosition.col - pCol;
 
             validateVector(cognitiveVelRow, cognitiveVelCol);
 
@@ -192,17 +193,20 @@ void Swarm::nextGen()
             if(!(mLattice[mWidth * posRow + posCol] & mParticleState))
             {
                 // No, then update the particle's position
-                p->setPosition(posRow, posCol);
-                p->setVelocity(velRow, velCol);
+                p->position.row = posRow;
+                p->position.col = posCol;
+                p->velocity.row = velRow;
+                p->velocity.col = velCol;
 
                 // Render the particle at its new position
                 mLattice[mWidth * posRow + posCol] |= mParticleState;
 
                 // If necessary, update the particle's best known position
-                if(mDensities[mWidth * p->bestPosition().row() + p->bestPosition().col()] <
+                if(mDensities[mWidth * p->bestPosition.row + p->bestPosition.col] <
                     mDensities[mWidth * posRow + posCol])
                 {
-                    p->setBestPosition(posRow, posCol);
+                    p->bestPosition.row = posRow;
+                    p->bestPosition.col = posCol;
                 }
             }
             else
