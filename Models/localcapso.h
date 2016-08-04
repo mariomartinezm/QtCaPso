@@ -7,7 +7,7 @@
 #include "swarm.h"
 #include "util.h"
 
-class LocalCaPso : public CellularAutomaton
+class LocalCaPso final : public CellularAutomaton
 {
 public:
     enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
@@ -16,9 +16,9 @@ public:
 
     LocalCaPso(int width, int height);
 
-    void initialize();
+    void initialize() override;
 
-    void nextGen();
+    void nextGen() override;
 
     void setPreyInitialDensity(float value);
     void setPreyCompetitionFactor(float value);
@@ -44,7 +44,7 @@ public:
     float predatorDeathProbability() const;
     int currentStage() const;
 
-    virtual void clear();
+    virtual void clear() override;
 
 private:
     LocalCaPso(const LocalCaPso&);
