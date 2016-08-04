@@ -17,11 +17,11 @@ public:
     LocalCaPso(int width, int height);
 
     void initialize() override;
-
+    virtual void clear() override;
     void nextGen() override;
 
-    void setPreyInitialDensity(float value);
     void setPreyCompetitionFactor(float value);
+    void setPreyInitialDensity(float value);
     void setPreyReproductiveCapacity(int value);
     void setPreyReproductionRadius(int value);
     void setPredatorReproductiveCapacity(int value);
@@ -44,13 +44,26 @@ public:
     float predatorDeathProbability() const;
     int currentStage() const;
 
-    virtual void clear() override;
-
 private:
     LocalCaPso(const LocalCaPso&);
     LocalCaPso& operator=(const LocalCaPso&);
 
 private:
+    // Model stages
+    void competitionOfPreys();
+    void migration();
+    void reproductionOfPredators();
+    void predatorsDeath();
+    void predation();
+    void reproductionOfPreys();
+
+    // Misc methods
+    void notifyNeighbors(const int& row, const int& col,
+                         const bool& death_birth);
+    bool checkState(int address, State state);
+    void setState(int address, State state);
+    void clearState(int address, State state);
+
     // Containers
     std::vector<unsigned char> mPreyDensities;
     std::vector<unsigned char> mTemp;
@@ -84,21 +97,6 @@ private:
     float mPredatorInitialInertiaWeight;
     float mPredatorFinalInertiaWeight;
     const float INERTIA_STEP;
-
-    // Model stages
-    void competitionOfPreys();
-    void migration();
-    void reproductionOfPredators();
-    void predatorsDeath();
-    void predation();
-    void reproductionOfPreys();
-
-    // Misc methods
-    void notifyNeighbors(const int& row, const int& col,
-                         const bool& death_birth);
-    bool checkState(int address, State state);
-    void setState(int address, State state);
-    void clearState(int address, State state);
 };
 
 #endif // CAPSO_H
