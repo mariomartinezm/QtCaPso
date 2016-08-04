@@ -7,7 +7,7 @@
 #include "swarm.h"
 #include "util.h"
 
-class GlobalCaPso : public CellularAutomaton
+class GlobalCaPso final : public CellularAutomaton
 {
 public:
     enum State {EMPTY, PREY, PREDATOR, PREY_PREDATOR, BEST = 4};
@@ -32,9 +32,9 @@ public:
     int numberOfPreys() const;
     int numberOfPredators() const;
 
-    void initialize();
-    virtual void clear();
-    void nextGen();
+    void initialize() override;
+    virtual void clear() override;
+    void nextGen() override;
 
 private:
     GlobalCaPso(const GlobalCaPso&);
