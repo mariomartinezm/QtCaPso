@@ -204,7 +204,7 @@ namespace util
     {
         path = QFileDialog::getExistingDirectory(NULL,
                                                  QObject::tr("Select a folder"),
-                                                 QCoreApplication::applicationDirPath() + QDir::separator(),
+                                                 QCoreApplication::applicationDirPath() + "/",
                                                  QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
         if(path.isEmpty())
         {
@@ -216,7 +216,7 @@ namespace util
 
     bool getFileFromDialog(QString& file, QString filter)
     {
-        QString appDir = QCoreApplication::applicationDirPath() + QDir::separator();
+        QString appDir = QCoreApplication::applicationDirPath() + "/";
 
         file = QFileDialog::getOpenFileName(NULL, QObject::tr("Select a file"),
                                             appDir, filter, 0, 0);

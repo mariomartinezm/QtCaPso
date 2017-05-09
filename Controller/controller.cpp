@@ -198,7 +198,7 @@ void Controller::showBatchDialog()
 void Controller::exportBitmap()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
-        QCoreApplication::applicationDirPath() + QDir::separator() +
+        QCoreApplication::applicationDirPath() + "/" +
         "lattice.PNG", tr("PNG (*.PNG);;JPG (*.jpg);; TIFF (*.tiff)"));
 
     if(!fileName.isEmpty())
@@ -218,7 +218,7 @@ void Controller::updateSettings()
 void Controller::exportSettings()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Export current settings",
-        QCoreApplication::applicationDirPath() + QDir::separator() + "settings.xml", tr("xml (*.xml)"));
+        QCoreApplication::applicationDirPath() + "/" + "settings.xml", tr("xml (*.xml)"));
 
     if(!fileName.isEmpty())
     {
@@ -279,7 +279,7 @@ void Controller::initializeSettings()
     if(!QFile::exists("settings.xml"))
     {
         if(!util::writeSettings(QCoreApplication::applicationDirPath() +
-                            QDir::separator() + "results.txt"))
+                            "/" + "results.txt"))
         {
             QMessageBox::critical(this, "Error!", "Cannot write settings");
         }

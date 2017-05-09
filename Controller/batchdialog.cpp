@@ -15,8 +15,7 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
 {
     this->setupUi(this);
 
-    lineEditPath->setText(QCoreApplication::applicationDirPath() +
-                          QDir::separator());
+    lineEditPath->setText(QCoreApplication::applicationDirPath() + "/");
 
     buttonStart->setAutoDefault(false);
     buttonStart->setEnabled(false);
@@ -91,7 +90,7 @@ void BatchDialog::on_buttonBrowse_clicked()
 
     if(util::getPathFromDialog(path))
     {
-        lineEditPath->setText(path + QDir::separator());
+        lineEditPath->setText(path + "/");
     }
 }
 

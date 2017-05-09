@@ -153,7 +153,7 @@ void LocalSettingsDialog::showFileDialog()
 
     if(!path.isEmpty())
     {
-        lineEditPath->setText(path + QDir::separator() + "results.txt");
+        lineEditPath->setText(path + "/" + "results.txt");
     }
 }
 
