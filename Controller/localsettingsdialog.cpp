@@ -4,6 +4,7 @@
 #include <QXmlStreamWriter>
 #pragma warning(pop)
 #include <QMessageBox>
+#include <QSettings>
 #include "localsettingsdialog.h"
 #include "util.h"
 
@@ -25,6 +26,16 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
     // Populate the form
     QFile settingsFile;
     settingsFile.setFileName("settings.xml");
+
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
+    QString resultsPath = settings.value("ResultsPath").toString();
+
+    if(resultsPath == "")
+    {
+        resultsPath = QCoreApplication::applicationDirPath() + "/results.txt";
+    }
+
+    lineEditPath->setText(resultsPath);
 
     if(!settingsFile.open(QIODevice::ReadOnly))
     {
@@ -128,12 +139,6 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
 
                 lineEditFinalWeight->setText(value);
             }
-            else if(elementName == "resultsFilePath")
-            {
-                QString value = reader.readElementText();
-
-                lineEditPath->setText(value);
-            }
         }
     }
 
@@ -159,7 +164,7 @@ void LocalSettingsDialog::showFileDialog()
 
 void LocalSettingsDialog::accept()
 {
-    if(!util::writeSettings(lineEditPath->text(), LOCAL,
+    if(!util::writeSettings(LOCAL,
                         lineEditInitialPreys->text().toFloat(),
                         lineEditCompetitionFactor->text().toFloat(),
                         spinBoxPreyReproductionRadius->value(),
@@ -177,6 +182,9 @@ void LocalSettingsDialog::accept()
     {
          QMessageBox::critical(this, "Error!", "Settings cannot be written");
     }
+
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
+    settings.setValue("ResultsPath", lineEditPath->text());
 
     emit settingsChanged();
 

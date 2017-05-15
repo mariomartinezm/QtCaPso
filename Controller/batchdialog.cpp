@@ -112,10 +112,7 @@ void BatchDialog::processItem(BatchItem& batchItem)
 {
     LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
 
-    // Dummy variable to call load settings, since the obtained path is
-    // ignored
-    QString path;
-    util::loadSettings(localCaPso, LOCAL, batchItem.settingsFile(), path);
+    util::loadSettings(localCaPso, LOCAL, batchItem.settingsFile());
 
     for (int simCount = 0; simCount < batchItem.numberOfSimulations(); simCount++)
     {

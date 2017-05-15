@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #pragma warning(pop)
 #include <QMessageBox>
+#include <QSettings>
 #include "controller.h"
 #include "localcapso.h"
 #include "localsettingsdialog.h"
@@ -209,7 +210,15 @@ void Controller::exportBitmap()
 
 void Controller::updateSettings()
 {
-    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.xml", mCurrFileName))
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
+    QString path = settings.value("ResultsPath").toString();
+
+    if(path != "")
+    {
+        mCurrFileName = path;
+    }
+
+    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.xml"))
     {
         QMessageBox::critical(this, "Error!", "The settings file cannot be loaded");
     }
@@ -278,8 +287,7 @@ void Controller::initializeSettings()
 
     if(!QFile::exists("settings.xml"))
     {
-        if(!util::writeSettings(QCoreApplication::applicationDirPath() +
-                            "/" + "results.txt"))
+        if(!util::writeSettings())
         {
             QMessageBox::critical(this, "Error!", "Cannot write settings");
         }
