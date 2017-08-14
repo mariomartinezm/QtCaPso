@@ -45,20 +45,52 @@ list<shared_ptr<Particle>>::iterator Swarm::end()
     return mParticles.end();
 }
 
+//void Swarm::initialize(int size)
+//{
+//    mParticles.clear();
+
+//    for(int i = 0; i < size; i++)
+//    {
+//        auto particle = make_shared<Particle>();
+//        particle->position.row = mRandom.GetRandomInt(0, mHeight - 1);
+//        particle->position.col = mRandom.GetRandomInt(0, mWidth - 1);
+//        particle->bestPosition.row = mRandom.GetRandomInt(0, mHeight - 1);
+//        particle->bestPosition.col = mRandom.GetRandomInt(0, mWidth - 1);
+//        particle->timeSinceLastMeal = 0;
+
+//        mParticles.push_back(particle);
+//    }
+//}
+
 void Swarm::initialize(int size)
 {
     mParticles.clear();
 
-    for(int i = 0; i < size; i++)
-    {
-        auto particle = make_shared<Particle>();
-        particle->position.row = mRandom.GetRandomInt(0, mHeight - 1);
-        particle->position.col = mRandom.GetRandomInt(0, mWidth - 1);
-        particle->bestPosition.row = mRandom.GetRandomInt(0, mHeight - 1);
-        particle->bestPosition.col = mRandom.GetRandomInt(0, mWidth - 1);
-        particle->timeSinceLastMeal = 0;
+    auto particle = make_shared<Particle>();
+    particle->position.row = mHeight / 2;
+    particle->position.col = mWidth  / 2;
+    particle->bestPosition.row = mRandom.GetRandomInt(0, mHeight - 1);
+    particle->bestPosition.col = mRandom.GetRandomInt(0, mWidth  - 1);
+    particle->timeSinceLastMeal = 0;
 
-        mParticles.push_back(particle);
+    mParticles.push_back(particle);
+
+    const unsigned int radius = 10;
+
+    for(unsigned int i = 0; i < size - 1; i++)
+    {
+        // Get an offset
+        unsigned int row = mRandom.GetRandomInt(-radius, radius);
+        unsigned int col = mRandom.GetRandomInt(-radius, radius);
+
+        auto neighbor = make_shared<Particle>();
+        neighbor->position.row = particle->position.row + row;
+        neighbor->position.col = particle->position.row + col;
+        neighbor->bestPosition.row = particle->bestPosition.row;
+        neighbor->bestPosition.col = particle->bestPosition.col;
+        neighbor->timeSinceLastMeal = 0;
+
+        mParticles.push_back(neighbor);
     }
 }
 
