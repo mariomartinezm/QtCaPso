@@ -7,7 +7,7 @@
 #include "swarm.h"
 #include "util.h"
 
-class LocalCaPso : public CellularAutomaton
+class LocalCaPso final : public CellularAutomaton
 {
 public:
     enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
@@ -16,12 +16,12 @@ public:
 
     LocalCaPso(int width, int height);
 
-    void initialize();
+    void initialize() override;
+    virtual void clear() override;
+    void nextGen() override;
 
-    void nextGen();
-
-    void setPreyInitialDensity(float value);
     void setPreyCompetitionFactor(float value);
+    void setPreyInitialDensity(float value);
     void setPreyReproductiveCapacity(int value);
     void setPreyReproductionRadius(int value);
     void setPredatorReproductiveCapacity(int value);
@@ -44,47 +44,11 @@ public:
     float predatorDeathProbability() const;
     int currentStage() const;
 
-    virtual void clear();
-
 private:
     LocalCaPso(const LocalCaPso&);
     LocalCaPso& operator=(const LocalCaPso&);
 
 private:
-    // Containers
-    std::vector<unsigned char> mPreyDensities;
-    std::vector<unsigned char> mTemp;
-
-    Swarm mPredatorSwarm;
-
-    int mNumberOfPreys, mNumberOfPredators;
-    float mPreyBirthRate, mPredatorBirthRate;
-    float mPreyDeathProbability, mPredatorDeathProbability;
-    int mCurrentStage;
-
-    RandomNumber mRandom;
-
-    // A function pointer that handles transitions
-    void (LocalCaPso::*mNextStage)();
-
-    // Model parameters
-    double mPreyInitialDensity;
-    double mPreyCompetitionFactor;
-    int mPreyReproductiveCapacity;
-    int mPreyReproductionRadius;
-    int mPredatorReproductiveCapacity;
-    int mPredatorReproductionRadius;
-    int mFitnessRadius;
-    int NEIGHBORHOOD_SIZE;
-
-    // PSO parameters
-    int mPredatorInitialSwarmSize;
-    int mPredatorMigrationTime;
-    int mPredatorMigrationCount;
-    float mPredatorInitialInertiaWeight;
-    float mPredatorFinalInertiaWeight;
-    const float INERTIA_STEP;
-
     // Model stages
     void competitionOfPreys();
     void migration();
@@ -99,6 +63,45 @@ private:
     bool checkState(int address, State state);
     void setState(int address, State state);
     void clearState(int address, State state);
+
+    // Containers
+    std::vector<unsigned char> mPreyDensities;
+    std::vector<unsigned char> mTemp;
+
+    Swarm mPredatorSwarm;
+
+    // Metrics
+    int mNumberOfPreys              { 0 };
+    int mNumberOfPredators          { 0 };
+    float mPreyBirthRate            { 0.0f };
+    float mPredatorBirthRate        { 0.0f };
+    float mPreyDeathProbability     { 0.0f };
+    float mPredatorDeathProbability { 0.0f };
+    int mCurrentStage               { COMPETITION };
+
+    RandomNumber mRandom;
+
+    // A function pointer that handles transitions
+    void (LocalCaPso::*mNextStage)();
+
+    // Model parameters
+    double mPreyInitialDensity        { 0.0 };
+    double mPreyCompetitionFactor     { 0.3 };
+    int mPreyReproductiveCapacity     { 10 };
+    int mPreyReproductionRadius       { 2 };
+    int mPredatorReproductiveCapacity { 10 };
+    int mPredatorReproductionRadius   { 2 };
+    int mFitnessRadius                { 3 };
+    int NEIGHBORHOOD_SIZE             { (2 * mFitnessRadius + 1) * (2 * mFitnessRadius + 1) - 1 };
+
+    // PSO parameters
+    int mPredatorInitialSwarmSize       { 3 };
+    int mPredatorMigrationTime          { 5 };
+    int mPredatorMigrationCount         { 0 };
+    float mPredatorInitialInertiaWeight { 0.9f };
+    float mPredatorFinalInertiaWeight   { 0.2f };
+    const float INERTIA_STEP            { (mPredatorInitialInertiaWeight - mPredatorFinalInertiaWeight) /
+                                            mPredatorMigrationTime };
 };
 
 #endif // CAPSO_H

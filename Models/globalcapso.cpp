@@ -138,7 +138,7 @@ void GlobalCaPso::initialize()
     {
         if(auto p = wp.lock())
         {
-            setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
+            setState(getAddress(p->position.row, p->position.col), PREDATOR);
 
             mNumberOfPredators++;
         }
@@ -162,26 +162,26 @@ void GlobalCaPso::initialize()
 
     // Obtain the starting best position known by the swarm
     auto it = mPredatorSwarm.begin();
-    mBestPosition.setRow((*it)->bestPosition().row());
-    mBestPosition.setCol((*it)->bestPosition().col());
+    mBestPosition.row = (*it)->bestPosition.row;
+    mBestPosition.col = (*it)->bestPosition.col;
 
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
-            if(mPreyDensities[getAddress(pRow, pCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
+            if(mPreyDensities[getAddress(pRow, pCol)] > mPreyDensities[getAddress(mBestPosition.row, mBestPosition.col)])
             {
-                mBestPosition.setRow(pRow);
-                mBestPosition.setCol(pCol);
+                mBestPosition.row = pRow;
+                mBestPosition.col = pCol;
             }
         }
     });
 
     // Render the best position
-    setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+    setState(getAddress(mBestPosition.row, mBestPosition.col), BEST);
 
     // Reset the migration counter
     mMigrationCount = 0;
@@ -275,8 +275,8 @@ void GlobalCaPso::migration()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             // Clear the previous cell
             clearState(getAddress(pRow, pCol), PREDATOR);
@@ -284,18 +284,18 @@ void GlobalCaPso::migration()
             double r1 = mRandom.GetRandomFloat();
             double r2 = mRandom.GetRandomFloat();
 
-            int currentVelRow = p->velocity().row();
-            int currentVelCol = p->velocity().col();
+            int currentVelRow = p->velocity.row;
+            int currentVelCol = p->velocity.col;
 
             validateVector(currentVelRow, currentVelCol);
 
-            int cognitiveVelRow = p->bestPosition().row() - pRow;
-            int cognitiveVelCol = p->bestPosition().col() - pCol;
+            int cognitiveVelRow = p->bestPosition.row - pRow;
+            int cognitiveVelCol = p->bestPosition.col - pCol;
 
             validateVector(cognitiveVelRow, cognitiveVelCol);
 
-            int globalVelRow = mBestPosition.row() - pRow;
-            int globalVelCol = mBestPosition.col() - pCol;
+            int globalVelRow = mBestPosition.row - pRow;
+            int globalVelCol = mBestPosition.col - pCol;
 
             validateVector(globalVelRow, globalVelCol);
 
@@ -325,8 +325,10 @@ void GlobalCaPso::migration()
             posRow = (mHeight + posRow) % mHeight;
             posCol = (mWidth + posCol) % mWidth;
 
-            p->setPosition(posRow, posCol);
-            p->setVelocity(velRow, velCol);
+            p->position.row = posRow;
+            p->position.col = posCol;
+            p->velocity.row = velRow;
+            p->velocity.col = velCol;
 
             // Render the particle at its new position
             setState(getAddress(posRow, posCol), PREDATOR);
@@ -334,7 +336,8 @@ void GlobalCaPso::migration()
             // If necessary, update the particle's best know position
             if(mPreyDensities[getAddress(pRow, pCol)] < mPreyDensities[getAddress(posRow, posCol)])
             {
-                p->setBestPosition(posRow, posCol);
+                p->bestPosition.row = posRow;
+                p->bestPosition.col = posCol;
             }
         }
     });
@@ -363,8 +366,8 @@ void GlobalCaPso::reproductionOfPredators()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             int birthCount = 0;
 
@@ -409,8 +412,10 @@ void GlobalCaPso::reproductionOfPredators()
                 {
                     // Create a new particle
                     auto particle = make_shared<Particle>();
-                    particle->setPosition(finalRow, finalCol);
-                    particle->setBestPosition(p->bestPosition().row(), p->bestPosition().col());
+                    particle->position.row = finalRow;
+                    particle->position.col = finalCol;
+                    particle->bestPosition.row = p->bestPosition.row;
+                    particle->bestPosition.col = p->bestPosition.col;
 
                     setState(getAddress(finalRow, finalCol), PREDATOR);
 
@@ -435,7 +440,7 @@ void GlobalCaPso::predatorsDeath()
 
     for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
     {
-        currentAddress = getAddress((*it)->position().row(), (*it)->position().col());
+        currentAddress = getAddress((*it)->position.row, (*it)->position.col);
 
         if(!checkState(currentAddress, PREY))
         {
@@ -458,8 +463,8 @@ void GlobalCaPso::predation()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             int currentAddress = getAddress(pRow, pCol);
 
@@ -479,29 +484,29 @@ void GlobalCaPso::predation()
     {
         // After feeding the current best position becomes invalidated, obtain a new one,
         // but first delete the original.
-        clearState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+        clearState(getAddress(mBestPosition.row, mBestPosition.col), BEST);
 
         auto it = mPredatorSwarm.begin();
-        mBestPosition.setRow((*it)->bestPosition().row());
-        mBestPosition.setCol((*it)->bestPosition().col());
+        mBestPosition.row = (*it)->bestPosition.row;
+        mBestPosition.col = (*it)->bestPosition.col;
 
         for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
         {
             if(auto p = wp.lock())
             {
-                int pBestRow = p->bestPosition().row();
-                int pBestCol = p->bestPosition().col();
+                int pBestRow = p->bestPosition.row;
+                int pBestCol = p->bestPosition.col;
 
-                if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
+                if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row, mBestPosition.col)])
                 {
-                    mBestPosition.setRow(pBestRow);
-                    mBestPosition.setCol(pBestCol);
+                    mBestPosition.row = pBestRow;
+                    mBestPosition.col = pBestCol;
                 }
             }
         });
 
         // Render the best position
-        setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+        setState(getAddress(mBestPosition.row, mBestPosition.col), BEST);
     }
 
     mNextStage = &GlobalCaPso::reproductionOfPreys;
@@ -515,8 +520,8 @@ void GlobalCaPso::predation2()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             for(int nRow = pRow - 1; nRow <= pRow + 1; nRow++)
             {
@@ -545,29 +550,29 @@ void GlobalCaPso::predation2()
     {
         // After feeding the current best position becomes invalidated, obtain a new one,
         // but first delete the original.
-        clearState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+        clearState(getAddress(mBestPosition.row, mBestPosition.col), BEST);
 
         auto it = mPredatorSwarm.begin();
-        mBestPosition.setRow((*it)->bestPosition().row());
-        mBestPosition.setCol((*it)->bestPosition().col());
+        mBestPosition.row = (*it)->bestPosition.row;
+        mBestPosition.col = (*it)->bestPosition.col;
 
         for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
         {
             if(auto p = wp.lock())
             {
-                int pBestRow = p->bestPosition().row();
-                int pBestCol = p->bestPosition().col();
+                int pBestRow = p->bestPosition.row;
+                int pBestCol = p->bestPosition.col;
 
-                if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row(), mBestPosition.col())])
+                if(mPreyDensities[getAddress(pBestRow, pBestCol)] > mPreyDensities[getAddress(mBestPosition.row, mBestPosition.col)])
                 {
-                    mBestPosition.setRow(pBestRow);
-                    mBestPosition.setCol(pBestCol);
+                    mBestPosition.row = pBestRow;
+                    mBestPosition.col = pBestCol;
                 }
             }
         });
 
         // Render the best position
-        setState(getAddress(mBestPosition.row(), mBestPosition.col()), BEST);
+        setState(getAddress(mBestPosition.row, mBestPosition.col), BEST);
     }
 
     mNextStage = &GlobalCaPso::reproductionOfPreys;

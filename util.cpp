@@ -10,8 +10,7 @@
 
 namespace util
 {
-    bool loadSettings(CellularAutomaton* ca, CaType type, QString settingsFilename,
-                      QString& currFilename)
+    bool loadSettings(CellularAutomaton* ca, CaType type, QString settingsFilename)
     {
         QFile settingsFile;
         settingsFile.setFileName(settingsFilename);
@@ -121,10 +120,6 @@ namespace util
 
                         local->setPredatorFinalInertiaWeight(value.toFloat());
                     }
-                    else if(elementName == "resultsFilePath")
-                    {
-                        currFilename = reader.readElementText();
-                    }
                 }
             }
             break;
@@ -146,7 +141,7 @@ namespace util
     }
 
 
-    bool writeSettings(QString filename, CaType type, float psi0, float alpha,
+    bool writeSettings(CaType type, float psi0, float alpha,
                        int ry, int ey, int rc, int z0, float k1, float k2,
                        int maxSpeed, int ez, int rz, int l, float omegaStart,
                        float omegaEnd)
@@ -191,7 +186,6 @@ namespace util
         writer.writeTextElement("predatorSocialRadius", QString::number(l));
         writer.writeTextElement("initialInertiaWeight", QString::number(omegaStart));
         writer.writeTextElement("finalInertiaWeight", QString::number(omegaEnd));
-        writer.writeTextElement("resultsFilePath", filename);
         writer.writeEndElement();
         writer.writeEndDocument();
 
@@ -204,7 +198,7 @@ namespace util
     {
         path = QFileDialog::getExistingDirectory(NULL,
                                                  QObject::tr("Select a folder"),
-                                                 QCoreApplication::applicationDirPath() + QDir::separator(),
+                                                 QCoreApplication::applicationDirPath() + "/",
                                                  QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
         if(path.isEmpty())
         {
@@ -216,7 +210,7 @@ namespace util
 
     bool getFileFromDialog(QString& file, QString filter)
     {
-        QString appDir = QCoreApplication::applicationDirPath() + QDir::separator();
+        QString appDir = QCoreApplication::applicationDirPath() + "/";
 
         file = QFileDialog::getOpenFileName(NULL, QObject::tr("Select a file"),
                                             appDir, filter, 0, 0);

@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #pragma warning(pop)
 #include <QMessageBox>
+#include <QSettings>
 #include "controller.h"
 #include "localcapso.h"
 #include "localsettingsdialog.h"
@@ -10,7 +11,7 @@
 #include "globalcapso.h"
 #include "util.h"
 
-Controller::Controller(QWidget *parent, Qt::WFlags flags)
+Controller::Controller(QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags),
     mCurrentType(LOCAL),
     mCurrFileName("results.txt"),
@@ -21,8 +22,8 @@ Controller::Controller(QWidget *parent, Qt::WFlags flags)
     mSeasonLength(10),
     mPreyCountBeforeReproduction(0),
     mPredatorCountBeforeReproduction(0),
-    mPreyCountBeforePredatorDeath(0),
-    mPredatorCountBeforePreyDeath(0)
+    mPredatorCountBeforePreyDeath(0),
+    mPreyCountBeforePredatorDeath(0)
 {
     this->setupUi(this);
 
@@ -198,7 +199,7 @@ void Controller::showBatchDialog()
 void Controller::exportBitmap()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Export Bitmap",
-        QCoreApplication::applicationDirPath() + QDir::separator() +
+        QCoreApplication::applicationDirPath() + "/" +
         "lattice.PNG", tr("PNG (*.PNG);;JPG (*.jpg);; TIFF (*.tiff)"));
 
     if(!fileName.isEmpty())
@@ -209,7 +210,15 @@ void Controller::exportBitmap()
 
 void Controller::updateSettings()
 {
-    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.xml", mCurrFileName))
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
+    QString path = settings.value("ResultsPath").toString();
+
+    if(path != "")
+    {
+        mCurrFileName = path;
+    }
+
+    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.xml"))
     {
         QMessageBox::critical(this, "Error!", "The settings file cannot be loaded");
     }
@@ -218,7 +227,7 @@ void Controller::updateSettings()
 void Controller::exportSettings()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Export current settings",
-        QCoreApplication::applicationDirPath() + QDir::separator() + "settings.xml", tr("xml (*.xml)"));
+        QCoreApplication::applicationDirPath() + "/" + "settings.xml", tr("xml (*.xml)"));
 
     if(!fileName.isEmpty())
     {
@@ -278,8 +287,7 @@ void Controller::initializeSettings()
 
     if(!QFile::exists("settings.xml"))
     {
-        if(!util::writeSettings(QCoreApplication::applicationDirPath() +
-                            QDir::separator() + "results.txt"))
+        if(!util::writeSettings())
         {
             QMessageBox::critical(this, "Error!", "Cannot write settings");
         }
@@ -389,6 +397,12 @@ void Controller::writeResults()
                               mPredatorCountBeforePreyDeath << " " <<
                               local->preyDeathProbability() << "\n";
         }
+        break;
+
+    case GLOBAL:
+        break;
+
+    case MOVEMENT:
         break;
     }
 }

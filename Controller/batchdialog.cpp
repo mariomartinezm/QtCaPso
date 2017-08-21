@@ -15,8 +15,7 @@ BatchDialog::BatchDialog(QWidget *parent, CaType type) :
 {
     this->setupUi(this);
 
-    lineEditPath->setText(QCoreApplication::applicationDirPath() +
-                          QDir::separator());
+    lineEditPath->setText(QCoreApplication::applicationDirPath() + "/");
 
     buttonStart->setAutoDefault(false);
     buttonStart->setEnabled(false);
@@ -91,7 +90,7 @@ void BatchDialog::on_buttonBrowse_clicked()
 
     if(util::getPathFromDialog(path))
     {
-        lineEditPath->setText(path + QDir::separator());
+        lineEditPath->setText(path + "/");
     }
 }
 
@@ -113,10 +112,7 @@ void BatchDialog::processItem(BatchItem& batchItem)
 {
     LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
 
-    // Dummy variable to call load settings, since the obtained path is
-    // ignored
-    QString path;
-    util::loadSettings(localCaPso, LOCAL, batchItem.settingsFile(), path);
+    util::loadSettings(localCaPso, LOCAL, batchItem.settingsFile());
 
     for (int simCount = 0; simCount < batchItem.numberOfSimulations(); simCount++)
     {

@@ -34,7 +34,7 @@ public:
     std::list<std::shared_ptr<Particle>>::iterator begin();
     std::list<std::shared_ptr<Particle>>::iterator end();
 
-    void initialize(int size);
+    void initialize(unsigned int size);
     void nextGen();
 
     void add(std::list<std::shared_ptr<Particle>>& newParticles);

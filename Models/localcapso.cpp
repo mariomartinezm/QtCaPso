@@ -19,31 +19,7 @@ LocalCaPso::LocalCaPso(int width, int height)
     mTemp(width * height),
     mPredatorSwarm(1.0f, 2.0f, 0.9f, 10, 3,
                    mLattice, mPreyDensities, mTemp,
-                   width, height, PREDATOR, mRandom),
-    mNumberOfPreys(0),
-    mNumberOfPredators(0),
-    mPreyBirthRate(0.0f),
-    mPredatorBirthRate(0.0f),
-    mPreyDeathProbability(0.0f),
-    mPredatorDeathProbability(0.0f),
-    mCurrentStage(COMPETITION),
-    // Model paremeters
-    mPreyInitialDensity(0.3),
-    mPreyCompetitionFactor(0.3),
-    mPreyReproductiveCapacity(10),
-    mPreyReproductionRadius(2),
-    mPredatorReproductiveCapacity(10),
-    mPredatorReproductionRadius(2),
-    mFitnessRadius(3),
-    NEIGHBORHOOD_SIZE((2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1),
-    // Pso parameters
-    mPredatorInitialSwarmSize(3),
-    mPredatorMigrationTime(5),
-    mPredatorMigrationCount(0),
-    mPredatorInitialInertiaWeight(0.9f),
-    mPredatorFinalInertiaWeight(0.2f),
-    INERTIA_STEP((mPredatorInitialInertiaWeight - mPredatorFinalInertiaWeight) /
-                 mPredatorMigrationTime)
+                   width, height, PREDATOR, mRandom)
 {
     initialize();
 }
@@ -60,7 +36,7 @@ void LocalCaPso::initialize()
     {
         if(auto p = wp.lock())
         {
-            setState(getAddress(p->position().row(), p->position().col()), PREDATOR);
+            setState(getAddress(p->position.row, p->position.col), PREDATOR);
 
             mNumberOfPredators++;
         }
@@ -293,8 +269,8 @@ void LocalCaPso::reproductionOfPredators()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             int birthCount = 0;
 
@@ -339,8 +315,10 @@ void LocalCaPso::reproductionOfPredators()
                 {
                     // Create a new particle
                     auto particle = make_shared<Particle>();
-                    particle->setPosition(finalRow, finalCol);
-                    particle->setBestPosition(p->bestPosition().row(), p->bestPosition().col());
+                    particle->position.row = finalRow;
+                    particle->position.col = finalCol;
+                    particle->bestPosition.row = p->bestPosition.row;
+                    particle->bestPosition.col = p->bestPosition.col;
 
                     setState(getAddress(finalRow, finalCol), PREDATOR);
 
@@ -372,7 +350,7 @@ void LocalCaPso::predatorsDeath()
 
     for(auto it = mPredatorSwarm.begin(); it != mPredatorSwarm.end();)
     {
-        currentAddress = getAddress((*it)->position().row(), (*it)->position().col());
+        currentAddress = getAddress((*it)->position.row, (*it)->position.col);
 
         if(!checkState(currentAddress, PREY))
         {
@@ -407,8 +385,8 @@ void LocalCaPso::predation()
     {
         if(auto p = wp.lock())
         {
-            int pRow = p->position().row();
-            int pCol = p->position().col();
+            int pRow = p->position.row;
+            int pCol = p->position.col;
 
             int currentAddress = getAddress(pRow, pCol);
 
