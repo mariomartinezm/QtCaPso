@@ -415,8 +415,8 @@ void LocalCaPso::reproductionOfPreys()
 {
     std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
-    int finalRow, finalCol, neighbourAddress;
-    int birthCount, initialNumberOfPreys = mNumberOfPreys;
+    int initialNumberOfPreys = mNumberOfPreys;
+    float birthProbability = 0.2f;
 
     for(int row = 0; row < mHeight; row++)
     {
@@ -424,49 +424,20 @@ void LocalCaPso::reproductionOfPreys()
         {
             if(mTemp[getAddress(row, col)] & PREY)
             {
-                birthCount = 0;
-
-                while(birthCount < mPreyReproductiveCapacity)
+                if(mRandom.GetRandomFloat() < birthProbability)
                 {
                     // Obtain an offset
-                    finalRow = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
-                    finalCol = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
-
-                    if(finalRow == 0 && finalCol == 0)
-                    {
-                        continue;
-                    }
+                    int finalRow = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
+                    int finalCol = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
 
                     // Get relative coordinates
                     finalRow += row;
                     finalCol += col;
 
-                    // Get final coordinates
-                    if (finalRow < 0 && finalCol < 0)
-                    {
-                        finalRow = mHeight + finalRow % mHeight;
-                        finalCol = mWidth + finalCol % mWidth;
-                    }
-                    else if (finalRow < 0 && finalCol >= 0)
-                    {
-                        finalRow = mHeight + finalRow % mHeight;
-                        finalCol = finalCol % mWidth;
-                    }
-                    else if (finalRow >= 0 && finalCol < 0)
-                    {
-                        finalRow = finalRow % mHeight;
-                        finalCol = mWidth + finalCol % mHeight;
-                    }
-                    else
-                    {
-                        finalRow = finalRow % mHeight;
-                        finalCol = finalCol % mWidth;
-                    }
+                    finalRow = (mWidth + finalRow) % mWidth;
+                    finalCol = (mHeight + finalCol) % mHeight;
 
-                    /*finalRow = (mWidth + finalRow) % mWidth;
-                    finalCol = (mHeight + finalCol) % mHeight;*/
-
-                    neighbourAddress = getAddress(finalRow, finalCol);
+                    int neighbourAddress = getAddress(finalRow, finalCol);
 
                     if(!(mLattice[neighbourAddress] & PREY))
                     {
@@ -476,20 +447,97 @@ void LocalCaPso::reproductionOfPreys()
 
                         mNumberOfPreys++;
                     }
-
-                    birthCount++;
                 }
             }
         }
     }
 
     int numberOfBirths = mNumberOfPreys - initialNumberOfPreys;
-
     mPreyBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
 
     mNextStage = &LocalCaPso::competitionOfPreys;
     mCurrentStage = COMPETITION;
 }
+
+//void LocalCaPso::reproductionOfPreys()
+//{
+//    std::copy(mLattice.begin(), mLattice.end(), mTemp.begin());
+
+//    int finalRow, finalCol, neighbourAddress;
+//    int birthCount, initialNumberOfPreys = mNumberOfPreys;
+
+//    for(int row = 0; row < mHeight; row++)
+//    {
+//        for(int col = 0; col < mWidth; col++)
+//        {
+//            if(mTemp[getAddress(row, col)] & PREY)
+//            {
+//                birthCount = 0;
+
+//                while(birthCount < mPreyReproductiveCapacity)
+//                {
+//                    // Obtain an offset
+//                    finalRow = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
+//                    finalCol = mRandom.GetRandomInt(-mPreyReproductionRadius, mPreyReproductionRadius);
+
+//                    if(finalRow == 0 && finalCol == 0)
+//                    {
+//                        continue;
+//                    }
+
+//                    // Get relative coordinates
+//                    finalRow += row;
+//                    finalCol += col;
+
+//                    // Get final coordinates
+//                    if (finalRow < 0 && finalCol < 0)
+//                    {
+//                        finalRow = mHeight + finalRow % mHeight;
+//                        finalCol = mWidth + finalCol % mWidth;
+//                    }
+//                    else if (finalRow < 0 && finalCol >= 0)
+//                    {
+//                        finalRow = mHeight + finalRow % mHeight;
+//                        finalCol = finalCol % mWidth;
+//                    }
+//                    else if (finalRow >= 0 && finalCol < 0)
+//                    {
+//                        finalRow = finalRow % mHeight;
+//                        finalCol = mWidth + finalCol % mHeight;
+//                    }
+//                    else
+//                    {
+//                        finalRow = finalRow % mHeight;
+//                        finalCol = finalCol % mWidth;
+//                    }
+
+//                    /*finalRow = (mWidth + finalRow) % mWidth;
+//                    finalCol = (mHeight + finalCol) % mHeight;*/
+
+//                    neighbourAddress = getAddress(finalRow, finalCol);
+
+//                    if(!(mLattice[neighbourAddress] & PREY))
+//                    {
+//                        mLattice[neighbourAddress] |= PREY;
+
+//                        notifyNeighbors(finalRow, finalCol, false);
+
+//                        mNumberOfPreys++;
+//                    }
+
+//                    birthCount++;
+//                }
+//            }
+//        }
+//    }
+
+//    int numberOfBirths = mNumberOfPreys - initialNumberOfPreys;
+
+//    mPreyBirthRate = static_cast<float>(numberOfBirths) / mLattice.size();
+
+//    mNextStage = &LocalCaPso::competitionOfPreys;
+//    mCurrentStage = COMPETITION;
+//}
 
 void LocalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
 {
