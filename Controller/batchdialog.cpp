@@ -119,7 +119,7 @@ void BatchDialog::processItem(BatchItem& batchItem)
         // Create results file
         QFile resultsFile(batchItem.resultsPath() +
                           batchItem.filenamePrefix() + "_" +
-                          QString::number(simCount) + ".txt");
+                          QString::number(simCount) + ".csv");
 
         QTextStream resultsStream(&resultsFile);
         resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |
@@ -131,6 +131,19 @@ void BatchDialog::processItem(BatchItem& batchItem)
         int predatorCountBeforeReproduction = 0;
         int preyCountBeforePredatorDeath = 0;
         int predatorCountBeforePreyDeath = 0;
+
+        // Write header containing columns names
+        resultsStream << "Season," <<
+                          "Preys," <<
+                          "Predators," <<
+                          "PreyCountBeforeReproduction," <<
+                          "PreyBirthRate," <<
+                          "PredatorCountBeforeReproduction," <<
+                          "PredatorBirthRate," <<
+                          "PreyCountBeforePredatorDeath," <<
+                          "PredatorDeathProbability," <<
+                          "PredatorCountBeforePreyDeath," <<
+                          "PreyDeathProbability\n";
 
         for(int genCount = 0; genCount < batchItem.numberOfSeasons() * 10; genCount++)
         {
@@ -152,16 +165,16 @@ void BatchDialog::processItem(BatchItem& batchItem)
 
             if(!(genCount % 10))
             {
-                resultsStream << genCount / 10 << " " <<
-                                 localCaPso->numberOfPreys() << " " <<
-                                 localCaPso->numberOfPredators() << " " <<
-                                 preyCountBeforeReproduction << " " <<
-                                 localCaPso->preyBirthRate() << " " <<
-                                 predatorCountBeforeReproduction << " " <<
-                                 localCaPso->predatorBirthRate() << " " <<
-                                 preyCountBeforePredatorDeath << " " <<
-                                 localCaPso->predatorDeathProbability() << " " <<
-                                 predatorCountBeforePreyDeath << " " <<
+                resultsStream << genCount / 10 << "," <<
+                                 localCaPso->numberOfPreys() << "," <<
+                                 localCaPso->numberOfPredators() << "," <<
+                                 preyCountBeforeReproduction << "," <<
+                                 localCaPso->preyBirthRate() << "," <<
+                                 predatorCountBeforeReproduction << "," <<
+                                 localCaPso->predatorBirthRate() << "," <<
+                                 preyCountBeforePredatorDeath << "," <<
+                                 localCaPso->predatorDeathProbability() << "," <<
+                                 predatorCountBeforePreyDeath << "," <<
                                  localCaPso->preyDeathProbability() << "\n";
             }
 
