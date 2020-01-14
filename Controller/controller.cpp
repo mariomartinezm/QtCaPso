@@ -14,7 +14,7 @@
 Controller::Controller(QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags),
     mCurrentType(LOCAL),
-    mCurrFileName("results.txt"),
+    mCurrFileName("results.csv"),
     mResultsFile(mCurrFileName),
     mResultsStream(&mResultsFile),
     mTimerId(-1),
@@ -376,6 +376,19 @@ void Controller::initializeResultsFile()
     mResultsFile.setFileName(mCurrFileName);
     mResultsFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
     mResultsStream.seek(0);
+
+    // Write header containing columns names
+    mResultsStream << "Season," <<
+                      "Preys," <<
+                      "Predators," <<
+                      "PreyCountBeforeReproduction," <<
+                      "PreyBirthRate," <<
+                      "PredatorCountBeforeReproduction," <<
+                      "PredatorBirthRate," <<
+                      "PreyCountBeforePredatorDeath," <<
+                      "PredatorDeathProbability," <<
+                      "PredatorCountBeforePreyDeath," <<
+                      "PreyDeathProbability\n";
 }
 
 void Controller::writeResults()
@@ -385,16 +398,16 @@ void Controller::writeResults()
     case LOCAL:
         {
             auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
-            mResultsStream << mTimerCount / mSeasonLength << " " <<
-                              local->numberOfPreys() << " " <<
-                              local->numberOfPredators() << " " <<
-                              mPreyCountBeforeReproduction << " " <<
-                              local->preyBirthRate() << " " <<
-                              mPredatorCountBeforeReproduction << " " <<
-                              local->predatorBirthRate() << " " <<
-                              mPreyCountBeforePredatorDeath << " " <<
-                              local->predatorDeathProbability() << " " <<
-                              mPredatorCountBeforePreyDeath << " " <<
+            mResultsStream << mTimerCount / mSeasonLength << "," <<
+                              local->numberOfPreys() << "," <<
+                              local->numberOfPredators() << "," <<
+                              mPreyCountBeforeReproduction << "," <<
+                              local->preyBirthRate() << "," <<
+                              mPredatorCountBeforeReproduction << "," <<
+                              local->predatorBirthRate() << "," <<
+                              mPreyCountBeforePredatorDeath << "," <<
+                              local->predatorDeathProbability() << "," <<
+                              mPredatorCountBeforePreyDeath << "," <<
                               local->preyDeathProbability() << "\n";
         }
         break;

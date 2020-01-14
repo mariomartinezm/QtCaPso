@@ -32,7 +32,7 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
 
     if(resultsPath == "")
     {
-        resultsPath = QCoreApplication::applicationDirPath() + "/results.txt";
+        resultsPath = QCoreApplication::applicationDirPath() + "/results.csv";
     }
 
     lineEditPath->setText(resultsPath);
@@ -158,7 +158,7 @@ void LocalSettingsDialog::showFileDialog()
 
     if(!path.isEmpty())
     {
-        lineEditPath->setText(path + "/" + "results.txt");
+        lineEditPath->setText(path + "/" + "results.csv");
     }
 }
 
