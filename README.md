@@ -16,6 +16,7 @@ predators is governed by a local particle swarm optimization algorithm.
   * A compiler with C++ 14, (MinGW 7.3.0 64 bit on Windows, and gcc 7.4.0 on
     Linux have been tested).
   * Qt 5.12.2
+  * CMake 3.5
 
 ### Bulding with QtCreator
 
@@ -24,7 +25,8 @@ predators is governed by a local particle swarm optimization algorithm.
 $ git clone https://github.com/mariomartinezm/QtCaPso
 ```
 
-  2. Run QtCreator and open the project file *QtCaPso.pro*
+  2. Run QtCreator and open the project file *CMakeLists.txt* at the root of
+     the project.
 ```
 File > Open File or Project...
 ```
@@ -33,10 +35,10 @@ File > Open File or Project...
 
   4. Build the project.
 ```
-Build > Build All
+Build > Build All Projects
 ```
 
-### Building from source
+### Out of source build with CMake
 
   1. Clone the repository to a local directory:
 ```sh
@@ -44,16 +46,26 @@ $ git clone https://github.com/mariomartinezm/QtCaPso
 $ cd QtCaPso
 ```
 
-  2. Generate Makefile using ```qmake```:
+  2. `cd` into the repo and create directory `build`. `cd` into this directory.
 ```sh
-$ qmake QtCaPso.pro
+$ cd QtCaPso
+$ mkdir build
+$ cd build
+```
+
+  3. Generate Makefile using `CMake`. You might want to specify a build
+     type, e.g., `Debug` or `Release` using CMake's command line
+     options.
+```sh
+$ cmake ..
 ```
 
   3. Build the project
 ```sh
 $ make
 ```
-  4. The resulting QtCaPso executable will be located inside the *release* directory.
+  4. The resulting QtCaPso executable will be located inside the
+     `build/src/` directory.
 
 ### References
 <a id="1">[1]</a>
