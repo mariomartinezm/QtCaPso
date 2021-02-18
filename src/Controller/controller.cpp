@@ -1,6 +1,4 @@
-#pragma warning(push, 3)
 #include <QFileDialog>
-#pragma warning(pop)
 #include <QMessageBox>
 #include <QSettings>
 #include "controller.h"

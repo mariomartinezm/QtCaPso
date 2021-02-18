@@ -1,12 +1,9 @@
 #ifndef GLOBALSETTINGSDIALOG_H
 #define GLOBALSETTINGSDIALOG_H
 
-#pragma warning(push, 3)
-#pragma warning(disable:4251)
 #include <QDialog>
 #include <QMap>
 #include "ui_globalsettingsdialog.h"
-#pragma warning(pop)
 
 class GlobalSettingsDialog : public QDialog, private Ui::GlobalSettingsDialog
 {
