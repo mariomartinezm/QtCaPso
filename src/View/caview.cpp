@@ -1,8 +1,6 @@
-#pragma warning(push, 3)
 #include <QPainter>
 #include <QColor>
 #include <QWidget>
-#pragma warning(pop)
 #include "caview.h"
 
 CaView::CaView(unsigned char* latticeData, const int& width,

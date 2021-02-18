@@ -1,8 +1,6 @@
-#pragma warning(push, 3)
 #include <QFileDialog>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#pragma warning(pop)
 #include <QMessageBox>
 #include <QSettings>
 #include "localsettingsdialog.h"
