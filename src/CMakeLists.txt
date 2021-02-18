@@ -34,7 +34,7 @@ set(PROJECT_SOURCES
         Controller/controller.qrc
 )
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SOURCES})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE Controller
