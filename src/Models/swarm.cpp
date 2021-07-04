@@ -255,13 +255,8 @@ void Swarm::add(list<shared_ptr<Particle>>& newParticles)
     mParticles.insert(mParticles.end(), newParticles.begin(), newParticles.end());
 }
 
-#if defined(Q_OS_LINUX) || defined (__MINGW32__)
 list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator Swarm::erase(list<shared_ptr<Particle>,
         std::allocator<shared_ptr<Particle>>>::iterator it)
-#else
-list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator Swarm::erase(list<shared_ptr<Particle>,
-        std::allocator<shared_ptr<Particle>>>::const_iterator it)
-#endif
 {
     return mParticles.erase(it);
 }
