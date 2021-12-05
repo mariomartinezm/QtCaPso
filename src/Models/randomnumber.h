@@ -1,18 +1,20 @@
 #ifndef RANDOMNUMBER_H
 #define RANDOMNUMBER_H
 
-#include<random>
+#include <random>
+#include "pcg_random.hpp"
 
 class RandomNumber
 {
 public:
     RandomNumber();
+    ~RandomNumber();
+
     float GetRandomFloat();
     int GetRandomInt(int min, int max);
 
 private:
-    // Use the c++0x implementation of the Mersenne twister RNG
-    std::mt19937 mRNG;
+    pcg32* mRNG;
     std::uniform_real_distribution<float> mRealDistribution;
 };
 
