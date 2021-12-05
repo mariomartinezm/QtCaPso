@@ -9,6 +9,19 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Concurrent REQUIRED)
 
+include(FetchContent)
+
+FetchContent_Declare(pcg-cpp
+    GIT_REPOSITORY https://github.com/imneme/pcg-cpp
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+)
+
+FetchContent_MakeAvailable(pcg-cpp)
+
+add_library(pcg-cpp INTERFACE)
+target_include_directories(pcg-cpp INTERFACE "$<BUILD_INTERFACE:${pcg-cpp_SOURCE_DIR}>/include")
+
 set(PROJECT_SOURCES
         main.cpp
         util.cpp
@@ -44,3 +57,4 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)
+target_link_libraries(${PROJECT_NAME} PRIVATE pcg-cpp)
