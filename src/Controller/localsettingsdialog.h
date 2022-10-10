@@ -7,11 +7,11 @@
 
 class LocalSettingsDialog : public QDialog, private Ui::LocalSettingsDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     LocalSettingsDialog(QWidget* parent = 0);
-	~LocalSettingsDialog();
+    ~LocalSettingsDialog();
 
 signals:
     void settingsChanged();
@@ -20,8 +20,7 @@ protected:
     void showEvent(QShowEvent*);
 
 private slots:
-	void showFileDialog();
-	virtual void accept();
+    virtual void accept();
 };
 
 #endif // LOCALSETTINGSDIALOG_H

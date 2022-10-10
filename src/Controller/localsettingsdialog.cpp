@@ -1,4 +1,4 @@
-#include <QFileDialog>
+#include <QFile>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QMessageBox>
@@ -10,8 +10,6 @@ LocalSettingsDialog::LocalSettingsDialog(QWidget *parent)
     : QDialog(parent)
 {
     this->setupUi(this);
-
-    connect(pushButtonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 }
 
 LocalSettingsDialog::~LocalSettingsDialog()
@@ -24,16 +22,6 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
     // Populate the form
     QFile settingsFile;
     settingsFile.setFileName("settings.xml");
-
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
-    QString resultsPath = settings.value("ResultsPath").toString();
-
-    if(resultsPath == "")
-    {
-        resultsPath = QCoreApplication::applicationDirPath() + "/results.csv";
-    }
-
-    lineEditPath->setText(resultsPath);
 
     if(!settingsFile.open(QIODevice::ReadOnly))
     {
@@ -149,17 +137,6 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
     settingsFile.close();
 }
 
-void LocalSettingsDialog::showFileDialog()
-{
-    QString path = QFileDialog::getExistingDirectory(this, tr("Select a folder"),
-        QDir::separator() + QString("home"), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-
-    if(!path.isEmpty())
-    {
-        lineEditPath->setText(path + "/" + "results.csv");
-    }
-}
-
 void LocalSettingsDialog::accept()
 {
     if(!util::writeSettings(LOCAL,
@@ -180,9 +157,6 @@ void LocalSettingsDialog::accept()
     {
          QMessageBox::critical(this, "Error!", "Settings cannot be written");
     }
-
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
-    settings.setValue("ResultsPath", lineEditPath->text());
 
     emit settingsChanged();
 

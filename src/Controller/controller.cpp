@@ -1,6 +1,6 @@
+#include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QSettings>
 #include "controller.h"
 #include "localcapso.h"
 #include "localsettingsdialog.h"
@@ -12,8 +12,8 @@
 Controller::Controller(QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags),
     mCurrentType(LOCAL),
-    mCurrFileName("results.csv"),
-    mResultsFile(mCurrFileName),
+    mResultsFilename("capso.csv"),
+    mResultsFile(mResultsFilename),
     mResultsStream(&mResultsFile),
     mTimerId(-1),
     mTimerCount(0),
@@ -80,6 +80,36 @@ void Controller::timerEvent(QTimerEvent*)
     mView->update();
 }
 
+void Controller::save()
+{
+    pause();
+
+    QString error = "";
+    QString filename = QFileDialog::getSaveFileName(this, "Save results file",
+        QCoreApplication::applicationDirPath() + "/" +
+        "capso.csv", tr("csv (*.csv)"));
+
+    if(!filename.isEmpty())
+    {
+        if(QFile::exists(filename) && !QFile::remove(filename))
+        {
+            error = "Error removing file: " + filename;
+        }
+        else
+        {
+            if(!QFile::copy("capso.csv", filename))
+            {
+                error = "Cannot save file: " + filename;
+            }
+        }
+
+        if(!error.isEmpty())
+        {
+            QMessageBox::critical(this, "Error!", error);
+        }
+    }
+}
+
 void Controller::play()
 {
     if(mTimerId == -1)
@@ -93,9 +123,7 @@ void Controller::pause()
     if(mTimerId != -1)
     {
         killTimer(mTimerId);
-
         mResultsStream.flush();
-
         mTimerId = -1;
     }
 }
@@ -105,7 +133,6 @@ void Controller::step()
     if(mTimerId != -1)
     {
         killTimer(mTimerId);
-
         mTimerId = -1;
     }
 
@@ -208,14 +235,6 @@ void Controller::exportBitmap()
 
 void Controller::updateSettings()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
-    QString path = settings.value("ResultsPath").toString();
-
-    if(path != "")
-    {
-        mCurrFileName = path;
-    }
-
     if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.xml"))
     {
         QMessageBox::critical(this, "Error!", "The settings file cannot be loaded");
@@ -299,6 +318,7 @@ void Controller::initializeSettings()
 
 void Controller::makeConnections()
 {
+    connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
     connect(actionPlay, SIGNAL(triggered()), this, SLOT(play()));
     connect(actionPause, SIGNAL(triggered()), this, SLOT(pause()));
     connect(actionStep, SIGNAL(triggered()), this, SLOT(step()));
@@ -349,8 +369,8 @@ void Controller::createSettingsDialog()
         {
             mSettingsDialog = new GlobalSettingsDialog(this);
             auto p = dynamic_cast<GlobalSettingsDialog*>(mSettingsDialog);
-            connect(p, SIGNAL(settingsChanged(QMap<QString, QVariant>)),
-                this, SLOT(updateSettings(QMap<QString, QVariant>)));
+            connect(p, SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+                this, SLOT(updateSettings(QMap<QString,QVariant>)));
         }
         break;
 
@@ -371,7 +391,7 @@ void Controller::createSettingsDialog()
 void Controller::initializeResultsFile()
 {
     mResultsFile.close();
-    mResultsFile.setFileName(mCurrFileName);
+    mResultsFile.setFileName(mResultsFilename);
     mResultsFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
     mResultsStream.seek(0);
 
