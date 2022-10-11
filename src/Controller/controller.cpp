@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
 #include "controller.h"
