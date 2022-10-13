@@ -216,7 +216,7 @@ void Controller::updateSettings()
         mCurrFileName = path;
     }
 
-    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.xml"))
+    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.json"))
     {
         QMessageBox::critical(this, "Error!", "The settings file cannot be loaded");
     }
@@ -225,7 +225,7 @@ void Controller::updateSettings()
 void Controller::exportSettings()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Export current settings",
-        QCoreApplication::applicationDirPath() + "/" + "settings.xml", tr("xml (*.xml)"));
+        QCoreApplication::applicationDirPath() + "/" + "settings.json", tr("xml (*.xml)"));
 
     if(!fileName.isEmpty())
     {
@@ -237,7 +237,7 @@ void Controller::exportSettings()
             }
         }
 
-        if(!QFile::copy("settings.xml", fileName))
+        if(!QFile::copy("settings.json", fileName))
         {
             QMessageBox::critical(this, "Error!", "Cannot copy file");
         }
@@ -247,11 +247,11 @@ void Controller::exportSettings()
 void Controller::importSettings()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Import settings", "",
-                                                    tr("xml (*.xml)"));
+                                                    tr("json (*.json)"));
 
     if(!fileName.isEmpty())
     {
-        QString originalFile = "settings.xml";
+        QString originalFile = "settings.json";
 
         if(!QFile::remove(originalFile))
         {
@@ -283,7 +283,7 @@ void Controller::initializeSettings()
         break;
     }
 
-    if(!QFile::exists("settings.xml"))
+    if(!QFile::exists("settings.json"))
     {
         if(!util::writeSettings())
         {
