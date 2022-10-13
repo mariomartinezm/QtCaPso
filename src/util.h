@@ -1,5 +1,4 @@
-#ifndef UTIL_H
-#define UTIL_H
+#pragma once
 
 #include <QString>
 #include "catype.h"
@@ -19,5 +18,3 @@ namespace util
 
     bool getFileFromDialog(QString& file, QString filter);
 }
-
-#endif // UTIL_H
