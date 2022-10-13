@@ -2,8 +2,8 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QDir>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include "util.h"
 #include "localcapso.h"
 #include "globalcapso.h"
@@ -20,120 +20,108 @@ namespace util
             return false;
         }
 
-        QXmlStreamReader reader(&settingsFile);
+        QByteArray fileData = settingsFile.readAll();
+        QJsonDocument fileDoc(QJsonDocument::fromJson(fileData));
+        QJsonObject json = fileDoc.object();
 
-        switch(type)
+        switch (type)
         {
-        case LOCAL:
-        {
-            auto local = dynamic_cast<LocalCaPso*>(ca);
-
-            while(!reader.atEnd() && !reader.hasError())
+            case LOCAL:
             {
-                reader.readNext();
+                auto local = dynamic_cast<LocalCaPso*>(ca);
 
-                if(reader.isStartElement())
+                QString key = "initialNumberOfPreys";
+                if (json.contains(key) && json[key].isDouble())
                 {
-                    QString elementName = reader.name().toString();
+                    local->setPreyInitialDensity(json[key].toDouble());
+                }
 
-                    if(elementName == "initialNumberOfPreys")
-                    {
-                        QString value = reader.readElementText();
+                key = "competitionFactor";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPreyCompetitionFactor(json[key].toDouble());
+                }
 
-                        local->setPreyInitialDensity(value.toFloat());
-                    }
-                    else if(elementName == "competitionFactor")
-                    {
-                        QString value = reader.readElementText();
+                key = "preyReproductionRadius";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPreyReproductionRadius(json[key].toInt());
+                }
 
-                        local->setPreyCompetitionFactor(value.toFloat());
-                    }
-                    else if(elementName == "preyReproductionRadius")
-                    {
-                        QString value = reader.readElementText();
+                key = "preyReproductiveCapacity";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPreyReproductiveCapacity(json[key].toInt());
+                }
 
-                        local->setPreyReproductionRadius(value.toInt());
-                    }
-                    else if(elementName == "preyReproductiveCapacity")
-                    {
-                        QString value = reader.readElementText();
+                key = "fitnessRadius";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setFitnessRadius(json[key].toInt());
+                }
 
-                        local->setPreyReproductiveCapacity(value.toInt());
-                    }
-                    else if(elementName == "fitnessRadius")
-                    {
-                        QString value = reader.readElementText();
+                key = "initialNumberOfPredators";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorInitialSwarmSize(json[key].toInt());
+                }
 
-                        local->setFitnessRadius(value.toInt());
-                    }
-                    else if(elementName == "initialNumberOfPredators")
-                    {
-                        QString value = reader.readElementText();
+                key = "predatorCognitiveFactor";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorCognitiveFactor(json[key].toDouble());
+                }
 
-                        local->setPredatorInitialSwarmSize(value.toInt());
-                    }
-                    else if(elementName == "predatorCognitiveFactor")
-                    {
-                        QString value = reader.readElementText();
+                key = "predatorSocialFactor";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorSocialFactor(json[key].toDouble());
+                }
 
-                        local->setPredatorCognitiveFactor(value.toFloat());
-                    }
-                    else if(elementName == "predatorSocialFactor")
-                    {
-                        QString value = reader.readElementText();
+                key = "predatorMaximumSpeed";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorMaximumSpeed(json[key].toInt());
+                }
 
-                        local->setPredatorSocialFactor(value.toFloat());
-                    }
-                    else if(elementName == "predatorMaximumSpeed")
-                    {
-                        QString value = reader.readElementText();
+                key = "predatorReproductiveCapacity";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorReproductiveCapacity(json[key].toInt());
+                }
 
-                        local->setPredatorMaximumSpeed(value.toInt());
-                    }
-                    else if(elementName == "predatorReproductiveCapacity")
-                    {
-                        QString value = reader.readElementText();
+                key = "predatorReproductionRadius";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorReproductionRadius(json[key].toInt());
+                }
 
-                        local->setPredatorReproductiveCapacity(value.toInt());
-                    }
-                    else if(elementName == "predatorReproductionRadius")
-                    {
-                        QString value = reader.readElementText();
+                key = "predatorSocialRadius";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorSocialRadius(json[key].toDouble());
+                }
 
-                        local->setPredatorReproductionRadius(value.toInt());
-                    }
-                    else if(elementName == "predatorSocialRadius")
-                    {
-                        QString value = reader.readElementText();
+                key = "initialInertiaWeight";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorInitialInertiaWeight(json[key].toDouble());
+                }
 
-                        local->setPredatorSocialRadius(value.toInt());
-                    }
-                    else if(elementName == "initialInertiaWeight")
-                    {
-                        QString value = reader.readElementText();
-
-                        local->setPredatorInitialInertiaWeight(value.toFloat());
-                    }
-                    else if(elementName == "finalInertiaWeight")
-                    {
-                        QString value = reader.readElementText();
-
-                        local->setPredatorFinalInertiaWeight(value.toFloat());
-                    }
+                key = "finalInertiaWeight";
+                if (json.contains(key) && json[key].isDouble())
+                {
+                    local->setPredatorFinalInertiaWeight(json[key].toDouble());
                 }
             }
             break;
-        }
-        case GLOBAL:
-            break;
-        case MOVEMENT:
-            break;
-        }
 
-        if(reader.hasError())
-        {
-            return false;
-        }
+            case GLOBAL:
+            break;
+
+            case MOVEMENT:
+            break;
+        };
 
         settingsFile.close();
 
@@ -141,53 +129,47 @@ namespace util
     }
 
 
-    bool writeSettings(CaType type, float psi0, float alpha,
-                       int ry, int ey, int rc, int z0, float k1, float k2,
-                       int maxSpeed, int ez, int rz, int l, float omegaStart,
-                       float omegaEnd)
+    bool writeSettings(CaPsoSettings& settings, CaType type)
     {
         QFile settingsFile;
-        settingsFile.setFileName("settings.xml");
+        settingsFile.setFileName("settings.json");
 
         if(!settingsFile.open(QIODevice::WriteOnly))
         {
             return false;
         }
 
-        QXmlStreamWriter writer(&settingsFile);
-        writer.setAutoFormatting(true);
-        writer.writeStartDocument();
-        writer.writeStartElement("project");
+        QJsonObject json;
 
         switch(type)
         {
         case LOCAL:
-            writer.writeAttribute("type", "LOCAL");
+            json["type"] = "LOCAL";
             break;
         case GLOBAL:
-            writer.writeAttribute("type", "GLOBAL");
+            json["type"] = "GLOBAL";
             break;
         case MOVEMENT:
-            writer.writeAttribute("type", "MOVEMENT");
+            json["type"] = "MOVEMENT";
             break;
         }
 
-        writer.writeTextElement("initialNumberOfPreys", QString::number(psi0));
-        writer.writeTextElement("competitionFactor", QString::number(alpha));
-        writer.writeTextElement("preyReproductionRadius", QString::number(ry));
-        writer.writeTextElement("preyReproductiveCapacity", QString::number(ey));
-        writer.writeTextElement("fitnessRadius", QString::number(rc));
-        writer.writeTextElement("initialNumberOfPredators", QString::number(z0));
-        writer.writeTextElement("predatorCognitiveFactor", QString::number(k1));
-        writer.writeTextElement("predatorSocialFactor", QString::number(k2));
-        writer.writeTextElement("predatorMaximumSpeed", QString::number(maxSpeed));
-        writer.writeTextElement("predatorReproductiveCapacity", QString::number(ez));
-        writer.writeTextElement("predatorReproductionRadius", QString::number(rz));
-        writer.writeTextElement("predatorSocialRadius", QString::number(l));
-        writer.writeTextElement("initialInertiaWeight", QString::number(omegaStart));
-        writer.writeTextElement("finalInertiaWeight", QString::number(omegaEnd));
-        writer.writeEndElement();
-        writer.writeEndDocument();
+        json["initialNumberOfPreys"]         = settings.initialPreyDensity;
+        json["competitionFactor"]            = settings.competitionFactor;
+        json["preyReproductionRadius"]       = settings.preyReproductionRadius;
+        json["preyReproductiveCapacity"]     = settings.preyReproductiveCapacity;
+        json["fitnessRadius"]                = settings.fitnessRadius;
+        json["initialNumberOfPredators"]     = settings.initialPredatorSwarmSize;
+        json["predatorCognitiveFactor"]      = settings.predatorCognitiveFactor;
+        json["predatorSocialFactor"]         = settings.predatorSocialFactor;
+        json["predatorMaximumSpeed"]         = settings.predatorMaxSpeed;
+        json["predatorReproductiveCapacity"] = settings.predatorReproductiveCapacity;
+        json["predatorReproductionRadius"]   = settings.predatorReproductionRadius;
+        json["predatorSocialRadius"]         = settings.predatorSocialRadius;
+        json["initialInertiaWeight"]         = settings.initialInertiaWeight;
+        json["finalInertiaWeight"]           = settings.finalInertiaWeight;
+
+        settingsFile.write(QJsonDocument(json).toJson());
 
         settingsFile.close();
 
