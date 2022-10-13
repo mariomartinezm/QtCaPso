@@ -23,7 +23,7 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
 {
     // Populate the form
     QFile settingsFile;
-    settingsFile.setFileName("settings.xml");
+    settingsFile.setFileName("settings.json");
 
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
     QString resultsPath = settings.value("ResultsPath").toString();
