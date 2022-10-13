@@ -285,7 +285,9 @@ void Controller::initializeSettings()
 
     if(!QFile::exists("settings.json"))
     {
-        if(!util::writeSettings())
+        util::CaPsoSettings settings;
+
+        if(!util::writeSettings(settings))
         {
             QMessageBox::critical(this, "Error!", "Cannot write settings");
         }
