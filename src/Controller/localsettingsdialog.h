@@ -1,5 +1,4 @@
-#ifndef LOCALSETTINGSDIALOG_H
-#define LOCALSETTINGSDIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QMap>
@@ -23,5 +22,3 @@ private slots:
 	void showFileDialog();
 	virtual void accept();
 };
-
-#endif // LOCALSETTINGSDIALOG_H
