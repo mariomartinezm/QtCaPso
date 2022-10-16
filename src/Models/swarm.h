@@ -4,7 +4,6 @@
 #include <list>
 #include <random>
 #include <memory>
-#include <QtGlobal>
 #include "particle.h"
 #include "randomnumber.h"
 
@@ -24,6 +23,7 @@ public:
     float socialFactor() const { return mSocialFactor; }
     float inertiaWeight() const { return mInertiaWeight; }
     int maxSpeed() const { return mMaxSpeed; }
+    int socialRadius() const { return mSocialRadius; }
 
     void setCognitiveFactor(float factor) { mCognitiveFactor = factor; }
     void setSocialFactor(float factor) { mSocialFactor = factor; }
@@ -39,7 +39,7 @@ public:
 
     void add(std::list<std::shared_ptr<Particle>>& newParticles);
 
-#if defined(Q_OS_LINUX) || defined(__MINGW32__)
+#if defined(__linux__) || defined(__unix__) || defined(__MINGW32__)
     std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
         std::allocator<std::shared_ptr<Particle>>>::iterator it);
 #else
