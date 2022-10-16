@@ -290,17 +290,17 @@ void Controller::initializeSettings()
 
     if(!QFile::exists("settings.json"))
     {
-        util::CaPsoSettings settings;
-
-        if(!util::writeSettings(settings))
+        if(!util::writeSettings(mSettings))
         {
             QMessageBox::critical(this, "Error!", "Cannot write settings");
         }
     }
 
-    updateSettings();
+    util::loadSettings(mSettings, "settings.json");
 
-    // Initialize CA according to the updated settings file
+    // Initialize CA according to settings file
+    auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+    local->setSettings(mSettings);
     mCellularAutomaton->initialize();
 }
 
