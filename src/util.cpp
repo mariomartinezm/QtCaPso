@@ -10,7 +10,7 @@
 
 namespace util
 {
-    bool loadSettings(CellularAutomaton* ca, CaType type, QString settingsFilename)
+    bool loadSettings(CaPsoSettings& settings, QString settingsFilename)
     {
         QFile settingsFile;
         settingsFile.setFileName(settingsFilename);
@@ -24,104 +24,89 @@ namespace util
         QJsonDocument fileDoc(QJsonDocument::fromJson(fileData));
         QJsonObject json = fileDoc.object();
 
-        switch (type)
+        QString key = "initialNumberOfPreys";
+        if (json.contains(key) && json[key].isDouble())
         {
-            case LOCAL:
-            {
-                auto local = dynamic_cast<LocalCaPso*>(ca);
+            settings.initialPreyDensity = json[key].toDouble();
+        }
 
-                QString key = "initialNumberOfPreys";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPreyInitialDensity(json[key].toDouble());
-                }
+        key = "competitionFactor";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.competitionFactor = json[key].toDouble();
+        }
 
-                key = "competitionFactor";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPreyCompetitionFactor(json[key].toDouble());
-                }
+        key = "preyReproductionRadius";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.preyReproductionRadius = json[key].toInt();
+        }
 
-                key = "preyReproductionRadius";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPreyReproductionRadius(json[key].toInt());
-                }
+        key = "preyReproductiveCapacity";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.preyReproductiveCapacity = json[key].toInt();
+        }
 
-                key = "preyReproductiveCapacity";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPreyReproductiveCapacity(json[key].toInt());
-                }
+        key = "fitnessRadius";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.fitnessRadius = json[key].toInt();
+        }
 
-                key = "fitnessRadius";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setFitnessRadius(json[key].toInt());
-                }
+        key = "initialNumberOfPredators";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.predatorInitialSwarmSize = json[key].toInt();
+        }
 
-                key = "initialNumberOfPredators";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorInitialSwarmSize(json[key].toInt());
-                }
+        key = "predatorCognitiveFactor";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.predatorCognitiveFactor = json[key].toDouble();
+        }
 
-                key = "predatorCognitiveFactor";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorCognitiveFactor(json[key].toDouble());
-                }
+        key = "predatorSocialFactor";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.predatorSocialFactor = json[key].toDouble();
+        }
 
-                key = "predatorSocialFactor";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorSocialFactor(json[key].toDouble());
-                }
+        key = "predatorMaximumSpeed";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.predatorMaxSpeed = json[key].toInt();
+        }
 
-                key = "predatorMaximumSpeed";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorMaximumSpeed(json[key].toInt());
-                }
+        key = "predatorReproductiveCapacity";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.predatorReproductiveCapacity = json[key].toInt();
+        }
 
-                key = "predatorReproductiveCapacity";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorReproductiveCapacity(json[key].toInt());
-                }
+        key = "predatorReproductionRadius";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.predatorReproductionRadius = json[key].toInt();
+        }
 
-                key = "predatorReproductionRadius";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorReproductionRadius(json[key].toInt());
-                }
+        key = "predatorSocialRadius";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.predatorSocialRadius = json[key].toDouble();
+        }
 
-                key = "predatorSocialRadius";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorSocialRadius(json[key].toDouble());
-                }
+        key = "initialInertiaWeight";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.initialInertiaWeight = json[key].toDouble();
+        }
 
-                key = "initialInertiaWeight";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorInitialInertiaWeight(json[key].toDouble());
-                }
-
-                key = "finalInertiaWeight";
-                if (json.contains(key) && json[key].isDouble())
-                {
-                    local->setPredatorFinalInertiaWeight(json[key].toDouble());
-                }
-            }
-            break;
-
-            case GLOBAL:
-            break;
-
-            case MOVEMENT:
-            break;
-        };
+        key = "finalInertiaWeight";
+        if (json.contains(key) && json[key].isDouble())
+        {
+            settings.finalInertiaWeight = json[key].toDouble();
+        }
 
         settingsFile.close();
 
@@ -159,7 +144,7 @@ namespace util
         json["preyReproductionRadius"]       = settings.preyReproductionRadius;
         json["preyReproductiveCapacity"]     = settings.preyReproductiveCapacity;
         json["fitnessRadius"]                = settings.fitnessRadius;
-        json["initialNumberOfPredators"]     = settings.initialPredatorSwarmSize;
+        json["initialNumberOfPredators"]     = settings.predatorInitialSwarmSize;
         json["predatorCognitiveFactor"]      = settings.predatorCognitiveFactor;
         json["predatorSocialFactor"]         = settings.predatorSocialFactor;
         json["predatorMaximumSpeed"]         = settings.predatorMaxSpeed;
