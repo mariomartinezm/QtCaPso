@@ -216,10 +216,13 @@ void Controller::updateSettings()
         mCurrFileName = path;
     }
 
-    if(!util::loadSettings(mCellularAutomaton, mCurrentType, "settings.json"))
+    if(!util::writeSettings(mSettings))
     {
-        QMessageBox::critical(this, "Error!", "The settings file cannot be loaded");
+        QMessageBox::critical(this, "Error!", "Cannot write settings");
     }
+
+    auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+    local->setSettings(mSettings);
 }
 
 void Controller::exportSettings()
@@ -246,11 +249,13 @@ void Controller::exportSettings()
 
 void Controller::importSettings()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, "Import settings", "",
+    QString filename = QFileDialog::getOpenFileName(this, "Import settings", "",
                                                     tr("json (*.json)"));
 
-    if(!fileName.isEmpty())
+    if(!filename.isEmpty())
     {
+        util::loadSettings(mSettings, filename);
+
         QString originalFile = "settings.json";
 
         if(!QFile::remove(originalFile))
@@ -259,7 +264,7 @@ void Controller::importSettings()
         }
         else
         {
-            if(!QFile::copy(fileName, originalFile))
+            if(!QFile::copy(filename, originalFile))
             {
                 QMessageBox::critical(this, "Error!", "Cannot copy new file");
             }
@@ -358,7 +363,7 @@ void Controller::createSettingsDialog()
 
     case LOCAL:
         {
-            mSettingsDialog = new LocalSettingsDialog(this);
+            mSettingsDialog = new LocalSettingsDialog(mSettings, this);
             auto p = dynamic_cast<LocalSettingsDialog*>(mSettingsDialog);
             connect(p, SIGNAL(settingsChanged()),
                 this, SLOT(updateSettings()));

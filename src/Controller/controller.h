@@ -1,12 +1,11 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#pragma once
 
 #include <QMainWindow>
 #include <QDialog>
 #include <QFile>
 #include <QTextStream>
 #include "ui_controller.h"
-#include "catype.h"
+#include "capsosettings.h"
 #include "cellularautomaton.h"
 #include "caview.h"
 
@@ -48,6 +47,7 @@ private:
     CellularAutomaton* mCellularAutomaton;
     CaView* mView;
     QDialog* mSettingsDialog;
+    CaPsoSettings mSettings;
 
     // Support for a results file
     QString mCurrFileName;
@@ -62,5 +62,3 @@ private:
     int mPredatorCountBeforePreyDeath;
     int mPreyCountBeforePredatorDeath;
 };
-
-#endif // CONTROLLER_H
