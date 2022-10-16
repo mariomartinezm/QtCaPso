@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QList>
 #include "ui_batchdialog.h"
-#include "catype.h"
+#include "capsosettings.h"
 #include "batchitem.h"
 
 class BatchDialog : public QDialog, private Ui::BatchDialog
