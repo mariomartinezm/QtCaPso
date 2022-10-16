@@ -5,7 +5,7 @@
 #include <list>
 #include "cellularautomaton.h"
 #include "swarm.h"
-#include "util.h"
+#include "capsosettings.h"
 
 class LocalCaPso final : public CellularAutomaton
 {
@@ -20,29 +20,18 @@ public:
     virtual void clear() override;
     void nextGen() override;
 
-    void setPreyCompetitionFactor(float value);
-    void setPreyInitialDensity(float value);
-    void setPreyReproductiveCapacity(int value);
-    void setPreyReproductionRadius(int value);
-    void setPredatorReproductiveCapacity(int value);
-    void setPredatorReproductionRadius(int value);
-    void setPredatorSocialRadius(int value);
-    void setFitnessRadius(int value);
-    void setPredatorInitialSwarmSize(int value);
-    void setPredatorCognitiveFactor(float value);
-    void setPredatorSocialFactor(float value);
-    void setPredatorMaximumSpeed(int value);
     void setPredatorMigrationTime(int value);
-    void setPredatorInitialInertiaWeight(float value);
-    void setPredatorFinalInertiaWeight(float value);
 
-    int numberOfPreys() const;
-    int numberOfPredators() const;
+    void setSettings(const CaPsoSettings& settings);
+    CaPsoSettings settings() const;
+
+    int   numberOfPreys() const;
+    int   numberOfPredators() const;
     float preyBirthRate() const;
     float predatorBirthRate() const;
     float preyDeathProbability() const;
     float predatorDeathProbability() const;
-    int currentStage() const;
+    int   currentStage() const;
 
 private:
     LocalCaPso(const LocalCaPso&);

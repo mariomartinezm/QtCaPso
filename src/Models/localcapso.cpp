@@ -2,7 +2,6 @@
 #include <ctime>
 #include <cmath>
 #include <memory>
-#include <QtGlobal>
 #include "localcapso.h"
 
 using std::list;
@@ -89,81 +88,48 @@ void LocalCaPso::nextGen()
     (this->*mNextStage)();
 }
 
-void LocalCaPso::setPreyCompetitionFactor(float value)
-{
-    mPreyCompetitionFactor = value;
-}
-
-void LocalCaPso::setPreyInitialDensity(float value)
-{
-    mPreyInitialDensity = value;
-}
-
-void LocalCaPso::setPreyReproductiveCapacity(int value)
-{
-    mPreyReproductiveCapacity = value;
-}
-
-void LocalCaPso::setPreyReproductionRadius(int value)
-{
-    mPreyReproductionRadius = value;
-}
-
-void LocalCaPso::setPredatorReproductiveCapacity(int value)
-{
-    mPredatorReproductiveCapacity = value;
-}
-
-void LocalCaPso::setPredatorReproductionRadius(int value)
-{
-    mPredatorReproductionRadius = value;
-}
-
-void LocalCaPso::setPredatorSocialRadius(int value)
-{
-    mPredatorSwarm.setSocialRadius(value);
-}
-
-void LocalCaPso::setFitnessRadius(int value)
-{
-    mFitnessRadius = value;
-
-    NEIGHBORHOOD_SIZE = (2 * mFitnessRadius + 1)*(2 * mFitnessRadius + 1) - 1;
-}
-
-void LocalCaPso::setPredatorInitialSwarmSize(int value)
-{
-    mPredatorInitialSwarmSize = value;
-}
-
-void LocalCaPso::setPredatorCognitiveFactor(float value)
-{
-    mPredatorSwarm.setCognitiveFactor(value);
-}
-
-void LocalCaPso::setPredatorSocialFactor(float value)
-{
-    mPredatorSwarm.setSocialFactor(value);
-}
-
-void LocalCaPso::setPredatorMaximumSpeed(int value)
-{
-    mPredatorSwarm.setMaxSpeed(value);
-}
-
 void LocalCaPso::setPredatorMigrationTime(int value)
 {
     mPredatorMigrationTime = value;
 }
 
-void LocalCaPso::setPredatorInitialInertiaWeight(float value)
+void LocalCaPso::setSettings(const CaPsoSettings &settings)
 {
-    mPredatorInitialInertiaWeight = value;
+    mPreyInitialDensity           = settings.initialPreyDensity;
+    mPreyCompetitionFactor        = settings.competitionFactor;
+    mPreyReproductionRadius       = settings.preyReproductionRadius;
+    mPreyReproductiveCapacity     = settings.preyReproductiveCapacity;
+    mFitnessRadius                = settings.fitnessRadius;
+    mPredatorInitialSwarmSize     = settings.predatorInitialSwarmSize;
+    mPredatorSwarm.setCognitiveFactor(settings.predatorCognitiveFactor);
+    mPredatorSwarm.setSocialFactor(settings.predatorSocialFactor);
+    mPredatorSwarm.setMaxSpeed(settings.predatorMaxSpeed);
+    mPredatorReproductiveCapacity = settings.predatorReproductiveCapacity;
+    mPredatorReproductionRadius   = settings.predatorReproductionRadius;
+    mPredatorSwarm.setSocialRadius(settings.predatorSocialRadius);
+    mPredatorInitialInertiaWeight = settings.initialInertiaWeight;
+    mPredatorFinalInertiaWeight   = settings.finalInertiaWeight;
 }
 
-void LocalCaPso::setPredatorFinalInertiaWeight(float value)
+CaPsoSettings LocalCaPso::settings() const
 {
-    mPredatorFinalInertiaWeight = value;
+    CaPsoSettings settings;
+    settings.initialPreyDensity           = mPreyInitialDensity;
+    settings.competitionFactor            = mPreyCompetitionFactor;
+    settings.preyReproductionRadius       = mPreyReproductionRadius;
+    settings.preyReproductiveCapacity     = mPreyReproductiveCapacity;
+    settings.fitnessRadius                = mFitnessRadius;
+    settings.predatorInitialSwarmSize     = mPredatorInitialSwarmSize;
+    settings.predatorCognitiveFactor      = mPredatorSwarm.cognitiveFactor();
+    settings.predatorSocialFactor         = mPredatorSwarm.socialFactor();
+    settings.predatorMaxSpeed             = mPredatorSwarm.maxSpeed();
+    settings.predatorReproductiveCapacity = mPredatorReproductiveCapacity;
+    settings.predatorReproductionRadius   = mPredatorReproductionRadius;
+    settings.predatorSocialRadius         = mPredatorSwarm.socialRadius();
+    settings.initialInertiaWeight         = mPredatorInitialInertiaWeight;
+    settings.finalInertiaWeight           = mPredatorFinalInertiaWeight;
+
+    return settings;
 }
 
 int LocalCaPso::numberOfPreys() const
