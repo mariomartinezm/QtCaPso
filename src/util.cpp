@@ -93,7 +93,7 @@ namespace util
         key = "predatorSocialRadius";
         if (json.contains(key) && json[key].isDouble())
         {
-            settings.predatorSocialRadius = json[key].toDouble();
+            settings.predatorSocialRadius = json[key].toInt();
         }
 
         key = "initialInertiaWeight";
