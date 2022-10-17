@@ -25,7 +25,7 @@ void BatchDialog::on_buttonBrowseSettings_clicked()
 {
     QString file;
 
-    if(util::getFileFromDialog(file, tr("xml (*.xml)")))
+    if(util::getFileFromDialog(file, tr("json (*.json)")))
     {
         lineEditSettingsFile->setText(file);
     }

@@ -228,7 +228,7 @@ void Controller::updateSettings()
 void Controller::exportSettings()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Export current settings",
-        QCoreApplication::applicationDirPath() + "/" + "settings.json", tr("xml (*.xml)"));
+        QCoreApplication::applicationDirPath() + "/" + "settings.json", tr("json (*.json)"));
 
     if(!fileName.isEmpty())
     {
