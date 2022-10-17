@@ -1,5 +1,4 @@
-#ifndef BATCHDIALOG_H
-#define BATCHDIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QList>
@@ -29,5 +28,3 @@ private:
     CaType mType;
     QList<BatchItem> batchItems;
 };
-
-#endif // BATCHDIALOG_H

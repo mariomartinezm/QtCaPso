@@ -110,10 +110,11 @@ void BatchDialog::on_lineEditPath_textChanged(QString text)
 
 void BatchDialog::processItem(BatchItem& batchItem)
 {
-    LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
-
     CaPsoSettings settings;
     util::loadSettings(settings, batchItem.settingsFile());
+
+    LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
+    localCaPso->setSettings(settings);
 
     for (int simCount = 0; simCount < batchItem.numberOfSimulations(); simCount++)
     {
@@ -135,16 +136,16 @@ void BatchDialog::processItem(BatchItem& batchItem)
 
         // Write header containing columns names
         resultsStream << "Season," <<
-                          "Preys," <<
-                          "Predators," <<
-                          "PreyCountBeforeReproduction," <<
-                          "PreyBirthRate," <<
-                          "PredatorCountBeforeReproduction," <<
-                          "PredatorBirthRate," <<
-                          "PreyCountBeforePredatorDeath," <<
-                          "PredatorDeathProbability," <<
-                          "PredatorCountBeforePreyDeath," <<
-                          "PreyDeathProbability\n";
+                         "Preys," <<
+                         "Predators," <<
+                         "PreyCountBeforeReproduction," <<
+                         "PreyBirthRate," <<
+                         "PredatorCountBeforeReproduction," <<
+                         "PredatorBirthRate," <<
+                         "PreyCountBeforePredatorDeath," <<
+                         "PredatorDeathProbability," <<
+                         "PredatorCountBeforePreyDeath," <<
+                         "PreyDeathProbability\n";
 
         for(int genCount = 0; genCount < batchItem.numberOfSeasons() * 10; genCount++)
         {
