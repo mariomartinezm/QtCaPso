@@ -1,6 +1,4 @@
 #include <QFileDialog>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
 #include <QMessageBox>
 #include <QSettings>
 #include "localsettingsdialog.h"
