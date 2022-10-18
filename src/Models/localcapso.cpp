@@ -109,6 +109,8 @@ void LocalCaPso::setSettings(const CaPsoSettings &settings)
     mPredatorSwarm.setSocialRadius(settings.predatorSocialRadius);
     mPredatorInitialInertiaWeight = settings.initialInertiaWeight;
     mPredatorFinalInertiaWeight   = settings.finalInertiaWeight;
+
+    NEIGHBORHOOD_SIZE = (2 * mFitnessRadius + 1) * (2 * mFitnessRadius + 1) - 1;
 }
 
 CaPsoSettings LocalCaPso::settings() const
