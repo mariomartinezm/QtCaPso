@@ -20,7 +20,7 @@ if(ENABLE_UNIT_TESTS)
     FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
-        #GIT_TAG release-1.10.0
+        GIT_TAG release-1.10.0
     )
 
     # For windows: Prevent overriding the parent's compiler / linker settings
