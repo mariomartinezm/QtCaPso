@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
 #include "controller.h"
@@ -73,11 +74,43 @@ void Controller::timerEvent(QTimerEvent*)
     if(!(mTimerCount % mSeasonLength))
     {
         writeResults();
+        mResultsSaved = false;
     }
 
     statusBarGeneration->showMessage(QString::number(mTimerCount));
 
     mView->update();
+}
+
+void Controller::closeEvent(QCloseEvent* event)
+{
+    if(!mResultsSaved)
+    {
+        QMessageBox::StandardButton resButton =
+                QMessageBox::warning(this, "QtCaPso",
+                                     tr("Save results before closing?"),
+                                     QMessageBox::Yes | QMessageBox::No);
+
+        if(resButton != QMessageBox::No)
+        {
+            // The user pressed "Yes" we attempt to save the file
+            save();
+        }
+        else
+        {
+            // The user pressed "No" so we can assume nothing will be lost
+            mResultsSaved = true;
+        }
+    }
+
+    if(!mResultsSaved)
+    {
+        event->ignore();
+    }
+    else
+    {
+        event->accept();
+    }
 }
 
 void Controller::save()
@@ -101,6 +134,10 @@ void Controller::save()
             {
                 error = "Cannot save file: " + filename;
             }
+            else
+            {
+                mResultsSaved = true;
+            }
         }
 
         if(!error.isEmpty())
@@ -123,8 +160,10 @@ void Controller::pause()
     if(mTimerId != -1)
     {
         killTimer(mTimerId);
-        mResultsStream.flush();
         mTimerId = -1;
+
+        mResultsStream.flush();
+        mResultsSaved = false;
     }
 }
 
@@ -164,6 +203,7 @@ void Controller::step()
     if(!(mTimerCount % mSeasonLength))
     {
         writeResults();
+        mResultsSaved = false;
     }
 
     statusBarGeneration->showMessage(QString::number(mTimerCount));

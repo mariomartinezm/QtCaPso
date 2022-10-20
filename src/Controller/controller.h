@@ -20,6 +20,7 @@ public:
 protected:
     // put events here
     void timerEvent(QTimerEvent*);
+    void closeEvent(QCloseEvent* event);
 
 private slots:
     void save();
@@ -51,9 +52,10 @@ private:
     CaPsoSettings mSettings;
 
     // Support for a results file
-    QString mResultsFilename;
-    QFile mResultsFile;
+    QString     mResultsFilename;
+    QFile       mResultsFile;
     QTextStream mResultsStream;
+    bool        mResultsSaved = { false };
 
     int mTimerId;
     int mTimerCount;

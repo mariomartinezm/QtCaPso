@@ -66,6 +66,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionSave"/>
     <addaction name="actionExportBitmap"/>
     <addaction name="actionImportSettings"/>
     <addaction name="actionExportSettings"/>
@@ -179,6 +180,9 @@
    </property>
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>
