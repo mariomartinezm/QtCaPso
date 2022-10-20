@@ -8,8 +8,6 @@ LocalSettingsDialog::LocalSettingsDialog(CaPsoSettings& settings, QWidget *paren
     mSettings(settings)
 {
     this->setupUi(this);
-
-    connect(pushButtonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 }
 
 LocalSettingsDialog::~LocalSettingsDialog()
@@ -19,16 +17,6 @@ LocalSettingsDialog::~LocalSettingsDialog()
 
 void LocalSettingsDialog::showEvent(QShowEvent*)
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
-    QString resultsPath = settings.value("ResultsPath").toString();
-
-    if(resultsPath == "")
-    {
-        resultsPath = QCoreApplication::applicationDirPath() + "/results.csv";
-    }
-
-    lineEditPath->setText(resultsPath);
-
     lineEditInitialPreys->setText(QString::number(mSettings.initialPreyDensity));
     lineEditCompetitionFactor->setText(QString::number(mSettings.competitionFactor));
     spinBoxPreyReproductionRadius->setValue(mSettings.preyReproductionRadius);
@@ -45,22 +33,8 @@ void LocalSettingsDialog::showEvent(QShowEvent*)
     lineEditFinalWeight->setText(QString::number(mSettings.finalInertiaWeight));
 }
 
-void LocalSettingsDialog::showFileDialog()
-{
-    QString path = QFileDialog::getExistingDirectory(this, tr("Select a folder"),
-        QDir::separator() + QString("home"), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-
-    if(!path.isEmpty())
-    {
-        lineEditPath->setText(path + "/" + "results.csv");
-    }
-}
-
 void LocalSettingsDialog::accept()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MMM", "QtCaPso");
-    settings.setValue("ResultsPath", lineEditPath->text());
-
     // Load new values into CaPso settings
     mSettings.initialPreyDensity           = lineEditInitialPreys->text().toFloat();
     mSettings.competitionFactor            = lineEditCompetitionFactor->text().toFloat();

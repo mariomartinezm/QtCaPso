@@ -1,33 +1,14 @@
-#include <QFileDialog>
 #include "globalsettingsdialog.h"
 
 GlobalSettingsDialog::GlobalSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
     this->setupUi(this);
-
-    // Set the lineEdit's text to the application's path
-    lineEditPath->setText(QCoreApplication::applicationDirPath() +
-        "/" + "results.txt");
-
-    // Connect the browse button to its corresponding slot
-    connect(pushButtonBrowse, SIGNAL(clicked()), this, SLOT(showFileDialog()));
 }
 
 GlobalSettingsDialog::~GlobalSettingsDialog()
 {
 
-}
-
-void GlobalSettingsDialog::showFileDialog()
-{
-    QString path = QFileDialog::getExistingDirectory(this, tr("Select a folder"),
-        QDir::separator() + QString("home"), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-
-    if(!path.isEmpty())
-    {
-        lineEditPath->setText(path + "/" + "results.txt");
-    }
 }
 
 void GlobalSettingsDialog::accept()
@@ -48,9 +29,6 @@ void GlobalSettingsDialog::accept()
     mSettings.insert("predatorReproductionRadius", spinBoxPredatorReproductionRadius->value());
     mSettings.insert("initialInertiaWeight", lineEditInitialWeight->text().toFloat());
     mSettings.insert("finalInertiaWeight", lineEditFinalWeight->text().toFloat());
-
-    // Insert path to results file
-    mSettings.insert("resultsFilePath", lineEditPath->text());
 
     emit settingsChanged(mSettings);
 

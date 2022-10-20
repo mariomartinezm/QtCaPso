@@ -20,7 +20,6 @@ protected:
     void showEvent(QShowEvent*);
 
 private slots:
-    void showFileDialog();
     virtual void accept();
 
 private:

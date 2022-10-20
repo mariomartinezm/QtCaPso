@@ -39,13 +39,8 @@ public:
 
     void add(std::list<std::shared_ptr<Particle>>& newParticles);
 
-#if defined(__linux__) || defined(__unix__) || defined(__MINGW32__)
     std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
         std::allocator<std::shared_ptr<Particle>>>::iterator it);
-#else
-    std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
-        std::allocator<std::shared_ptr<Particle>>>::const_iterator it);
-#endif
 
     bool empty() const;
 

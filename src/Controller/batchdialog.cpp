@@ -116,12 +116,21 @@ void BatchDialog::processItem(BatchItem& batchItem)
     LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
     localCaPso->setSettings(settings);
 
-    for (int simCount = 0; simCount < batchItem.numberOfSimulations(); simCount++)
+    for (int simIndex = 0, fileIndex = 0; simIndex < batchItem.numberOfSimulations(); ++simIndex, ++fileIndex)
     {
-        // Create results file
-        QFile resultsFile(batchItem.resultsPath() +
-                          batchItem.filenamePrefix() + "_" +
-                          QString::number(simCount) + ".csv");
+        // Initialize filename for results file
+        QString filename = batchItem.resultsPath() + batchItem.filenamePrefix() +
+                "_" + QString::number(fileIndex) + ".csv";
+
+        // If file exists increase index and build a new filename
+        while(QFile::exists(filename))
+        {
+            ++fileIndex;
+            filename = batchItem.resultsPath() + batchItem.filenamePrefix() +
+                "_" + QString::number(fileIndex) + ".csv";
+        }
+
+        QFile resultsFile(filename);
 
         QTextStream resultsStream(&resultsFile);
         resultsFile.open(QIODevice::WriteOnly | QIODevice::Text |

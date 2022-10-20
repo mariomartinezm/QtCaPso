@@ -22,6 +22,7 @@ protected:
     void timerEvent(QTimerEvent*);
 
 private slots:
+    void save();
     void play();
     void pause();
     void step();
@@ -50,7 +51,7 @@ private:
     CaPsoSettings mSettings;
 
     // Support for a results file
-    QString mCurrFileName;
+    QString mResultsFilename;
     QFile mResultsFile;
     QTextStream mResultsStream;
 
