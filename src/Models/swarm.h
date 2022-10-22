@@ -4,7 +4,6 @@
 #include <list>
 #include <random>
 #include <memory>
-#include <QtGlobal>
 #include "particle.h"
 #include "randomnumber.h"
 
@@ -24,6 +23,7 @@ public:
     float socialFactor() const { return mSocialFactor; }
     float inertiaWeight() const { return mInertiaWeight; }
     int maxSpeed() const { return mMaxSpeed; }
+    int socialRadius() const { return mSocialRadius; }
 
     void setCognitiveFactor(float factor) { mCognitiveFactor = factor; }
     void setSocialFactor(float factor) { mSocialFactor = factor; }

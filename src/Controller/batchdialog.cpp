@@ -25,7 +25,7 @@ void BatchDialog::on_buttonBrowseSettings_clicked()
 {
     QString file;
 
-    if(util::getFileFromDialog(file, tr("xml (*.xml)")))
+    if(util::getFileFromDialog(file, tr("json (*.json)")))
     {
         lineEditSettingsFile->setText(file);
     }
@@ -110,9 +110,11 @@ void BatchDialog::on_lineEditPath_textChanged(QString text)
 
 void BatchDialog::processItem(BatchItem& batchItem)
 {
-    LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
+    CaPsoSettings settings;
+    util::loadSettings(settings, batchItem.settingsFile());
 
-    util::loadSettings(localCaPso, LOCAL, batchItem.settingsFile());
+    LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
+    localCaPso->setSettings(settings);
 
     for (int simIndex = 0, fileIndex = 0; simIndex < batchItem.numberOfSimulations(); ++simIndex, ++fileIndex)
     {
@@ -143,16 +145,16 @@ void BatchDialog::processItem(BatchItem& batchItem)
 
         // Write header containing columns names
         resultsStream << "Season," <<
-                          "Preys," <<
-                          "Predators," <<
-                          "PreyCountBeforeReproduction," <<
-                          "PreyBirthRate," <<
-                          "PredatorCountBeforeReproduction," <<
-                          "PredatorBirthRate," <<
-                          "PreyCountBeforePredatorDeath," <<
-                          "PredatorDeathProbability," <<
-                          "PredatorCountBeforePreyDeath," <<
-                          "PreyDeathProbability\n";
+                         "Preys," <<
+                         "Predators," <<
+                         "PreyCountBeforeReproduction," <<
+                         "PreyBirthRate," <<
+                         "PredatorCountBeforeReproduction," <<
+                         "PredatorBirthRate," <<
+                         "PreyCountBeforePredatorDeath," <<
+                         "PredatorDeathProbability," <<
+                         "PredatorCountBeforePreyDeath," <<
+                         "PreyDeathProbability\n";
 
         for(int genCount = 0; genCount < batchItem.numberOfSeasons() * 10; genCount++)
         {

@@ -1,12 +1,11 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#pragma once
 
 #include <QMainWindow>
 #include <QDialog>
 #include <QFile>
 #include <QTextStream>
 #include "ui_controller.h"
-#include "catype.h"
+#include "capsosettings.h"
 #include "cellularautomaton.h"
 #include "caview.h"
 
@@ -21,8 +20,10 @@ public:
 protected:
     // put events here
     void timerEvent(QTimerEvent*);
+    void closeEvent(QCloseEvent* event);
 
 private slots:
+    void save();
     void play();
     void pause();
     void step();
@@ -48,11 +49,13 @@ private:
     CellularAutomaton* mCellularAutomaton;
     CaView* mView;
     QDialog* mSettingsDialog;
+    CaPsoSettings mSettings;
 
     // Support for a results file
-    QString mCurrFileName;
-    QFile mResultsFile;
+    QString     mResultsFilename;
+    QFile       mResultsFile;
     QTextStream mResultsStream;
+    bool        mResultsSaved = { false };
 
     int mTimerId;
     int mTimerCount;
@@ -62,5 +65,3 @@ private:
     int mPredatorCountBeforePreyDeath;
     int mPreyCountBeforePredatorDeath;
 };
-
-#endif // CONTROLLER_H

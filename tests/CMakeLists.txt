@@ -1,7 +1,11 @@
 set(TEST_SOURCES
     main.cpp
+    ../src/Models/cellularautomaton.cpp
+    ../src/Models/localcapso.cpp
+    ../src/Models/swarm.cpp
     ../src/Models/randomnumber.cpp
-    randomnumber-test.cpp)
+    randomnumber-test.cpp
+    capso-test.cpp)
 
 add_executable(${PROJECT_NAME}_test ${TEST_SOURCES})
 
