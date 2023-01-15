@@ -1,0 +1,17 @@
+{
+    "competitionFactor": 0.1,
+    "finalInertiaWeight": 0,
+    "fitnessRadius": 1,
+    "initialInertiaWeight": 0,
+    "initialNumberOfPredators": 262,
+    "initialNumberOfPreys": 1,
+    "predatorCognitiveFactor": 0,
+    "predatorMaximumSpeed": 0,
+    "predatorReproductionRadius": 1,
+    "predatorReproductiveCapacity": 1,
+    "predatorSocialFactor": 0,
+    "predatorSocialRadius": 1,
+    "preyReproductionRadius": 1,
+    "preyReproductiveCapacity": 1,
+    "type": "LOCAL"
+}
