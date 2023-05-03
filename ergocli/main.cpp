@@ -11,7 +11,6 @@
 const int WIDTH         = 512;
 const int HEIGHT        = 512;
 const int NUM_SEASONS   = 300;
-const int NUM_INTERVALS = 1000;
 
 template <typename Iterator>
 struct ForEachBlock
