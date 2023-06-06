@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <cxxopts.hpp>
 
 #include "Models/localcapso.h"
 #include "Models/capsosettings.h"
@@ -22,7 +23,9 @@ struct ForEachBlock
 };
 
 template <typename Iterator>
-void ParalellForEach(Iterator first, Iterator last, std::function<void(const float&)> f)
+void ParalellForEach(Iterator first, Iterator last,
+                     unsigned long userThreads,
+                     std::function<void(const float&)> f)
 {
     unsigned long const length = std::distance(first, last);
 
@@ -31,12 +34,10 @@ void ParalellForEach(Iterator first, Iterator last, std::function<void(const flo
         return;
     }
 
-    unsigned long const minPerThread = 10;
-    unsigned long const maxThreads   = (length + minPerThread - 1) / minPerThread;
     unsigned long const hwThreads    = std::thread::hardware_concurrency();
     unsigned long const numThreads   = std::min(hwThreads != 0
                                                 ? hwThreads :
-                                                2, maxThreads);
+                                                2, userThreads);
 
     std::cout << "Using " << numThreads << " threads.\n";
 
@@ -103,17 +104,32 @@ void f(const float& d) {
     std::cout << "Simulation for density = " << d << " finished!.\n";
 }
 
-int main()
+int main(int argc, char** argv)
 {
-    int n       = 10;
+    cxxopts::Options options("ergocli",
+                             "Ergodicity test of the CaPso model");
+    options.add_options()
+        ("t,threads", "Number of threads", cxxopts::value<int>())
+        ("b,bins",    "Number of bins",    cxxopts::value<int>())
+        ("s,seasons", "Number of seasons", cxxopts::value<int>());
+
+    auto result = options.parse(argc, argv);
+
+    std::cout << "Number of threads = " << result["threads"].as<int>() << std::endl;
+    std::cout << "Number of bins    = " << result["bins"].as<int>()    << std::endl;
+    std::cout << "Number of seasons = " << result["seasons"].as<int>() << std::endl;
+
+    int numBins = result["bins"].as<int>();
+    std::vector<float> densities(numBins + 1, 0);
+
+    float delta = (0.7F - 0.3F) / numBins;
     int i       = 0;
-    float delta = (0.7 - 0.3) / n;
-    std::vector<float> densities(n + 1, 0);
     std::generate(densities.begin(), densities.end(), [i, delta] () mutable {
                   return 0.3F + (delta * i++);
                   });
 
-    ParalellForEach(densities.begin(), densities.end(), f);
+    ParalellForEach(densities.begin(), densities.end(),
+                    result["threads"].as<int>(), f);
 
     return 0;
 }
