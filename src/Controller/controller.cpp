@@ -10,8 +10,8 @@
 #include "globalcapso.h"
 #include "util.h"
 
-Controller::Controller(QWidget *parent, Qt::WindowFlags flags)
-    : QMainWindow(parent, flags),
+Controller::Controller(QWidget *parent)
+    : QMainWindow(parent),
     mCurrentType(LOCAL),
     mResultsFilename("capso.csv"),
     mResultsFile(mResultsFilename),

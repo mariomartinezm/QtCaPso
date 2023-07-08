@@ -5,8 +5,6 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include "util.h"
-#include "localcapso.h"
-#include "globalcapso.h"
 
 namespace util
 {
@@ -180,7 +178,7 @@ namespace util
         QString appDir = QCoreApplication::applicationDirPath() + "/";
 
         file = QFileDialog::getOpenFileName(NULL, QObject::tr("Select a file"),
-                                            appDir, filter, 0, 0);
+                                            appDir, filter);
 
         if(file.isEmpty())
         {

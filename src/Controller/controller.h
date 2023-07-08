@@ -14,7 +14,7 @@ class Controller : public QMainWindow, private Ui::ControllerClass
     Q_OBJECT
 
 public:
-    Controller(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    Controller(QWidget *parent = 0);
     ~Controller();
 
 protected:
