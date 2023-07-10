@@ -5,9 +5,7 @@
 #include <QTextStream>
 #include <QDir>
 #include "batchdialog.h"
-#include "cellularautomaton.h"
 #include "localcapso.h"
-#include "globalcapso.h"
 #include "util.h"
 
 BatchDialog::BatchDialog(QWidget *parent, CaType type) :
@@ -37,7 +35,7 @@ void BatchDialog::on_buttonAdd_clicked()
     {
         // Get the size of the lattice from the combo box
         QString currentItem = comboSize->itemText(comboSize->currentIndex());
-        QStringList size = currentItem.split('x', QString::SkipEmptyParts,
+        QStringList size = currentItem.split('x', Qt::SkipEmptyParts,
                                          Qt::CaseSensitive);
 
         int width, height;
