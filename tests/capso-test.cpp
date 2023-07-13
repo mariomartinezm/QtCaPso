@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "Models/localcapso.h"
+#include "localcapso.h"
 
 TEST(LocalCaPso, test_setSettings)
 {

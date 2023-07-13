@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "Models/randomnumber.h"
+#include "randomnumber.h"
 
 TEST(RandomNumber, test_float_limits)
 {
