@@ -2,7 +2,6 @@
 #include <ctime>
 #include <cmath>
 #include <memory>
-#include <QtGlobal>
 #include "globalcapso.h"
 
 using std::list;

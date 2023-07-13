@@ -5,7 +5,6 @@
 #include <list>
 #include "cellularautomaton.h"
 #include "swarm.h"
-#include "util.h"
 
 class GlobalCaPso final : public CellularAutomaton
 {
