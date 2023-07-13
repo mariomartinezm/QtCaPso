@@ -1,3 +1,5 @@
+project(CaPsoGui LANGUAGES CXX VERSION 0.3.2 DESCRIPTION "GUI for the CaPso model")
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -9,42 +11,28 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Concurrent REQUIRED)
 
-include(FetchContent)
-
-FetchContent_Declare(pcg-cpp
-    GIT_REPOSITORY https://github.com/imneme/pcg-cpp
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND ""
-)
-
-FetchContent_MakeAvailable(pcg-cpp)
-
-add_library(pcg-cpp INTERFACE)
-target_include_directories(pcg-cpp INTERFACE "$<BUILD_INTERFACE:${pcg-cpp_SOURCE_DIR}>/include")
-
-set(PROJECT_SOURCES
-        main.cpp
-        util.cpp
-        Models/cellularautomaton.cpp
-        Models/localcapso.cpp
-        Models/globalcapso.cpp
-        Models/swarm.cpp
-        Models/randomnumber.cpp
-        Models/randomnumber.cpp
-        View/caview.cpp
-        Controller/controller.cpp
-        Controller/controller.ui
-        Controller/localsettingsdialog.cpp
-        Controller/localsettingsdialog.ui
-        Controller/globalsettingsdialog.cpp
-        Controller/globalsettingsdialog.ui
-        Controller/batchdialog.cpp
-        Controller/batchdialog.ui
-        Controller/batchitem.cpp
-        Controller/controller.qrc
-)
-
-add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SOURCES})
+add_executable(${PROJECT_NAME} WIN32)
+target_sources(${PROJECT_NAME} PRIVATE
+    main.cpp
+    util.h
+    util.cpp
+    View/caview.h
+    View/caview.cpp
+    Controller/controller.h
+    Controller/controller.cpp
+    Controller/controller.ui
+    Controller/localsettingsdialog.h
+    Controller/localsettingsdialog.cpp
+    Controller/localsettingsdialog.ui
+    Controller/globalsettingsdialog.h
+    Controller/globalsettingsdialog.cpp
+    Controller/globalsettingsdialog.ui
+    Controller/batchdialog.h
+    Controller/batchdialog.cpp
+    Controller/batchdialog.ui
+    Controller/batchdialog.h
+    Controller/batchitem.cpp
+    Controller/controller.qrc)
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE Controller
@@ -57,4 +45,4 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)
-target_link_libraries(${PROJECT_NAME} PRIVATE pcg-cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE capso)
