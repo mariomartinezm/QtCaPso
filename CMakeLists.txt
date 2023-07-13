@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(QtCaPso LANGUAGES CXX)
+project(capso LANGUAGES CXX VERSION 0.3.2 DESCRIPTION "CaPso model library")
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
