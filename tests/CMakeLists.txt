@@ -1,3 +1,23 @@
+option(ENABLE_UNIT_TESTS "Enable units tests" ON)
+message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
+
+if(ENABLE_UNIT_TESTS)
+    include(FetchContent)
+
+    FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG release-1.10.0
+    )
+
+    # For windows: Prevent overriding the parent's compiler / linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+    FetchContent_MakeAvailable(googletest)
+endif()
+
+enable_testing()
+
 set(TEST_SOURCES
     main.cpp
     randomnumber-test.cpp
