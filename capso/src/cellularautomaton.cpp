@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "cellularautomaton.h"
 
-CellularAutomaton::CellularAutomaton(int width, int height)
+capso::CellularAutomaton::CellularAutomaton(int width, int height)
     : mLattice(width * height)
 {
     // Set the lattice's width, height and stride
@@ -10,35 +10,35 @@ CellularAutomaton::CellularAutomaton(int width, int height)
     mStride = width;
 }
 
-unsigned char* CellularAutomaton::latticeData() const
+unsigned char* capso::CellularAutomaton::latticeData() const
 {
     return const_cast<unsigned char*>(mLattice.data());
 }
 
-int CellularAutomaton::width() const
+int capso::CellularAutomaton::width() const
 {
     return mWidth;
 }
 
-int CellularAutomaton::height() const
+int capso::CellularAutomaton::height() const
 {
     return mHeight;
 }
 
-void CellularAutomaton::setCellState(int row, int col, unsigned char state)
+void capso::CellularAutomaton::setCellState(int row, int col, unsigned char state)
 {
     mLattice[getAddress(row, col)] = state;
 }
 
-void CellularAutomaton::clear()
+void capso::CellularAutomaton::clear()
 {
-	std::transform(mLattice.begin(), mLattice.end(), mLattice.begin(), [](unsigned char)
-	{
-		return 0;
-	});
+    std::transform(mLattice.begin(), mLattice.end(), mLattice.begin(), [](unsigned char)
+    {
+        return 0;
+    });
 }
 
-CellularAutomaton::~CellularAutomaton()
+capso::CellularAutomaton::~CellularAutomaton()
 {
 
 }
