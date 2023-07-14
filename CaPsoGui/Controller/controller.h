@@ -46,7 +46,7 @@ private:
     void writeResults();
 
     CaType mCurrentType;
-    CellularAutomaton* mCellularAutomaton;
+    capso::CellularAutomaton* mCellularAutomaton;
     CaView* mView;
     QDialog* mSettingsDialog;
     CaPsoSettings mSettings;
