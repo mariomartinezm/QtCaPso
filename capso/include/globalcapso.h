@@ -6,7 +6,7 @@
 #include "cellularautomaton.h"
 #include "swarm.h"
 
-class GlobalCaPso final : public CellularAutomaton
+class GlobalCaPso final : public capso::CellularAutomaton
 {
 public:
     enum State {EMPTY, PREY, PREDATOR, PREY_PREDATOR, BEST = 4};
