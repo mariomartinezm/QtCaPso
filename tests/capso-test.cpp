@@ -19,7 +19,7 @@ TEST(LocalCaPso, test_setSettings)
     settings.initialInertiaWeight         = 0.13F;
     settings.finalInertiaWeight           = 0.14F;
 
-    LocalCaPso ca(512, 512);
+    Local ca(512, 512);
     ca.setSettings(settings);
     ca.initialize();
 

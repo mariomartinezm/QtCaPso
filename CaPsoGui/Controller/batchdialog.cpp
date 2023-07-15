@@ -111,7 +111,7 @@ void BatchDialog::processItem(BatchItem& batchItem)
     CaPsoSettings settings;
     util::loadSettings(settings, batchItem.settingsFile());
 
-    LocalCaPso* localCaPso = new LocalCaPso(batchItem.width(), batchItem.height());
+    Local* localCaPso = new Local(batchItem.width(), batchItem.height());
     localCaPso->setSettings(settings);
 
     for (int simIndex = 0, fileIndex = 0; simIndex < batchItem.numberOfSimulations(); ++simIndex, ++fileIndex)

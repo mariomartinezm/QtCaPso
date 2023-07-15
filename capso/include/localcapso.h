@@ -7,14 +7,14 @@
 #include "swarm.h"
 #include "capsosettings.h"
 
-class LocalCaPso final : public capso::CellularAutomaton
+class Local final : public capso::CellularAutomaton
 {
 public:
     enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
     enum Stage { COMPETITION, MIGRATION, REPRODUCTION_OF_PREDATORS,
                  DEATH_OF_PREDATORS, DEATH_OF_PREYS, REPRODUCTION_OF_PREYS };
 
-    LocalCaPso(int width, int height);
+    Local(int width, int height);
 
     void initialize() override;
     virtual void clear() override;
@@ -34,8 +34,8 @@ public:
     int   currentStage() const;
 
 private:
-    LocalCaPso(const LocalCaPso&);
-    LocalCaPso& operator=(const LocalCaPso&);
+    Local(const Local&);
+    Local& operator=(const Local&);
 
 private:
     // Model stages
@@ -71,7 +71,7 @@ private:
     RandomNumber mRandom;
 
     // A function pointer that handles transitions
-    void (LocalCaPso::*mNextStage)();
+    void (Local::*mNextStage)();
 
     // Model parameters
     double mPreyInitialDensity        { 0.0 };

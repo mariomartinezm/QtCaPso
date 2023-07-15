@@ -48,7 +48,7 @@ void Controller::timerEvent(QTimerEvent*)
 {
     if(mCurrentType == LOCAL)
     {
-        auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+        auto local = dynamic_cast<Local*>(mCellularAutomaton);
 
         switch(local->currentStage())
         {
@@ -177,7 +177,7 @@ void Controller::step()
 
     if(mCurrentType == LOCAL)
     {
-        auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+        auto local = dynamic_cast<Local*>(mCellularAutomaton);
 
         switch(local->currentStage())
         {
@@ -280,7 +280,7 @@ void Controller::updateSettings()
         QMessageBox::critical(this, "Error!", "Cannot write settings");
     }
 
-    auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+    auto local = dynamic_cast<Local*>(mCellularAutomaton);
     local->setSettings(mSettings);
 }
 
@@ -358,7 +358,7 @@ void Controller::initializeSettings()
     util::loadSettings(mSettings, "settings.json");
 
     // Initialize CA according to settings file
-    auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+    auto local = dynamic_cast<Local*>(mCellularAutomaton);
     local->setSettings(mSettings);
     mCellularAutomaton->initialize();
 }
@@ -389,7 +389,7 @@ void Controller::createCa()
         break;
 
     case LOCAL:
-        mCellularAutomaton = new LocalCaPso(512, 512);
+        mCellularAutomaton = new Local(512, 512);
         mSeasonLength = 10;
         break;
 
@@ -462,7 +462,7 @@ void Controller::writeResults()
     {
     case LOCAL:
         {
-            auto local = dynamic_cast<LocalCaPso*>(mCellularAutomaton);
+            auto local = dynamic_cast<Local*>(mCellularAutomaton);
             mResultsStream << mTimerCount / mSeasonLength << "," <<
                               local->numberOfPreys() << "," <<
                               local->numberOfPredators() << "," <<
