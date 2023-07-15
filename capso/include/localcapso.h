@@ -7,7 +7,7 @@
 #include "swarm.h"
 #include "capsosettings.h"
 
-class LocalCaPso final : public CellularAutomaton
+class LocalCaPso final : public capso::CellularAutomaton
 {
 public:
     enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
