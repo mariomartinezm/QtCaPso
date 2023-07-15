@@ -13,7 +13,7 @@ using std::copy;
 using std::transform;
 using std::uniform_int_distribution;
 
-GlobalCaPso::GlobalCaPso(int width, int height)
+Global::Global(int width, int height)
     : CellularAutomaton(width, height),
     mPredatorSwarm(1.0f, 2.0f, 0.9f, 10, 3,
                    mLattice, mPreyDensities, mTemp,
@@ -44,89 +44,89 @@ GlobalCaPso::GlobalCaPso(int width, int height)
     initialize();
 }
 
-void GlobalCaPso::setInitialPreyPercentage(float value)
+void Global::setInitialPreyPercentage(float value)
 {
     mInitialPreyPercentage = value;
 }
 
-void GlobalCaPso::setCompetitionFactor(float value)
+void Global::setCompetitionFactor(float value)
 {
     mCompetitionFactor = value;
 }
 
-void GlobalCaPso::setCompetitionRadius(int value)
+void Global::setCompetitionRadius(int value)
 {
     mCompetitionRadius = value;
 
     NEIGHBORHOOD_SIZE = (2 * value + 1)*(2 * value + 1) - 1;
 }
 
-void GlobalCaPso::setPreyMeanOffspring(int value)
+void Global::setPreyMeanOffspring(int value)
 {
     mPreyMeanOffspring = value;
 }
 
-void GlobalCaPso::setPreyReproductionRadius(int value)
+void Global::setPreyReproductionRadius(int value)
 {
     mPreyReproductionRadius = value;
 }
 
-void GlobalCaPso::setPredatorMeanOffspring(int value)
+void Global::setPredatorMeanOffspring(int value)
 {
     mPredatorMeanOffspring = value;
 }
 
-void GlobalCaPso::setPredatorReproductionRadius(int value)
+void Global::setPredatorReproductionRadius(int value)
 {
     mPredatorReproductionRadius = value;
 }
 
-void GlobalCaPso::setInitialSwarmSize(int value)
+void Global::setInitialSwarmSize(int value)
 {
     mInitialSwarmSize = value;
 }
 
-void GlobalCaPso::setCognitiveFactor(float value)
+void Global::setCognitiveFactor(float value)
 {
     mPredatorSwarm.setCognitiveFactor(value);
 }
 
-void GlobalCaPso::setSocialFactor(float value)
+void Global::setSocialFactor(float value)
 {
     mPredatorSwarm.setSocialFactor(value);
 }
 
-void GlobalCaPso::setMaximumSpeed(int value)
+void Global::setMaximumSpeed(int value)
 {
     mPredatorSwarm.setMaxSpeed(value);
 }
 
-void GlobalCaPso::setMitrationTime(int value)
+void Global::setMitrationTime(int value)
 {
     mMigrationTime = value;
 }
 
-void GlobalCaPso::setInitialInertialWeight(float value)
+void Global::setInitialInertialWeight(float value)
 {
     mInitialInertiaWeight = value;
 }
 
-void GlobalCaPso::setFinalInertiaWeight(float value)
+void Global::setFinalInertiaWeight(float value)
 {
     mFinalInertiaWeight = value;
 }
 
-int GlobalCaPso::numberOfPreys() const
+int Global::numberOfPreys() const
 {
     return mNumberOfPreys;
 }
 
-int GlobalCaPso::numberOfPredators() const
+int Global::numberOfPredators() const
 {
     return mNumberOfPredators;
 }
 
-void GlobalCaPso::initialize()
+void Global::initialize()
 {
     clear();
 
@@ -185,10 +185,10 @@ void GlobalCaPso::initialize()
     // Reset the migration counter
     mMigrationCount = 0;
 
-    mNextStage = &GlobalCaPso::competitionOfPreys;
+    mNextStage = &Global::competitionOfPreys;
 }
 
-void GlobalCaPso::clear()
+void Global::clear()
 {
     CellularAutomaton::clear();
 
@@ -202,12 +202,12 @@ void GlobalCaPso::clear()
     mNumberOfPredators = 0;
 }
 
-void GlobalCaPso::nextGen()
+void Global::nextGen()
 {
     (this->*mNextStage)();
 }
 
-void GlobalCaPso::competitionOfPreys()
+void Global::competitionOfPreys()
 {
     copy(mPreyDensities.begin(), mPreyDensities.end(), mTemp.begin());
 
@@ -238,10 +238,10 @@ void GlobalCaPso::competitionOfPreys()
         }
     }
 
-    mNextStage = &GlobalCaPso::migration;
+    mNextStage = &Global::migration;
 }
 
-void GlobalCaPso::migration()
+void Global::migration()
 {
     auto validateVector = [this] (int& row, int& col)
     {
@@ -349,13 +349,13 @@ void GlobalCaPso::migration()
     // weight and migration count
     if(mMigrationCount == mMigrationTime)
     {
-        mNextStage = &GlobalCaPso::reproductionOfPredators;
+        mNextStage = &Global::reproductionOfPredators;
         mMigrationCount = 0;
         mCurrentInertiaWeight = mInitialInertiaWeight;
     }
 }
 
-void GlobalCaPso::reproductionOfPredators()
+void Global::reproductionOfPredators()
 {
     copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
@@ -430,10 +430,10 @@ void GlobalCaPso::reproductionOfPredators()
 
     mPredatorSwarm.add(newParticles);
 
-    mNextStage = &GlobalCaPso::predatorsDeath;
+    mNextStage = &Global::predatorsDeath;
 }
 
-void GlobalCaPso::predatorsDeath()
+void Global::predatorsDeath()
 {
     int currentAddress;
 
@@ -453,10 +453,10 @@ void GlobalCaPso::predatorsDeath()
         }
     }
 
-    mNextStage = &GlobalCaPso::predation;
+    mNextStage = &Global::predation;
 }
 
-void GlobalCaPso::predation()
+void Global::predation()
 {
     for_each(mPredatorSwarm.begin(), mPredatorSwarm.end(), [this](weak_ptr<Particle> wp)
     {
@@ -508,10 +508,10 @@ void GlobalCaPso::predation()
         setState(getAddress(mBestPosition.row, mBestPosition.col), BEST);
     }
 
-    mNextStage = &GlobalCaPso::reproductionOfPreys;
+    mNextStage = &Global::reproductionOfPreys;
 }
 
-void GlobalCaPso::predation2()
+void Global::predation2()
 {
     copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
@@ -574,10 +574,10 @@ void GlobalCaPso::predation2()
         setState(getAddress(mBestPosition.row, mBestPosition.col), BEST);
     }
 
-    mNextStage = &GlobalCaPso::reproductionOfPreys;
+    mNextStage = &Global::reproductionOfPreys;
 }
 
-void GlobalCaPso::reproductionOfPreys()
+void Global::reproductionOfPreys()
 {
     copy(mLattice.begin(), mLattice.end(), mTemp.begin());
 
@@ -646,10 +646,10 @@ void GlobalCaPso::reproductionOfPreys()
         }
     }
 
-    mNextStage = &GlobalCaPso::competitionOfPreys;
+    mNextStage = &Global::competitionOfPreys;
 }
 
-void GlobalCaPso::notifyNeighbors(const int& row, const int& col, const bool& death)
+void Global::notifyNeighbors(const int& row, const int& col, const bool& death)
 {
     int finalRow, finalCol;
 
@@ -677,17 +677,17 @@ void GlobalCaPso::notifyNeighbors(const int& row, const int& col, const bool& de
     }
 }
 
-bool GlobalCaPso::checkState(int address, State state)
+bool Global::checkState(int address, State state)
 {
     return mLattice[address] & state;
 }
 
-void GlobalCaPso::setState(int address, State state)
+void Global::setState(int address, State state)
 {
     mLattice[address] |= state;
 }
 
-void GlobalCaPso::clearState(int address, State state)
+void Global::clearState(int address, State state)
 {
     mLattice[address] &= ~state;
 }

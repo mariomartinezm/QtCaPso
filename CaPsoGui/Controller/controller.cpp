@@ -384,7 +384,7 @@ void Controller::createCa()
     switch(mCurrentType)
     {
     case GLOBAL:
-        mCellularAutomaton = new GlobalCaPso(512, 512);
+        mCellularAutomaton = new Global(512, 512);
         mSeasonLength = 10;
         break;
 

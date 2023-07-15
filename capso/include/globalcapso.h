@@ -6,12 +6,12 @@
 #include "cellularautomaton.h"
 #include "swarm.h"
 
-class GlobalCaPso final : public capso::CellularAutomaton
+class Global final : public capso::CellularAutomaton
 {
 public:
     enum State {EMPTY, PREY, PREDATOR, PREY_PREDATOR, BEST = 4};
 
-    GlobalCaPso(int width, int height);
+    Global(int width, int height);
 
     void setInitialPreyPercentage(float value);
     void setCompetitionFactor(float value);
@@ -36,8 +36,8 @@ public:
     void nextGen() override;
 
 private:
-    GlobalCaPso(const GlobalCaPso&);
-    GlobalCaPso& operator=(const GlobalCaPso&);
+    Global(const Global&);
+    Global& operator=(const Global&);
 
 private:
     Swarm mPredatorSwarm;
@@ -51,7 +51,7 @@ private:
     RandomNumber mRandom;
 
     // A function pointer that handles transitions
-    void (GlobalCaPso::*mNextStage)();
+    void (Global::*mNextStage)();
 
     // Model parameters
     double mInitialPreyPercentage;
