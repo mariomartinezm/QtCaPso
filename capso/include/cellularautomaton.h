@@ -1,11 +1,13 @@
-#ifndef CELLULARAUTOMATON_H
-#define CELLULARAUTOMATON_H
+#pragma once
 
 #include <vector>
 
+#include "capso_export.h"
+
+
 namespace capso
 {
-    class CellularAutomaton
+    class CAPSO_EXPORT CellularAutomaton
     {
     public:
         CellularAutomaton(int width, int height);
@@ -38,5 +40,3 @@ namespace capso
         return mStride * row + col;
     }
 }
-
-#endif // CELLULARAUTOMATON_H
