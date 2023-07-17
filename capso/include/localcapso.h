@@ -1,15 +1,17 @@
-#ifndef CAPSO_H
-#define CAPSO_H
+#pragma once
 
 #include <random>
 #include <list>
+
 #include "cellularautomaton.h"
 #include "swarm.h"
 #include "capsosettings.h"
+#include "capso_export.h"
+
 
 namespace capso
 {
-    class Local final : public capso::CellularAutomaton
+    class CAPSO_EXPORT Local final : public capso::CellularAutomaton
     {
         public:
             enum State { EMPTY, PREY, PREDATOR, PREY_PREDATOR };
@@ -95,5 +97,3 @@ namespace capso
                 mPredatorMigrationTime };
     };
 }
-
-#endif // CAPSO_H
