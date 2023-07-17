@@ -1,11 +1,13 @@
-#ifndef RANDOMNUMBER_H
-#define RANDOMNUMBER_H
+#pragma once
 
 #include <memory>
 #include <random>
-#include "pcg_random.hpp"
 
-class RandomNumber
+#include "pcg_random.hpp"
+#include "capso_export.h"
+
+
+class CAPSO_EXPORT RandomNumber
 {
 public:
     RandomNumber();
@@ -17,5 +19,3 @@ private:
     std::unique_ptr<pcg32> mRNG;
     std::uniform_real_distribution<float> mRealDistribution;
 };
-
-#endif // RANDOMNUMBER_H
