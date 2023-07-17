@@ -1,13 +1,15 @@
-#ifndef SWARM_H
-#define SWARM_H
+#pragma once
 
 #include <list>
 #include <random>
 #include <memory>
+
 #include "particle.h"
 #include "randomnumber.h"
+#include "capso_export.h"
 
-class Swarm
+
+class CAPSO_EXPORT Swarm
 {
 public:
     Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
@@ -62,5 +64,3 @@ private:
     int mParticleState;
     RandomNumber& mRandom;
 };
-
-#endif // SWARM_H
