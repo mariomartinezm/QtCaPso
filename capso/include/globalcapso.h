@@ -1,14 +1,16 @@
-#ifndef GLOBALCAPSO_H
-#define GLOBALCAPSO_H
+#pragma once
 
 #include <random>
 #include <list>
+
 #include "cellularautomaton.h"
 #include "swarm.h"
+#include "capso_export.h"
+
 
 namespace capso
 {
-    class Global final : public capso::CellularAutomaton
+    class CAPSO_EXPORT Global final : public capso::CellularAutomaton
     {
         public:
             enum State {EMPTY, PREY, PREDATOR, PREY_PREDATOR, BEST = 4};
@@ -93,5 +95,3 @@ namespace capso
             void clearState(int address, State state);
     };
 }
-
-#endif // GLOBALCAPSO_H
