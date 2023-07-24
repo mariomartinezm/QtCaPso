@@ -1,14 +1,11 @@
-#ifndef PARTICLE_H
-#define PARTICLE_H
+#pragma once
 
 #include "latticepoint.h"
 
 struct Particle
 {
-    LatticePoint position;
-    LatticePoint bestPosition;
-    LatticePoint velocity;
+    capso::LatticePoint position;
+    capso::LatticePoint bestPosition;
+    capso::LatticePoint velocity;
     unsigned int timeSinceLastMeal;
 };
-
-#endif // PARTICLE_H
