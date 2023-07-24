@@ -19,7 +19,7 @@ namespace capso
                   std::vector<unsigned char>& lattice,
                   std::vector<unsigned char>& densities,
                   std::vector<unsigned char> &temp,
-                  int width, int height, int particleState, RandomNumber& random);
+                  int width, int height, int particleState, capso::RandomNumber& random);
 
             ~Swarm();
 
@@ -64,6 +64,6 @@ namespace capso
             int mWidth;
             int mHeight;
             int mParticleState;
-            RandomNumber& mRandom;
+            capso::RandomNumber& mRandom;
     };
 }

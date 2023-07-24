@@ -3,7 +3,7 @@
 
 TEST(RandomNumber, test_float_limits)
 {
-    RandomNumber rand;
+    capso::RandomNumber rand;
 
     bool error = false;
 
@@ -23,7 +23,7 @@ TEST(RandomNumber, test_float_limits)
 
 TEST(RandomNumber, test_integer_interval)
 {
-    RandomNumber rand;
+    capso::RandomNumber rand;
 
     bool error = false;
 

@@ -72,7 +72,7 @@ namespace capso
             float mPredatorDeathProbability { 0.0f };
             int mCurrentStage               { COMPETITION };
 
-            RandomNumber mRandom;
+            capso::RandomNumber mRandom;
 
             // A function pointer that handles transitions
             void (Local::*mNextStage)();

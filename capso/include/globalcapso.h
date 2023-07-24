@@ -52,7 +52,7 @@ namespace capso
 
             int mNumberOfPreys, mNumberOfPredators;
 
-            RandomNumber mRandom;
+            capso::RandomNumber mRandom;
 
             // A function pointer that handles transitions
             void (Global::*mNextStage)();

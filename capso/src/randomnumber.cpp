@@ -1,7 +1,7 @@
 #include <chrono>
 #include "randomnumber.h"
 
-RandomNumber::RandomNumber()
+capso::RandomNumber::RandomNumber()
     : mRealDistribution(0.0, 1.0)
 {
     // Initialize PRNG
@@ -25,12 +25,12 @@ RandomNumber::RandomNumber()
     }
 }
 
-float RandomNumber::GetRandomFloat()
+float capso::RandomNumber::GetRandomFloat()
 {
     return mRealDistribution(*mRNG);
 }
 
-int RandomNumber::GetRandomInt(int min, int max)
+int capso::RandomNumber::GetRandomInt(int min, int max)
 {
     return std::uniform_int_distribution<int>{min, max}(*mRNG);
 }

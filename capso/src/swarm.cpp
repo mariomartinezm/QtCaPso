@@ -13,7 +13,7 @@ capso::Swarm::Swarm(float cognitiveFactor, float socialFactor, float inertiaWeig
              std::vector<unsigned char> &lattice,
              std::vector<unsigned char> &densities,
              std::vector<unsigned char> &temp,
-             int width, int height, int particleState, RandomNumber &random)
+             int width, int height, int particleState, capso::RandomNumber &random)
     : mCognitiveFactor(cognitiveFactor),
       mSocialFactor(socialFactor),
       mInertiaWeight(inertiaWeight),
