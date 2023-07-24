@@ -7,6 +7,8 @@ using std::list;
 using std::make_shared;
 using std::shared_ptr;
 using std::weak_ptr;
+using capso::Particle;
+
 
 capso::Swarm::Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
              int maxSpeed, int socialRadius,

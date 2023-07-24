@@ -2,10 +2,14 @@
 
 #include "latticepoint.h"
 
-struct Particle
+
+namespace capso
 {
-    capso::LatticePoint position;
-    capso::LatticePoint bestPosition;
-    capso::LatticePoint velocity;
-    unsigned int timeSinceLastMeal;
-};
+    struct Particle
+    {
+        capso::LatticePoint position;
+        capso::LatticePoint bestPosition;
+        capso::LatticePoint velocity;
+        unsigned int timeSinceLastMeal;
+    };
+}
