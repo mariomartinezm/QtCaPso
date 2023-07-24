@@ -44,7 +44,7 @@ namespace capso
             Global& operator=(const Global&);
 
         private:
-            Swarm mPredatorSwarm;
+            capso::Swarm mPredatorSwarm;
 
             // Containers
             std::vector<unsigned char> mTemp;

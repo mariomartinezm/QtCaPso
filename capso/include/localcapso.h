@@ -61,7 +61,7 @@ namespace capso
             std::vector<unsigned char> mPreyDensities;
             std::vector<unsigned char> mTemp;
 
-            Swarm mPredatorSwarm;
+            capso::Swarm mPredatorSwarm;
 
             // Metrics
             int mNumberOfPreys              { 0 };
