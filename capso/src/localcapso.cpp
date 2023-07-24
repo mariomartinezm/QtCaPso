@@ -12,6 +12,7 @@ using std::for_each;
 using std::copy;
 using std::transform;
 
+
 capso::Local::Local(int width, int height)
     : CellularAutomaton(width, height),
     mPreyDensities(width * height),
@@ -93,7 +94,7 @@ void capso::Local::setPredatorMigrationTime(int value)
     mPredatorMigrationTime = value;
 }
 
-void capso::Local::setSettings(const CaPsoSettings &settings)
+void capso::Local::setSettings(const capso::Settings& settings)
 {
     mPreyInitialDensity           = settings.initialPreyDensity;
     mPreyCompetitionFactor        = settings.competitionFactor;
@@ -113,9 +114,9 @@ void capso::Local::setSettings(const CaPsoSettings &settings)
     NEIGHBORHOOD_SIZE = (2 * mFitnessRadius + 1) * (2 * mFitnessRadius + 1) - 1;
 }
 
-CaPsoSettings capso::Local::settings() const
+capso::Settings capso::Local::settings() const
 {
-    CaPsoSettings settings;
+    capso::Settings settings;
     settings.initialPreyDensity           = mPreyInitialDensity;
     settings.competitionFactor            = mPreyCompetitionFactor;
     settings.preyReproductionRadius       = mPreyReproductionRadius;

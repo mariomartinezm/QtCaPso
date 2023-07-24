@@ -12,7 +12,7 @@
 
 Controller::Controller(QWidget *parent)
     : QMainWindow(parent),
-    mCurrentType(LOCAL),
+    mCurrentType(capso::LOCAL),
     mResultsFilename("capso.csv"),
     mResultsFile(mResultsFilename),
     mResultsStream(&mResultsFile),
@@ -46,7 +46,7 @@ Controller::~Controller()
 
 void Controller::timerEvent(QTimerEvent*)
 {
-    if(mCurrentType == LOCAL)
+    if(mCurrentType == capso::LOCAL)
     {
         auto local = dynamic_cast<capso::Local*>(mCellularAutomaton);
 
@@ -175,7 +175,7 @@ void Controller::step()
         mTimerId = -1;
     }
 
-    if(mCurrentType == LOCAL)
+    if(mCurrentType == capso::LOCAL)
     {
         auto local = dynamic_cast<capso::Local*>(mCellularAutomaton);
 
@@ -339,11 +339,11 @@ void Controller::initializeSettings()
 {
     switch(mCurrentType)
     {
-    case GLOBAL:
+    case capso::GLOBAL:
         break;
-    case LOCAL:
+    case capso::LOCAL:
         break;
-    case MOVEMENT:
+    case capso::MOVEMENT:
         break;
     }
 
@@ -383,17 +383,17 @@ void Controller::createCa()
 {
     switch(mCurrentType)
     {
-    case GLOBAL:
+    case capso::GLOBAL:
         mCellularAutomaton = new capso::Global(512, 512);
         mSeasonLength = 10;
         break;
 
-    case LOCAL:
+    case capso::LOCAL:
         mCellularAutomaton = new capso::Local(512, 512);
         mSeasonLength = 10;
         break;
 
-    case MOVEMENT:
+    case capso::MOVEMENT:
         break;
     }
 }
@@ -412,7 +412,7 @@ void Controller::createSettingsDialog()
 {
     switch(mCurrentType)
     {
-    case GLOBAL:
+    case capso::GLOBAL:
         {
             mSettingsDialog = new GlobalSettingsDialog(this);
             auto p = dynamic_cast<GlobalSettingsDialog*>(mSettingsDialog);
@@ -421,7 +421,7 @@ void Controller::createSettingsDialog()
         }
         break;
 
-    case LOCAL:
+    case capso::LOCAL:
         {
             mSettingsDialog = new LocalSettingsDialog(mSettings, this);
             auto p = dynamic_cast<LocalSettingsDialog*>(mSettingsDialog);
@@ -430,7 +430,7 @@ void Controller::createSettingsDialog()
         }
         break;
 
-    case MOVEMENT:
+    case capso::MOVEMENT:
         break;
     }
 }
@@ -460,7 +460,7 @@ void Controller::writeResults()
 {
     switch(mCurrentType)
     {
-    case LOCAL:
+    case capso::LOCAL:
         {
             auto local = dynamic_cast<capso::Local*>(mCellularAutomaton);
             mResultsStream << mTimerCount / mSeasonLength << "," <<
@@ -477,10 +477,10 @@ void Controller::writeResults()
         }
         break;
 
-    case GLOBAL:
+    case capso::GLOBAL:
         break;
 
-    case MOVEMENT:
+    case capso::MOVEMENT:
         break;
     }
 }

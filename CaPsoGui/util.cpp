@@ -8,7 +8,7 @@
 
 namespace util
 {
-    bool loadSettings(CaPsoSettings& settings, QString settingsFilename)
+    bool loadSettings(capso::Settings& settings, QString settingsFilename)
     {
         QFile settingsFile;
         settingsFile.setFileName(settingsFilename);
@@ -112,7 +112,7 @@ namespace util
     }
 
 
-    bool writeSettings(CaPsoSettings& settings, CaType type)
+    bool writeSettings(capso::Settings& settings, capso::CaType type)
     {
         QFile settingsFile;
         settingsFile.setFileName("settings.json");
@@ -126,13 +126,13 @@ namespace util
 
         switch(type)
         {
-        case LOCAL:
+        case capso::LOCAL:
             json["type"] = "LOCAL";
             break;
-        case GLOBAL:
+        case capso::GLOBAL:
             json["type"] = "GLOBAL";
             break;
-        case MOVEMENT:
+        case capso::MOVEMENT:
             json["type"] = "MOVEMENT";
             break;
         }

@@ -6,9 +6,9 @@
 
 namespace util
 {
-    bool loadSettings(CaPsoSettings& settings, QString settingsFilename);
+    bool loadSettings(capso::Settings& settings, QString settingsFilename);
 
-    bool writeSettings(CaPsoSettings& settings, CaType type=LOCAL);
+    bool writeSettings(capso::Settings& settings, capso::CaType type=capso::LOCAL);
 
     bool getPathFromDialog(QString& path);
 

@@ -8,7 +8,7 @@
 #include "localcapso.h"
 #include "util.h"
 
-BatchDialog::BatchDialog(QWidget *parent, CaType type) :
+BatchDialog::BatchDialog(QWidget *parent, capso::CaType type) :
     QDialog(parent), mType(type)
 {
     this->setupUi(this);
@@ -108,7 +108,7 @@ void BatchDialog::on_lineEditPath_textChanged(QString text)
 
 void BatchDialog::processItem(BatchItem& batchItem)
 {
-    CaPsoSettings settings;
+    capso::Settings settings;
     util::loadSettings(settings, batchItem.settingsFile());
 
     capso::Local* localCaPso = new capso::Local(batchItem.width(),

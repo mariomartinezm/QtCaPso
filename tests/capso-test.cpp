@@ -3,7 +3,7 @@
 
 TEST(LocalCaPso, test_setSettings)
 {
-    CaPsoSettings settings;
+    capso::Settings settings;
     settings.initialPreyDensity           = 0.1F;
     settings.competitionFactor            = 0.2F;
     settings.preyReproductionRadius       = 3;
@@ -26,7 +26,7 @@ TEST(LocalCaPso, test_setSettings)
     EXPECT_EQ(ca.numberOfPredators(), 6);
     EXPECT_NEAR(ca.numberOfPreys(), 512 * 512 * 0.1F, 512 * 512 * 0.001F);
 
-    CaPsoSettings caSettings = ca.settings();
+    capso::Settings caSettings = ca.settings();
     EXPECT_NEAR(caSettings.initialPreyDensity        ,0.1F, 0.0000001F);
     EXPECT_NEAR(caSettings.competitionFactor         ,0.2F, 0.0000001F);
     EXPECT_EQ(caSettings.preyReproductionRadius      ,3);

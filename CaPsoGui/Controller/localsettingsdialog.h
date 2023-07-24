@@ -10,7 +10,7 @@ class LocalSettingsDialog : public QDialog, private Ui::LocalSettingsDialog
     Q_OBJECT
 
 public:
-    LocalSettingsDialog(CaPsoSettings& settings, QWidget* parent = 0);
+    LocalSettingsDialog(capso::Settings& settings, QWidget* parent = 0);
     ~LocalSettingsDialog();
 
 signals:
@@ -23,5 +23,5 @@ private slots:
     virtual void accept();
 
 private:
-    CaPsoSettings& mSettings;
+    capso::Settings& mSettings;
 };

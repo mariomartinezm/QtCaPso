@@ -10,7 +10,7 @@ class BatchDialog : public QDialog, private Ui::BatchDialog
 {
     Q_OBJECT
 public:
-    explicit BatchDialog(QWidget *parent = 0, CaType type = LOCAL);
+    explicit BatchDialog(QWidget *parent = 0, capso::CaType type = capso::LOCAL);
 
 private slots:
     void on_buttonStart_clicked();
@@ -25,6 +25,6 @@ private:
     void processItem(BatchItem& batchItem);
 
 private:
-    CaType mType;
+    capso::CaType mType;
     QList<BatchItem> batchItems;
 };

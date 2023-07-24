@@ -45,11 +45,11 @@ private:
     void initializeResultsFile();
     void writeResults();
 
-    CaType mCurrentType;
+    capso::CaType mCurrentType;
     capso::CellularAutomaton* mCellularAutomaton;
     CaView* mView;
     QDialog* mSettingsDialog;
-    CaPsoSettings mSettings;
+    capso::Settings mSettings;
 
     // Support for a results file
     QString     mResultsFilename;

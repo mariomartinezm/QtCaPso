@@ -26,8 +26,8 @@ namespace capso
 
             void setPredatorMigrationTime(int value);
 
-            void setSettings(const CaPsoSettings& settings);
-            CaPsoSettings settings() const;
+            void setSettings(const capso::Settings& settings);
+            capso::Settings settings() const;
 
             int   numberOfPreys() const;
             int   numberOfPredators() const;

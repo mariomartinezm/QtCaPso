@@ -3,7 +3,7 @@
 #include <QSettings>
 #include "localsettingsdialog.h"
 
-LocalSettingsDialog::LocalSettingsDialog(CaPsoSettings& settings, QWidget *parent) :
+LocalSettingsDialog::LocalSettingsDialog(capso::Settings& settings, QWidget *parent) :
     QDialog(parent),
     mSettings(settings)
 {
