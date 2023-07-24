@@ -9,58 +9,61 @@
 #include "capso_export.h"
 
 
-class CAPSO_EXPORT Swarm
+namespace capso
 {
-public:
-    Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
-          int maxSpeed, int socialRadius,
-          std::vector<unsigned char>& lattice,
-          std::vector<unsigned char>& densities,
-          std::vector<unsigned char> &temp,
-          int width, int height, int particleState, RandomNumber& random);
+    class CAPSO_EXPORT Swarm
+    {
+        public:
+            Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
+                  int maxSpeed, int socialRadius,
+                  std::vector<unsigned char>& lattice,
+                  std::vector<unsigned char>& densities,
+                  std::vector<unsigned char> &temp,
+                  int width, int height, int particleState, RandomNumber& random);
 
-    ~Swarm();
+            ~Swarm();
 
-    float cognitiveFactor() const { return mCognitiveFactor; }
-    float socialFactor() const { return mSocialFactor; }
-    float inertiaWeight() const { return mInertiaWeight; }
-    int maxSpeed() const { return mMaxSpeed; }
-    int socialRadius() const { return mSocialRadius; }
+            float cognitiveFactor() const { return mCognitiveFactor; }
+            float socialFactor() const { return mSocialFactor; }
+            float inertiaWeight() const { return mInertiaWeight; }
+            int maxSpeed() const { return mMaxSpeed; }
+            int socialRadius() const { return mSocialRadius; }
 
-    void setCognitiveFactor(float factor) { mCognitiveFactor = factor; }
-    void setSocialFactor(float factor) { mSocialFactor = factor; }
-    void setInertiaWeight(float inertiaWeight) { mInertiaWeight = inertiaWeight; }
-    void setMaxSpeed(int speed) { mMaxSpeed = speed; }
-    void setSocialRadius(int radius) { mSocialRadius = radius; }
+            void setCognitiveFactor(float factor) { mCognitiveFactor = factor; }
+            void setSocialFactor(float factor) { mSocialFactor = factor; }
+            void setInertiaWeight(float inertiaWeight) { mInertiaWeight = inertiaWeight; }
+            void setMaxSpeed(int speed) { mMaxSpeed = speed; }
+            void setSocialRadius(int radius) { mSocialRadius = radius; }
 
-    std::list<std::shared_ptr<Particle>>::iterator begin();
-    std::list<std::shared_ptr<Particle>>::iterator end();
+            std::list<std::shared_ptr<Particle>>::iterator begin();
+            std::list<std::shared_ptr<Particle>>::iterator end();
 
-    void initialize(unsigned int size);
-    void nextGen();
+            void initialize(unsigned int size);
+            void nextGen();
 
-    void add(std::list<std::shared_ptr<Particle>>& newParticles);
+            void add(std::list<std::shared_ptr<Particle>>& newParticles);
 
-    std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
-        std::allocator<std::shared_ptr<Particle>>>::iterator it);
+            std::list<std::shared_ptr<Particle>, std::allocator<std::shared_ptr<Particle>>>::iterator erase(std::list<std::shared_ptr<Particle>,
+                                                                                                            std::allocator<std::shared_ptr<Particle>>>::iterator it);
 
-    bool empty() const;
+            bool empty() const;
 
-private:
-    std::list<std::shared_ptr<Particle>> mParticles;
+        private:
+            std::list<std::shared_ptr<Particle>> mParticles;
 
-    float mCognitiveFactor;
-    float mSocialFactor;
-    float mInertiaWeight;
-    int mMaxSpeed;
-    int mSocialRadius;
+            float mCognitiveFactor;
+            float mSocialFactor;
+            float mInertiaWeight;
+            int mMaxSpeed;
+            int mSocialRadius;
 
-    std::vector<unsigned char>& mLattice;
-    std::vector<unsigned char>& mDensities;
-    std::vector<unsigned char>& mTemp;
+            std::vector<unsigned char>& mLattice;
+            std::vector<unsigned char>& mDensities;
+            std::vector<unsigned char>& mTemp;
 
-    int mWidth;
-    int mHeight;
-    int mParticleState;
-    RandomNumber& mRandom;
-};
+            int mWidth;
+            int mHeight;
+            int mParticleState;
+            RandomNumber& mRandom;
+    };
+}

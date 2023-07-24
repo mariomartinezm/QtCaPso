@@ -8,7 +8,7 @@ using std::make_shared;
 using std::shared_ptr;
 using std::weak_ptr;
 
-Swarm::Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
+capso::Swarm::Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
              int maxSpeed, int socialRadius,
              std::vector<unsigned char> &lattice,
              std::vector<unsigned char> &densities,
@@ -31,21 +31,21 @@ Swarm::Swarm(float cognitiveFactor, float socialFactor, float inertiaWeight,
 }
 
 
-Swarm::~Swarm()
+capso::Swarm::~Swarm()
 {
 }
 
-list<shared_ptr<Particle>>::iterator Swarm::begin()
+list<shared_ptr<Particle>>::iterator capso::Swarm::begin()
 {
     return mParticles.begin();
 }
 
-list<shared_ptr<Particle>>::iterator Swarm::end()
+list<shared_ptr<Particle>>::iterator capso::Swarm::end()
 {
     return mParticles.end();
 }
 
-void Swarm::initialize(unsigned int size)
+void capso::Swarm::initialize(unsigned int size)
 {
     mParticles.clear();
 
@@ -94,7 +94,7 @@ void Swarm::initialize(unsigned int size)
 //    }
 //}
 
-void Swarm::nextGen()
+void capso::Swarm::nextGen()
 {
     auto validateVector = [this] (int& row, int& col)
     {
@@ -250,18 +250,18 @@ void Swarm::nextGen()
     });
 }
 
-void Swarm::add(list<shared_ptr<Particle>>& newParticles)
+void capso::Swarm::add(list<shared_ptr<Particle>>& newParticles)
 {
     mParticles.insert(mParticles.end(), newParticles.begin(), newParticles.end());
 }
 
-list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator Swarm::erase(list<shared_ptr<Particle>,
+list<shared_ptr<Particle>, std::allocator<shared_ptr<Particle>>>::iterator capso::Swarm::erase(list<shared_ptr<Particle>,
         std::allocator<shared_ptr<Particle>>>::iterator it)
 {
     return mParticles.erase(it);
 }
 
-bool Swarm::empty() const
+bool capso::Swarm::empty() const
 {
     return mParticles.empty();
 }
