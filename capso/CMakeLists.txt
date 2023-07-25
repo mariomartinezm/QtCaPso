@@ -34,7 +34,7 @@ target_sources(${PROJECT_NAME} PUBLIC
     include/globalcapso.h
     include/localcapso.h)
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++ -Wall -Wextra -Wpedantic)
 
 include(GenerateExportHeader)
 generate_export_header(${PROJECT_NAME})
