@@ -11,4 +11,4 @@ endif()
 
 add_subdirectory(capso)
 add_subdirectory(CaPsoGui)
-add_subdirectory(tests)
+add_subdirectory(tests EXCLUDE_FROM_ALL)
