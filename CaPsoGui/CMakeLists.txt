@@ -30,7 +30,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     Controller/batchdialog.h
     Controller/batchdialog.cpp
     Controller/batchdialog.ui
-    Controller/batchdialog.h
     Controller/batchitem.cpp
     Controller/controller.qrc)
 
